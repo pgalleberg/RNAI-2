@@ -1,6 +1,9 @@
-from scholarly import scholarly
+import re
 
-def get_author_from_id(author_id):
-    author = scholarly.search_author_id(author_id)
-
-    return author
+def get_author_id_from_publication_result(input):
+    author_tags = input.find_all("div", {"class": "gs_a"})
+    pattern = r'\?user=(.*?)&amp'
+    
+    author_ids = re.findall(pattern, str(author_tags[0]))
+    
+    return author_ids

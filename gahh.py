@@ -1,13 +1,3 @@
-from scholarly import scholarly
-
-def get_publication_details(publication_name):
-    search_results = scholarly.search_pubs(publication_name)
-
-    publication_list = list(search_results)
-
-    return publication_list[0]
-
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -24,6 +14,8 @@ def get_citations(paper_id):
         soup = BeautifulSoup(response.text, 'html.parser')
         
         citation_elements = soup.find_all('a', {'data-clk': True})
+
+        print(citation_elements)
         if not citation_elements:
             break
 
@@ -36,3 +28,5 @@ def get_citations(paper_id):
         start += 10
 
     return citations
+
+print(get_citations('12890608974762536247'))
