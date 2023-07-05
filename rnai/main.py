@@ -31,12 +31,12 @@ class RNAI:
     def __init__(self):
         self.parameters = {'iterations': 10, 'citations': 100, 'wait_time': 25}
 
-        self.initialise_database()
-
-    def initialise_database(self):
         self.mongo_client = MongoClient('mongodb+srv://vih:lwJGhZ37uM07vhrO@tsp.geu7l4s.mongodb.net/?retryWrites=true&w=majority', tlsCAFile = ca)
 
         self.db = self.mongo_client.rnai
+
+    def initialise_database(self):
+        
 
         self.verticals = {}
         self.papers    = {}
@@ -49,11 +49,14 @@ class RNAI:
 
     def initialise_vertical(self, data_file_path = os.path.join('data', 'verticals.json')):
 
+        print('X')
+
         # load json
         with open(data_file_path, 'r') as f:
             verticals_input_data = json.load(f)
 
         for vertical_name in verticals_input_data.keys():
+            print(vertical_name)
             if vertical_name not in [self.verticals[vertical_id]['name'] for vertical_id in self.verticals.keys()]:
                 result = self.db.verticals.insert_one({"name": vertical_name, "_complete": False})
 
