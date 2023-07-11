@@ -81,13 +81,20 @@ class RNAI:
 
         self.papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
 
-        while len(self.papers_to_bucket) > 0:            
+        bucket_count = self.db.papers.count_documents({"_bucket_exists": False})
+
+        while bucket_count > 0: 
             self.create_bucket(random.sample(list(self.papers_to_bucket), 1)[0])
             
             pbar_cb.update(1)
             pbar_cb.total = self.db.papers.count_documents({"_bucket_exists": False})
+            pbar_cb.refresh()
+
+            bucket_count = self.db.papers.count_documents({"_bucket_exists": False})
 
             self.papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
+
+            
 
     def create_bucket(self, paper_record):
         if paper_record['_bucket_exists'] is False:
@@ -97,7 +104,7 @@ class RNAI:
             headers = {'User-Agent': 'Mozilla/5.0'}
             
             response = requests.get(url,headers = headers)
-            #response.raise_for_status()
+            response.raise_for_status()
             
             html_record = response.text
             
@@ -110,13 +117,16 @@ class RNAI:
 
         pbar_cp = tqdm(total = self.db.papers.count_documents({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}), leave = True)
         self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
-
         while len(self.papers_to_complete) > 0:
+            print(self.papers_to_complete)
+            print(len(self.papers_to_complete))
             self.process_citations(random.sample(list(self.papers_to_complete), 1)[0])
 
             pbar_cp.update(1)
 
             pbar_cp.total = self.db.papers.count_documents({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]})
+
+            pbar_cp.refresh()
 
             self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
 

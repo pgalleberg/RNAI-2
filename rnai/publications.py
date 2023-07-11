@@ -18,6 +18,8 @@ def get_citations(paper_id):
 
     citations = []
 
+    steps = 0
+
     while True:
         url = f"https://scholar.google.com/scholar?start={start}&cites={paper_id}&hl=en"
         
@@ -35,6 +37,9 @@ def get_citations(paper_id):
                 citations = citations + [citation_name]
 
         start += 10
+
+        if start > 19:
+            break
 
         time.sleep(random.randint(500, 1000)/100)
 
