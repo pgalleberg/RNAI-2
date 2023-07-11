@@ -15,6 +15,10 @@ ca = certifi.where()
 from rnai.authors import get_author_id_from_publication_result
 from rnai.publications import get_citations
 
+from rnai.papers import paper_exists_in_db
+
+from rnai.verticals import vertical_exists_in_db
+
 headers_set = [
     {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'},
     {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'},
@@ -35,38 +39,30 @@ class RNAI:
 
         self.db = self.mongo_client.rnai
 
-    def initialise_database(self):
-        
-
-        self.verticals = {}
-        self.papers    = {}
-
-        for vertical in self.db.verticals.find({}):
-            self.verticals[str(vertical['_id'])] = vertical
-            
-        for paper in self.db.papers.find({}):
-            self.papers[str(paper['_id'])] = paper
-
     def initialise_vertical(self, data_file_path = os.path.join('data', 'verticals.json')):
-
-        print('X')
 
         # load json
         with open(data_file_path, 'r') as f:
             verticals_input_data = json.load(f)
 
         for vertical_name in verticals_input_data.keys():
-            print(vertical_name)
-            if vertical_name not in [self.verticals[vertical_id]['name'] for vertical_id in self.verticals.keys()]:
-                result = self.db.verticals.insert_one({"name": vertical_name, "_complete": False})
 
-                vertical_id = result.inserted_id
+            vertical_exists = vertical_exists_in_db(self, vertical_name)
 
-                for input_paper_name in verticals_input_data[vertical_name]['papers_list']:
-                    if input_paper_name not in [self.papers[paper_id]['title'] for paper_id in self.papers.keys()]:
-                        result = self.db.papers.insert_one({"title": input_paper_name, "_vertical_id": vertical_id, "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0})
+            if vertical_exists:
+                vertical_id = vertical_exists['_id']
 
-    def complete_paper_first_level(self):
+            else:
+                vertical_insert = self.db.verticals.insert_one({"name": vertical_name, "_complete": False})
+                
+                vertical_id = vertical_insert.inserted_id
+
+            for input_paper_name in verticals_input_data[vertical_name]['papers_list']:
+
+                if paper_exists_in_db(self, vertical_id, input_paper_name) is None:
+                    result = self.db.papers.insert_one({"title": input_paper_name, "_vertical_id": vertical_id, "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0})
+
+    def complete_papers(self):
 
         for paper_key in self.papers.keys():
             result = self.db.papers.find_one({"_id": ObjectId(paper_key)})
