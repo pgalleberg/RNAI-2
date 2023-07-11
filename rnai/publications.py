@@ -1,4 +1,5 @@
 from scholarly import scholarly
+import time, random
 
 def get_publication_details(publication_name):
     search_results = scholarly.search_pubs(publication_name)
@@ -34,5 +35,7 @@ def get_citations(paper_id):
                 citations = citations + [citation_name]
 
         start += 10
+
+        time.sleep(random.randint(500, 1000)/100)
 
     return citations
