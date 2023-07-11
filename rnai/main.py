@@ -12,6 +12,9 @@ from pymongo.server_api import ServerApi
 import certifi
 ca = certifi.where()
 
+
+from langdetect import detect
+
 from rnai.authors import get_author_id_from_publication_result
 from rnai.publications import get_citations
 
@@ -64,7 +67,9 @@ class RNAI:
             for input_paper_name in verticals_input_data[vertical_name]['papers_list']:
 
                 if paper_exists_in_db(self, vertical_id, input_paper_name) is None:
-                    result = self.db.papers.insert_one({"title": input_paper_name, "_vertical_id": vertical_id, "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0, '_citation_count': None})
+
+                    if detect(input_paper_name) == 'en':
+                        result = self.db.papers.insert_one({"title": input_paper_name, "_vertical_id": vertical_id, "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0, '_citation_count': None})
 
                 pbar_ip.update(1)
 
@@ -145,7 +150,8 @@ class RNAI:
                 citations = get_citations(paper_id)
 
                 for citation in citations:
-                    result = self.db.papers.insert_one({"title": citation, "_vertical_id": paper_record['_vertical_id'], "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0})
+                    if detect(citation) == 'en':
+                        result = self.db.papers.insert_one({"title": citation, "_vertical_id": paper_record['_vertical_id'], "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index": paper_record['_level_index'] + 1})
 
                 if len(citations) > 0:
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citations_listed": True}})
