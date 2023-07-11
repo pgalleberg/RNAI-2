@@ -88,9 +88,11 @@ class RNAI:
         if paper_record['_bucket_exists'] is False:
             query = '+'.join(paper_record['title'].split())
             url = f"https://scholar.google.com/scholar?q={query}"
+
+            headers = {'User-Agent': 'Mozilla/5.0'}
             
-            response = requests.get(url,headers = random.choice(headers_set))
-            response.raise_for_status()
+            response = requests.get(url,headers = headers)
+            #response.raise_for_status()
             
             html_record = response.text
             
