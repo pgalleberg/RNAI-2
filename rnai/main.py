@@ -254,129 +254,49 @@ class RNAI:
 
     def get_author_details(self):
 
+        pbar_ca = tqdm(total = self.db.authors.count_documents({"_complete": False}), leave = True)
+
         for author_record in self.db.authors.find({"_complete": False}):
             
+            if self.request_counter > 22:
+                logIn()
+                self.request_counter = 0
+
             author = scholarly.search_author_id(author_record['_ags_id'])
 
             for akey in author.keys():
-                author_record[akey] = author[akey]
 
+                if type(author[akey]) is int:
+                    author[akey] = str(author[akey])
+                author_record[akey] = author[akey]
+                
             author_record['_complete'] = True
 
             self.db.authors.update_one({"_id": author_record['_id']}, {"$set": author_record})
 
-            # append all fields from returned author dictionary to author_record and set _complete to True
+            pbar_ca.update(1)
+    
+    def rank_authors(self):
+        
+        authors_to_rank = list(self.db.authors.find({'_complete': True}))
 
+        pbar_ra = tqdm(total = self.db.authors.count_documents({'_complete': True}), leave = True)
 
+        for author_rank in authors_to_rank:
+            citation_count = int(author_rank['citedby'])
+            paper_occurrences = self.db.papers.count_documents({'_authors': author_rank['_id']})
 
+            authored_papers = self.db.papers.find({'_authors': author_rank['_id']})
 
+            citations_in_vertical = 0
 
+            for apaper in authored_papers:
 
+                occurrences = self.db.papers.count_documents({'_vertical_id': apaper['_vertical_id'], '_cited_by': apaper['_id']})
 
+                citations_in_vertical = citations_in_vertical + occurrences
 
-'''
-
-from pymongo import MongoClient
-
-def calculate_ranking(publication):
-    level_index = publication['_level_index']
-    citation_count = publication['_citation_count']
-    vertical_id = publication['_vertical_id']['$oid']
-
-    # Count occurrences of publication's _id in the _cited_by list of all other documents with the same _vertical_id
-    occurrences = db.collection.count_documents({'_vertical_id': {'$oid': vertical_id}, '_cited_by': publication['_id']['$oid']})
-
-    ranking = (5 - level_index) / 5 + citation_count / 100 + occurrences / 50
-    return ranking
-
-# Connect to the MongoDB database
-client = MongoClient('<your-mongodb-connection-string>')
-db = client['<your-database-name>']
-collection = db['<your-collection-name>']
-
-# Fetch all publications from the collection
-publications = collection.find()
-
-# Iterate over the publications and calculate the ranking for each
-for publication in publications:
-    ranking = calculate_ranking(publication)
-    collection.update_one({'_id': publication['_id']}, {'$set': {'_ranking': ranking}})
-
-# Sort the publications in descending order based on the ranking
-sorted_publications = collection.find().sort('_ranking', -1)
-
-# Print the sorted publications
-for publication in sorted_publications:
-    print(publication)
-
-
-
-
-
-    def process_publication(self, paper_record):
-
-        if paper_record['_bucket_exists'] is True:
-            html_record = self.db.bucket_papers.find_one({"_paper_id": paper_record['_id']})['_html']
+            ranking = (citation_count/10000) + (occurrences/5) + (paper_occurrences/50)
             
-        else:
-            query = '+'.join(paper_record['title'].split())
-            url = f"https://scholar.google.com/scholar?q={query}"
-
-            response = requests.get(url,headers = random.choice(headers_set))
-            response.raise_for_status()
-
-            html_record = response.text
-
-            add_r = self.db.bucket_papers.insert_one({"_paper_id": paper_record['_id'], "_html": html_record})
-            upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_bucket_exists": True}})
-
-            time.sleep(random.randint(500, 1000)/100)
-
-        parsed_content = BeautifulSoup(html_record, 'html.parser')
-
-        main_result = (parsed_content.find('div', {'class': 'gs_ri'}))
-        
-        result = parsed_content.find('div', {'class': 'gs_ri'})
-
-        cited_by_details = parsed_content.select_one('a:-soup-contains("Cited by")').text if parsed_content.select_one('a:-soup-contains("Cited by")') is not None else 'No citation count'
-        
-        processsed_cited_by = [int(s) for s in cited_by_details.split() if s.isdigit()]
-
-        if len(processsed_cited_by) > 0:
-            citation_count = processsed_cited_by[-1]
-        else:
-            citation_count = None
-
-        if paper_record['_citation_count'] is None:
-            upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citation_count": citation_count}})
-
-        if paper_record['_authors_listed'] is False:
-            author_ids = get_author_id_from_publication_result(result)
-
-            a_inserted_ids = []
-
-            if len(author_ids) > 0:
-                for author_id in author_ids:
-                    auth_result = self.db.authors.insert_one({"_ags_id": author_id, "_complete": False})
-
-                    a_inserted_ids = a_inserted_ids + [auth_result.inserted_id]
-
-                upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_authors_listed": True, "_authors": a_inserted_ids}})
-
-        # wait random time between 5 and 10 seconds
-        
-
-        if paper_record['_citations_listed'] is False:
-
-            link_element = main_result.find('a', {'data-clk': True})
-            if link_element:
-                paper_id = link_element['data-clk'].split('&d=')[1].split('&')[0]
-
-                citations = get_citations(paper_id)
-
-                for citation in citations:
-                    result = self.db.papers.insert_one({"title": citation, "_vertical_id": paper_record['_vertical_id'], "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0})
-
-                if len(citations) > 0:
-                    upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citations_listed": True}})
-'''
+            self.db.authors.update_one({'_id': author_rank['_id']}, {'$set': {'_ranking': ranking}})
+            pbar_ra.update(1)
