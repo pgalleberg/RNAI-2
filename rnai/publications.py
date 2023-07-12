@@ -20,14 +20,19 @@ def get_citations(paper_id):
 
     citations = []
 
-    browser = webdriver.Chrome()
+    #browser = webdriver.Chrome()
 
     while True:
         url = f"https://scholar.google.com/scholar?start={start}&cites={paper_id}&hl=en"
         
-        #response = requests.get(url)
-        browser.get(url)
-        html_record = browser.page_source
+        response = requests.get(url)
+        html_record = response.text
+
+        #browser.get(url)
+        #html_record = browser.page_source
+
+        #print(html_record)
+        
         soup = BeautifulSoup(html_record, 'html.parser')
         
         citation_elements = soup.find_all('a', {'data-clk': True})
@@ -45,5 +50,5 @@ def get_citations(paper_id):
         if start > 20:
             break
 
-        time.sleep(random.randint(500, 1000)/100)
+        time.sleep(random.randint(2, 5)/100)
     return citations
