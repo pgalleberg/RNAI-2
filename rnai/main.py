@@ -53,6 +53,7 @@ class RNAI:
 
         self.maximum_depth = 4
 
+
     def initialise_vertical(self, data_file_path = os.path.join('data', 'verticals.json')):
 
         # load json
@@ -137,6 +138,7 @@ class RNAI:
 
             if paper_rec['_level_index'] < self.maximum_depth:
                 self.process_citations(paper_rec)
+
 
             pbar_cp.update(1)
             self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
