@@ -51,7 +51,7 @@ class RNAI:
 
         self.request_counter = 0
 
-        
+        self.maximum_depth = 4
 
     def initialise_vertical(self, data_file_path = os.path.join('data', 'verticals.json')):
 
@@ -132,7 +132,11 @@ class RNAI:
         #rotate_VPN(self.settings) 
 
         while len(self.papers_to_complete) > 0:
-            self.process_citations(random.sample(list(self.papers_to_complete), 1)[0])
+
+            paper_rec = random.sample(list(self.papers_to_complete), 1)[0]
+
+            if paper_rec['_level_index'] < self.maximum_depth:
+                self.process_citations(paper_rec)
 
             pbar_cp.update(1)
             self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
