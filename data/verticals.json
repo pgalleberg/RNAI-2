@@ -1,20 +1,2 @@
-{"methane removal from ambient air":{"status": "new", "papers_list": ["Atmospheric methane removal: a research agenda" ,"A novel green technology: Reducing carbon dioxide and eliminating methane from the atmosphere", "Methane removal and atmospheric restoration", "New Directions: Atmospheric methane removal as a way to mitigate climate change?", "Methane removal seen as tool to slow warming"]}, "Science of Reading": {
-        "status": "new",
-        "papers_list": [
-            "How Psychological Science Informs the Teaching of Reading",
-            "Reading in the Brain: The New Science of How We Read",
-            "The science of reading and its educational implications",
-            "Overcoming Dyslexia",
-            "reading acquisition"
-        ]
-    }, 
-"Bio-inspired burrowing robots": {
-    "status": "new",
-    "papers_list": [
-        "Razor clam to RoboClam: burrowing drag reduction mechanisms and their robotic adaptation",
-        "Undulatory swimming in sand: experimental and simulation studies of a robotic sandfish",
-        "Controlling subterranean forces enables a fast, steerable, burrowing soft robot",
-        "Design, fabrication and control of a multi-material-multi-actuator soft robot inspired by burrowing worms",
-        "Soft Robot Actuation Strategies for Locomotion in Granular Substrates"
-    ]
-}}
+{"methane removal from ambient air":{"status": "new", "papers_list": ["Atmospheric methane removal: a research agenda" ,"A novel green technology: Reducing carbon dioxide and eliminating methane from the atmosphere", "Methane removal and atmospheric restoration", "New Directions: Atmospheric methane removal as a way to mitigate climate change?", "Methane removal seen as tool to slow warming"]}}
+

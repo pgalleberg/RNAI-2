@@ -4,16 +4,16 @@ from fp.fp import FreeProxy
 import os, re, json, requests, random
 from bs4 import BeautifulSoup
 from bson import ObjectId
-
+from selenium import webdriver
+from langdetect import detect
 import time
 from tqdm import tqdm
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import certifi
+from nordvpn_switcher import initialize_VPN,rotate_VPN,terminate_VPN
+
 ca = certifi.where()
-
-
-from langdetect import detect
 
 from rnai.authors import get_author_id_from_publication_result
 from rnai.publications import get_citations
@@ -42,6 +42,10 @@ class RNAI:
 
         self.db = self.mongo_client.rnai
 
+        self.browser = webdriver.Chrome()
+
+        initialize_VPN(save=1,area_input=['complete rotation'])
+
     def initialise_vertical(self, data_file_path = os.path.join('data', 'verticals.json')):
 
         # load json
@@ -67,7 +71,6 @@ class RNAI:
             for input_paper_name in verticals_input_data[vertical_name]['papers_list']:
 
                 if paper_exists_in_db(self, vertical_id, input_paper_name) is None:
-
                     if detect(input_paper_name) == 'en':
                         result = self.db.papers.insert_one({"title": input_paper_name, "_vertical_id": vertical_id, "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0, '_citation_count': None})
 
@@ -81,63 +84,49 @@ class RNAI:
 
         self.papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
 
-        bucket_count = self.db.papers.count_documents({"_bucket_exists": False})
-
-        while bucket_count > 0: 
+        while len(self.papers_to_bucket) > 0:            
             self.create_bucket(random.sample(list(self.papers_to_bucket), 1)[0])
             
             pbar_cb.update(1)
-            pbar_cb.total = self.db.papers.count_documents({"_bucket_exists": False})
-            pbar_cb.refresh()
-
-            bucket_count = self.db.papers.count_documents({"_bucket_exists": False})
-
             self.papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
 
-            
-
     def create_bucket(self, paper_record):
-        if paper_record['_bucket_exists'] is False:
-            query = '+'.join(paper_record['title'].split())
-            url = f"https://scholar.google.com/scholar?q={query}"
+        rotate_VPN()
+        query = '+'.join(paper_record['title'].split())
+        url = f"https://scholar.google.com/scholar?q={query}"
+        
+        response = requests.get(url,headers = random.choice(headers_set))
+        
+        response.raise_for_status()
+        
+        html_record = response.text
 
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            
-            response = requests.get(url,headers = headers)
-            response.raise_for_status()
-            
-            html_record = response.text
-            
-            add_r = self.db.bucket_papers.insert_one({"_paper_id": paper_record['_id'], "_html": html_record})
-            upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_bucket_exists": True}})
+        self.browser.get(url)
+        html_record = self.browser.page_source
+        
+        add_r = self.db.bucket_papers.insert_one({"_paper_id": paper_record['_id'], "_html": html_record})
+        upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_bucket_exists": True}})
 
-        time.sleep(random.randint(500, 1000)/100)
+        time.sleep(random.randint(100, 300)/100)
 
     def complete_citations(self):
 
         pbar_cp = tqdm(total = self.db.papers.count_documents({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}), leave = True)
         self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
+
         while len(self.papers_to_complete) > 0:
-            print(self.papers_to_complete)
-            print(len(self.papers_to_complete))
             self.process_citations(random.sample(list(self.papers_to_complete), 1)[0])
 
             pbar_cp.update(1)
-
-            pbar_cp.total = self.db.papers.count_documents({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]})
-
-            pbar_cp.refresh()
-
             self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
 
     def process_citations(self, paper_record):
+        rotate_VPN()
         html_record = self.db.bucket_papers.find_one({"_paper_id": paper_record['_id']})['_html']
 
         parsed_content = BeautifulSoup(html_record, 'html.parser')
 
-        main_result = (parsed_content.find('div', {'class': 'gs_ri'}))
-        
-        result = parsed_content.find('div', {'class': 'gs_ri'})
+        main_result = parsed_content.find('div', {'class': 'gs_ri'})
 
         cited_by_details = parsed_content.select_one('a:-soup-contains("Cited by")').text if parsed_content.select_one('a:-soup-contains("Cited by")') is not None else 'No citation count'
         
@@ -148,12 +137,19 @@ class RNAI:
         else:
             citation_count = None
 
-        if paper_record['_citation_count'] is None:
+        if '_citation_count' not in paper_record.keys():
+            upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citation_count": citation_count}})
+
+        elif paper_record['_citation_count'] is None:
             upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citation_count": citation_count}})
 
         if paper_record['_citations_listed'] is False:
 
-            link_element = main_result.find('a', {'data-clk': True})
+            if main_result is not None:
+                link_element = main_result.find('a', {'data-clk': True})
+
+            else:
+                link_element = None
             if link_element:
                 paper_id = link_element['data-clk'].split('&d=')[1].split('&')[0]
 
@@ -161,7 +157,7 @@ class RNAI:
 
                 for citation in citations:
                     if detect(citation) == 'en':
-                        result = self.db.papers.insert_one({"title": citation, "_vertical_id": paper_record['_vertical_id'], "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index": paper_record['_level_index'] + 1})
+                        result = self.db.papers.insert_one({"title": citation, "_vertical_id": paper_record['_vertical_id'], "_complete": False, "_bucket_exists": False, "_citations_complete": False, "_authors_listed": False, "_authors_complete": False, "_citations_listed": False, "_level_index":0})
 
                 if len(citations) > 0:
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citations_listed": True}})
@@ -169,6 +165,7 @@ class RNAI:
                 else:
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citations_listed": 'ERROR'}})
 
+'''
     def process_publication(self, paper_record):
 
         if paper_record['_bucket_exists'] is True:
@@ -235,5 +232,4 @@ class RNAI:
 
                 if len(citations) > 0:
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citations_listed": True}})
-
-
+'''

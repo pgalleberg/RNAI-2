@@ -11,6 +11,8 @@ def get_publication_details(publication_name):
 
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from nordvpn_switcher import initialize_VPN,rotate_VPN,terminate_VPN
 
 def get_citations(paper_id):
 
@@ -18,13 +20,15 @@ def get_citations(paper_id):
 
     citations = []
 
-    steps = 0
+    browser = webdriver.Chrome()
 
     while True:
         url = f"https://scholar.google.com/scholar?start={start}&cites={paper_id}&hl=en"
         
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+        #response = requests.get(url)
+        browser.get(url)
+        html_record = browser.page_source
+        soup = BeautifulSoup(html_record, 'html.parser')
         
         citation_elements = soup.find_all('a', {'data-clk': True})
         if not citation_elements:
@@ -38,9 +42,8 @@ def get_citations(paper_id):
 
         start += 10
 
-        if start > 19:
+        if start > 20:
             break
 
         time.sleep(random.randint(500, 1000)/100)
-
     return citations
