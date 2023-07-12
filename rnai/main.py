@@ -206,7 +206,73 @@ class RNAI:
         pbar_rv = tqdm(total = self.db.papers.count_documents({"_vertical_id": vertical_id}), leave = True)
 
         for pub_ranked in publications_to_rank:
-            pass
+            if '_citation_count' not in pub_ranked.keys():
+                pub_ranked['_citation_count'] = None
+
+            level_index = pub_ranked['_level_index']
+            citation_count = pub_ranked['_citation_count']
+            occurrences = self.db.papers.count_documents({'_vertical_id': vertical_id, '_cited_by': pub_ranked['_id']})
+
+            if citation_count is None:
+                citation_count = 0
+
+            
+            ranking = ((5 - level_index) / 5) + (citation_count / 100) + (occurrences / 25)
+            
+            self.db.papers.update_one({'_id': pub_ranked['_id']}, {'$set': {'_ranking': ranking}})
+            pbar_rv.update(1)
+
+    def complete_authors(self):
+        pbar_ca = tqdm(total = self.db.papers.count_documents({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}), leave = True)
+
+        papers_to_complete = list(self.db.papers.find({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}))
+
+        for paper_record in papers_to_complete:
+            self.process_authors(paper_record)
+
+            pbar_ca.update(1)
+
+    def process_authors(self, paper_record):
+        html_record = self.db.bucket_papers.find_one({"_paper_id": paper_record['_id']})['_html']
+
+        parsed_content = BeautifulSoup(html_record, 'html.parser')
+
+        main_result = parsed_content.find('div', {'class': 'gs_ri'})
+
+        if paper_record['_authors_listed'] is False:
+            author_ids = get_author_id_from_publication_result(main_result)
+
+            a_inserted_ids = []
+
+            if len(author_ids) > 0:
+                for author_id in author_ids:
+                    auth_result = self.db.authors.insert_one({"_ags_id": author_id, "_complete": False})
+
+                    a_inserted_ids = a_inserted_ids + [auth_result.inserted_id]
+
+                upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_authors_listed": True, "_authors": a_inserted_ids}})
+
+    def get_author_details(self):
+
+        for author_record in self.db.authors.find({"_complete": False}):
+            
+            author = scholarly.search_author_id(author_record['_ags_id'])
+
+            for akey in author.keys():
+                author_record[akey] = author[akey]
+
+            author_record['_complete'] = True
+
+            self.db.authors.update_one({"_id": author_record['_id']}, {"$set": author_record})
+
+            # append all fields from returned author dictionary to author_record and set _complete to True
+
+
+
+
+
+
+
 
 '''
 
