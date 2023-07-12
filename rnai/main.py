@@ -207,17 +207,9 @@ class RNAI:
         pbar_rv = tqdm(total = self.db.papers.count_documents({"_vertical_id": vertical_id}), leave = True)
 
         for pub_ranked in publications_to_rank:
+            pass
 
-        while len(self.papers_to_rank) > 0:
-            self.rank_paper(random.sample(list(self.papers_to_rank), 1)[0])
-
-            pbar_rv.update(1)
-            self.papers_to_rank = list(self.db.papers.find({"_vertical_id": vertical_id}))
-
-
-
-
-
+'''
 
 from pymongo import MongoClient
 
@@ -255,7 +247,7 @@ for publication in sorted_publications:
 
 
 
-'''
+
     def process_publication(self, paper_record):
 
         if paper_record['_bucket_exists'] is True:
