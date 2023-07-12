@@ -40,8 +40,7 @@ class RNAI:
         logIn()
         self.parameters = {'iterations': 10, 'citations': 100, 'wait_time': 25}
 
-        self.mongo_client = MongoClient('mongodb+srv://vih:lwJGhZ37uM07vhrO@tsp.geu7l4s.mongodb.net/?retryWrites=true&w=majority', tlsCAFile = ca, directConnection=True)
-
+        self.mongo_client = MongoClient('mongodb+srv://vih:lwJGhZ37uM07vhrO@tsp.geu7l4s.mongodb.net/?retryWrites=true&w=majority', tlsCAFile = ca)
         self.db = self.mongo_client.rnai
 
         #self.browser = webdriver.Chrome()
