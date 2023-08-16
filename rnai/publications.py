@@ -12,9 +12,8 @@ def get_publication_details(publication_name):
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from nordvpn_switcher import initialize_VPN,rotate_VPN,terminate_VPN
 
-def get_citations(paper_id):
+def get_citations(paper_id, session):
 
     start = 0
 
@@ -25,7 +24,7 @@ def get_citations(paper_id):
     while True:
         url = f"https://scholar.google.com/scholar?start={start}&cites={paper_id}&hl=en"
         
-        response = requests.get(url)
+        response = session.get(url)
         html_record = response.text
 
         #browser.get(url)
@@ -46,9 +45,6 @@ def get_citations(paper_id):
                 citations = citations + [citation_name]
 
         start += 10
-
-        if start > 20:
-            break
 
         time.sleep(random.randint(2, 5)/100)
     return citations

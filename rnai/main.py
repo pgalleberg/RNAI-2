@@ -1,51 +1,49 @@
 from scholarly import scholarly
-from scholarly import ProxyGenerator
-from fp.fp import FreeProxy
-import os, re, json, requests, random
+import os, re, time, json, requests, random
 from bs4 import BeautifulSoup
 from bson import ObjectId
 from selenium import webdriver
 from langdetect import detect
-import time
 from tqdm import tqdm
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import certifi
-from nordvpn_switcher import initialize_VPN,rotate_VPN,terminate_VPN
 
 ca = certifi.where()
 
 from rnai.authors import get_author_id_from_publication_result
 from rnai.publications import get_citations
-
 from rnai.papers import paper_exists_in_db
-
 from rnai.verticals import vertical_exists_in_db
 from rnai.utilities.vpn import logIn
+from rnai.utilities.misc import headers_set
 
-headers_set = [
-    {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'},
-    {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'},
-    {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36'},
-    {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.171 Safari/537.36'},
-    {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36'},
-    {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.171 Safari/537.36'},
-    # Add more headers if needed
-]
+import requests
+from requests_ip_rotator import ApiGateway
+
+import time, requests
+from urllib.parse import urlparse
+from requests_ip_rotator import ApiGateway, EXTRA_REGIONS
+
+
+proxy_rotation_mode = 'AWS'
+
+aws_access_key_id = 'AKIA55ZYZKB4747LBJ3H'
+aws_secret_access_key = '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'
+
+src = 'https://scholar.google.com'
+src_parsed = urlparse(src)
+src_nopath = "%s://%s" % (src_parsed.scheme, src_parsed.netloc)
+
 
 
 class RNAI:
 
     def __init__(self):
-        logIn()
         self.parameters = {'iterations': 10, 'citations': 100, 'wait_time': 25}
 
         self.mongo_client = MongoClient('mongodb+srv://vih:lwJGhZ37uM07vhrO@tsp.geu7l4s.mongodb.net/?retryWrites=true&w=majority', tlsCAFile = ca)
         self.db = self.mongo_client.rnai
-
-        #self.browser = webdriver.Chrome()
-
-        #self.settings = initialize_VPN(save=1,area_input=['complete rotation'])
 
         self.papers, self.authors = {}, {}
 
@@ -53,9 +51,12 @@ class RNAI:
 
         self.maximum_depth = 4
 
+        self.gateway1 = ApiGateway(src_nopath, regions=EXTRA_REGIONS, access_key_id=f"{aws_access_key_id}", access_key_secret=f"{aws_secret_access_key}")
+        self.gateway1.start(force=True)
+        self.session1 = requests.Session()
+        self.session1.mount(src_nopath, self.gateway1)
 
     def initialise_vertical(self, data_file_path = os.path.join('data', 'verticals.json')):
-
         # load json
         with open(data_file_path, 'r') as f:
             verticals_input_data = json.load(f)
@@ -94,24 +95,16 @@ class RNAI:
 
         self.papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
 
-        #rotate_VPN(self.settings) 
-
-        while len(self.papers_to_bucket) > 0:
-
-            if self.request_counter > 14:
-                logIn()
-                self.request_counter = 0            
-            self.create_bucket(random.sample(list(self.papers_to_bucket), 1)[0])
-            
+        for paper_to_bucket in self.papers_to_bucket:
+            self.create_bucket(paper_to_bucket)
             pbar_cb.update(1)
-            self.papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
 
     def create_bucket(self, paper_record):
         
         query = '+'.join(paper_record['title'].split())
         url = f"https://scholar.google.com/scholar?q={query}"
         
-        response = requests.get(url,headers = random.choice(headers_set))
+        response = self.session1.get(url)
         response.raise_for_status()
         html_record = response.text
 
@@ -129,8 +122,6 @@ class RNAI:
 
         pbar_cp = tqdm(total = self.db.papers.count_documents({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}), leave = True)
         self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
-
-        #rotate_VPN(self.settings) 
 
         while len(self.papers_to_complete) > 0:
 
@@ -153,10 +144,6 @@ class RNAI:
         cited_by_details = parsed_content.select_one('a:-soup-contains("Cited by")').text if parsed_content.select_one('a:-soup-contains("Cited by")') is not None else 'No citation count'
         
         processsed_cited_by = [int(s) for s in cited_by_details.split() if s.isdigit()]
-
-        if self.request_counter > 14:
-                logIn()
-                self.request_counter = 0
 
         if len(processsed_cited_by) > 0:
             citation_count = processsed_cited_by[-1]
@@ -181,9 +168,7 @@ class RNAI:
             if link_element:
                 paper_id = link_element['data-clk'].split('&d=')[1].split('&')[0]
 
-                citations = get_citations(paper_id)
-
-                print(citations)
+                citations = get_citations(paper_id, self.session1)
 
                 for citation in citations:
                     if detect(citation) == 'en':
@@ -263,11 +248,6 @@ class RNAI:
         pbar_ca = tqdm(total = self.db.authors.count_documents({"_complete": False}), leave = True)
 
         for author_record in self.db.authors.find({"_complete": False}):
-            
-            if self.request_counter > 22:
-                logIn()
-                self.request_counter = 0
-
             author = scholarly.search_author_id(author_record['_ags_id'])
 
             for akey in author.keys():
