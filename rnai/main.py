@@ -25,7 +25,6 @@ import time, requests
 from urllib.parse import urlparse
 from requests_ip_rotator import ApiGateway, EXTRA_REGIONS
 
-
 proxy_rotation_mode = 'AWS'
 
 aws_access_key_id = 'AKIA55ZYZKB4747LBJ3H'
@@ -34,8 +33,6 @@ aws_secret_access_key = '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'
 src = 'https://scholar.google.com'
 src_parsed = urlparse(src)
 src_nopath = "%s://%s" % (src_parsed.scheme, src_parsed.netloc)
-
-
 
 class RNAI:
 
@@ -181,7 +178,6 @@ class RNAI:
                         else:
                             upd_r = self.db.papers.update_one({"_id": self.papers[citation]}, {"$push": {"_cited_by": paper_record['_id']}})
 
-
                 if len(citations) > 0:
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_citations_listed": True}})
 
@@ -282,7 +278,7 @@ class RNAI:
 
                 citations_in_vertical = citations_in_vertical + occurrences
 
-            ranking = (citation_count/10000) + (occurrences/5) + (paper_occurrences/50)
+            ranking = (citation_count/10000) + (citations_in_vertical/5) + (paper_occurrences/50)
             
             self.db.authors.update_one({'_id': author_rank['_id']}, {'$set': {'_ranking': ranking}})
             pbar_ra.update(1)
