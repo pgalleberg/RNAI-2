@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+  <title>RNAI</title>
+  <link
+    rel="shortcut icon"
+    href="{{ url_for('static', filename='scroll-solid.svg') }}"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      /* background-color: #2196F3;  */
+      /* padding: 10px; */
+    }
+    .grid-item {
+      /* background-color: rgba(255, 255, 255, 0.8); */
+      /* border: 1px solid rgba(0, 0, 0, 0.8); */
+      padding: 0px 10px 0px 10px;
+      font-size: 15px;
+      color: lightgray;
+      text-align: center;
+    }
+    </style>
+</head>
+
+<body>
+  <img src="{{ url_for('static', filename='RNAI_logo_II.png') }}" class="img" />
+  <!-- <h3>RNAI</h3> -->
+  <!-- <form  method="post">
+    <input type="text" name="vertical" placeholder="Vertical Name" required />
+    
+    <input type="text" name="paper1" placeholder="Title of First Paper" required />
+    <input type="text" name="paper2" placeholder="Title of Second Paper" required />
+    <input type="text" name="paper3" placeholder="Title of Third Paper" required />
+    <input type="text" name="paper4" placeholder="Title of Fourth Paper" required />
+    <input type="text" name="paper5" placeholder="Title of Fifth Paper" required />
+
+    <input type="text" name="name1" placeholder="First Generic Name" required />
+    <input type="text" name="name2" placeholder="Second Generic Name" required />
+    <input type="text" name="name3" placeholder="Third Generic Name" required />
+    <input type="text" name="name4" placeholder="Fourth Generic Name" required />
+    <input type="text" name="name5" placeholder="Fifth Generic Name" required />
+
+    <input type="submit" value="Submit" />
+  </form> -->
+
+
+  <form  method="post">
+
+    <div class="grid-container">
+
+        <div class="grid-item"></div>
+        <div class="grid-item" style="padding-bottom: 10px;">Relevant Papers</div>
+        <div class="grid-item" style="padding-bottom: 10px;">Generic Vertical Name</div> 
+
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper1" placeholder="Title of First Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name1" placeholder="First Generic Name" required />
+        </div>  
+        
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper2" placeholder="Title of Second Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name2" placeholder="Second Generic Name" required />
+        </div>  
+        
+        <div class="grid-item">
+            <input type="text" name="vertical" placeholder="Vertical Name" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="paper3" placeholder="Title of Third Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name3" placeholder="Third Generic Name" required />
+        </div>  
+        
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper4" placeholder="Title of Fourth Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name4" placeholder="Fourth Generic Name" required />
+        </div> 
+        
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper5" placeholder="Title of Fifth Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name5" placeholder="Fifth Generic Name" required />
+        </div>   
+
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="submit" value="Submit" />
+        </div>
+        <div class="grid-item"></div>
+
+    </div>
+
+    <!-- <input type="submit" value="Submit" /> -->
+
+</form>
+
+  {% if result %}
+  <!-- <div class="result" style="color: green;">{{ result }}</div> -->
+  <p style="color: green"><i class="fas fa-check-circle fa-2x" style="color:green; margin-right: 10px; padding-top: 20px;"></i>We are processing your file, and will be emailing it to you shortly.</p>
+  {% endif %}
+
+  {% if error %}
+  <p style="color:red"><i class="fas fa-times-circle fa-2x" style="color:red; margin-right: 10px; padding-top: 20px;"></i>{{ error }}</p>
+  <p style="color:red">{{ error2 }}</p>
+  {% endif %}
+
+</body>

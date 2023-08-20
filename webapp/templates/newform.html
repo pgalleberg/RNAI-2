@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: #2196F3;
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<h1>Grid Elements</h1>
+
+<p>A Grid Layout must have a parent element with the <em>display</em> property set to <em>grid</em> or <em>inline-grid</em>.</p>
+
+<p>Direct child element(s) of the grid container automatically becomes grid items.</p>
+
+<div class="grid-container">
+  <div class="grid-item"></div>
+  <div class="grid-item">Relevant Papers</div>
+  <div class="grid-item">Generic Vertical Name</div>  
+</div>
+
+<form  method="post">
+
+    <div class="grid-container">
+
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper1" placeholder="Title of First Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name1" placeholder="First Generic Name" required />
+        </div>  
+        
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper1" placeholder="Title of First Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name1" placeholder="First Generic Name" required />
+        </div>  
+        
+        <div class="grid-item">
+            <input type="text" name="vertical" placeholder="Vertical Name" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="paper1" placeholder="Title of First Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name1" placeholder="First Generic Name" required />
+        </div>  
+        
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper1" placeholder="Title of First Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name1" placeholder="First Generic Name" required />
+        </div> 
+        
+        <div class="grid-item"></div>
+        <div class="grid-item">
+            <input type="text" name="paper1" placeholder="Title of First Paper" required />
+        </div>
+        <div class="grid-item">
+            <input type="text" name="name1" placeholder="First Generic Name" required />
+        </div>   
+    
+    </div>
+
+    <input type="submit" value="Submit" />
+
+</form>
+
+</body>
+</html>
+
+

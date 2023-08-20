@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+  <title>RNAI</title>
+  <link
+    rel="shortcut icon"
+    href="{{ url_for('static', filename='scroll-solid.svg') }}"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+</head>
+
+<body>
+  <img src="{{ url_for('static', filename='scroll-solid.svg') }}" class="icon" />
+  <h3>RNAII</h3>
+  <form  method="post">
+    <input type="text" name="vertical" placeholder="Vertical Name" required />
+    
+    <input type="text" name="paper1" placeholder="Title of First Paper" required />
+    <input type="text" name="paper2" placeholder="Title of Second Paper" required />
+    <input type="text" name="paper3" placeholder="Title of Third Paper" required />
+    <input type="text" name="paper4" placeholder="Title of Fourth Paper" required />
+    <input type="text" name="paper5" placeholder="Title of Fifth Paper" required />
+
+    <input type="text" name="name1" placeholder="First Generic Name" required />
+    <input type="text" name="name2" placeholder="Second Generic Name" required />
+    <input type="text" name="name3" placeholder="Third Generic Name" required />
+    <input type="text" name="name4" placeholder="Fourth Generic Name" required />
+    <input type="text" name="name5" placeholder="Fifth Generic Name" required />
+
+    <input type="submit" value="Submit" />
+  </form>
+
+  {% if result %}
+  <!-- <div class="result" style="color: green;">{{ result }}</div> -->
+  <p style="color: green"><i class="fas fa-check-circle fa-2x" style="color:green; margin-right: 10px; padding-top: 20px;"></i>We are processing your file, and will be emailing it to you shortly.</p>
+  {% endif %}
+
+  {% if error %}
+  <p style="color:red"><i class="fas fa-times-circle fa-2x" style="color:red; margin-right: 10px; padding-top: 20px;"></i>{{ error }}</p>
+  <p style="color:red">{{ error2 }}</p>
+  {% endif %}
+
+</body>
