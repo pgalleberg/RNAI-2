@@ -50,7 +50,7 @@ class RNAI:
             pbar_ip = tqdm(total = len(self.initial_data[vertical_name]['papers_list']), leave = True)
             
             for input_paper_name in self.initial_data[vertical_name]['papers_list']:
-                paper_id = add_paper(self.db, vertical_id, input_paper_name, 0)
+                paper_id = add_paper(self.db, vertical_id.inserted_id, input_paper_name, 0)
                 self.papers[input_paper_name] = paper_id
                 pbar_ip.update(1)
 
