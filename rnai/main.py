@@ -15,6 +15,7 @@ ca = certifi.where()
 from rnai.utilities.networking import NetworkPortal
 from rnai.verticals.add import add_vertical
 from rnai.papers.add import add_paper
+from rnai.papers.citations import get_citations
 
 class RNAI:
     def __init__(self, reset = False, collection = 'rnai', initial_data = os.path.join('data', 'initial_vertical_data.json')):
@@ -50,19 +51,15 @@ class RNAI:
         pbar_v.close()
     
     def reset(self):
-        # ask for confirmation before proceeding
-
         for coll in self.db.list_collection_names():
             self.db.drop_collection(coll)
 
     def populate_verticals(self):
         while self.current_level < self.parameters['depth'] + 1:
-
-            print(self.current_level)
-            print(self.parameters['depth'])
-
             while len(list(self.db.papers.find({"_bucket_exists": False}))) > 0:
                 self.create_buckets()
+
+            self.process_papers()
 
             self.current_level = self.current_level + 1
             
@@ -70,8 +67,6 @@ class RNAI:
         pbar_cb = tqdm(total = self.db.papers.count_documents({"_bucket_exists": False}), leave = True)
 
         papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
-
-        print(papers_to_bucket)
 
         for paper_to_bucket in papers_to_bucket:
             query = '+'.join(paper_to_bucket['title'].split())
@@ -86,3 +81,54 @@ class RNAI:
             pbar_cb.update(1)
 
         pbar_cb.close()
+
+    def process_papers(self):
+        
+        pbar_cp = tqdm(total = self.db.papers.count_documents({"$and": [{"_cite_by_complete": False}, {"_bucket_exists": True}]}), leave = True)
+        
+        papers_to_complete = list(self.db.papers.find({"$and": [{"_cite_by_complete": False}, {"_bucket_exists": True}]}))
+
+        for paper_to_complete in papers_to_complete:
+            html_record = self.db.bucket_papers.find_one({"_paper_id": paper_to_complete['_id']})['_html']
+            parsed_content = BeautifulSoup(html_record, 'html.parser')
+            
+            main_result = parsed_content.find('div', {'class': 'gs_ri'})
+            
+            cited_by_details = parsed_content.select_one('a:-soup-contains("Cited by")').text if parsed_content.select_one('a:-soup-contains("Cited by")') is not None else 'No citation count'
+            
+            processsed_cited_by = [int(s) for s in cited_by_details.split() if s.isdigit()]
+
+            if len(processsed_cited_by) > 0:
+                citation_count = processsed_cited_by[-1]
+            else:
+                citation_count = None
+
+            if '_citation_count' not in paper_to_complete.keys():
+                upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_citation_count": citation_count}})
+                
+            elif paper_to_complete['_citation_count'] is None:
+                upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_citation_count": citation_count}})
+
+            if paper_to_complete['_cite_by_complete'] is False:
+
+                if main_result is not None:
+                    link_element = main_result.find('a', {'data-clk': True})
+
+                else:
+                    link_element = None
+
+                if link_element:
+                    paper_id = link_element['data-clk'].split('&d=')[1].split('&')[0]
+
+                    citations = get_citations(paper_id, self.network_portal)
+
+                    for citation in citations:
+                        paper_id = add_paper(self.db, paper_to_complete['_vertical_id'], citation, self.current_level + 1)
+                        self.papers[citation] = paper_id
+
+                    if len(citations) > 0:
+                        upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": True}})
+                        
+                    else:
+                        upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": 'ERROR'}})
+

@@ -126,7 +126,6 @@ class RNAI:
             if paper_rec['_level_index'] < self.maximum_depth:
                 self.process_citations(paper_rec)
 
-
             pbar_cp.update(1)
             self.papers_to_complete = list(self.db.papers.find({"$and": [{"_citations_listed": False}, {"_bucket_exists": True}]}))
 
