@@ -58,7 +58,10 @@ class RNAI:
     def populate_verticals(self):
         while self.current_level < self.parameters['depth'] + 1:
 
-            while self.db.papers.find({"_bucket_exists": False}) is not None:
+            print(self.current_level)
+            print(self.parameters['depth'])
+
+            while len(list(self.db.papers.find({"_bucket_exists": False}))) > 0:
                 self.create_buckets()
 
             self.current_level = self.current_level + 1
@@ -67,6 +70,8 @@ class RNAI:
         pbar_cb = tqdm(total = self.db.papers.count_documents({"_bucket_exists": False}), leave = True)
 
         papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
+
+        print(papers_to_bucket)
 
         for paper_to_bucket in papers_to_bucket:
             query = '+'.join(paper_to_bucket['title'].split())
