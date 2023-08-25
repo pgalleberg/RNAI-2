@@ -45,12 +45,12 @@ class RNAI:
 
         pbar_v = tqdm(total = len(self.initial_data.keys()), leave = True)
         for vertical_name in self.initial_data.keys():
-            vertical_id = add_vertical(self.db, vertical_name)
+            vertical_id, log_string = add_vertical(self.db, vertical_name)
             
             pbar_ip = tqdm(total = len(self.initial_data[vertical_name]['papers_list']), leave = True)
             
             for input_paper_name in self.initial_data[vertical_name]['papers_list']:
-                paper_id = add_paper(self.db, vertical_id.inserted_id, input_paper_name, 0)
+                paper_id, log_string = add_paper(self.db, vertical_id, input_paper_name, 0)
                 self.papers[input_paper_name] = paper_id
                 pbar_ip.update(1)
 
