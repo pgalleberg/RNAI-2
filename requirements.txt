@@ -1,4 +1,4 @@
-alabaster==0.7.13
+alabaster
 anyio==3.7.0
 arrow==1.2.3
 async-generator==1.10
