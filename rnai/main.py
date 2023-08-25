@@ -14,12 +14,19 @@ ca = certifi.where()
 
 from rnai.utilities.networking import NetworkPortal
 from rnai.verticals.add import add_vertical
+from rnai.verticals.rank_papers import rank_papers_in_vertical
 from rnai.papers.add import add_paper
 from rnai.papers.citations import get_citations
+
+from rnai.authors.author_ids import get_author_id_from_publication_result
+
+from rnai.authors.rank import rank_authors
 
 class RNAI:
     def __init__(self, reset = False, collection = 'rnai', initial_data = os.path.join('data', 'initial_vertical_data.json')):
         self.parameters = {'iterations': 10, 'citations': 100, 'wait_time': 25, 'depth': 4}
+
+        print('Initialising RNAI Runtime')
 
         self.mongo_client = MongoClient('mongodb+srv://vih:lwJGhZ37uM07vhrO@tsp.geu7l4s.mongodb.net/?retryWrites=true&w=majority', tlsCAFile = ca)
         self.db = self.mongo_client[collection]
@@ -33,6 +40,8 @@ class RNAI:
 
         if reset is True:
             self.reset()
+
+        print('Initialising Verticals')
 
         pbar_v = tqdm(total = len(self.initial_data.keys()), leave = True)
         for vertical_name in self.initial_data.keys():
@@ -51,6 +60,7 @@ class RNAI:
         pbar_v.close()
     
     def reset(self):
+        print('Resetting Database')
         for coll in self.db.list_collection_names():
             self.db.drop_collection(coll)
 
@@ -130,7 +140,7 @@ class RNAI:
                         self.papers[citation] = paper_id
 
                     if len(citations) > 0:
-                        upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": True}})
+                        upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": True, '_complete':True}})
                         
                     else:
                         upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": 'ERROR'}})
@@ -143,5 +153,54 @@ class RNAI:
         verticals = self.db.verticals.find({})
 
         for vertical in verticals:
-            
+            rank_papers_in_vertical(self.db, vertical['_id'])
+    
+    def process_authors(self):
+        pbar_ca = tqdm(total = self.db.papers.count_documents({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}), leave = True)
+
+        papers_to_complete = list(self.db.papers.find({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}))
+
+        for paper_record in papers_to_complete:
+            html_record = self.db.bucket_papers.find_one({"_paper_id": paper_record['_id']})['_html']
+            parsed_content = BeautifulSoup(html_record, 'html.parser')
+            main_result = parsed_content.find('div', {'class': 'gs_ri'})
+
+            if paper_record['_authors_listed'] is False:
+                author_ids = get_author_id_from_publication_result(main_result)
+                
+                a_inserted_ids = []
+                
+                if len(author_ids) > 0:
+                    for author_id in author_ids:
+                        auth_result = self.db.authors.insert_one({"_ags_id": author_id, "_complete": False})
+                        
+                        a_inserted_ids = a_inserted_ids + [auth_result.inserted_id]
+                        
+                    upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_authors_listed": True, "_authors": a_inserted_ids}})
+
+            pbar_ca.update(1)
+
+        pbar_ca.close()
+
+    def populate_author_records(self):
+        pbar_ca = tqdm(total = self.db.authors.count_documents({"_complete": False}), leave = True)
+
+        for author_record in self.db.authors.find({"_complete": False}):
+            author = scholarly.search_author_id(author_record['_ags_id'])
+            for akey in author.keys():
+
+                if type(author[akey]) is int:
+                    author[akey] = str(author[akey])
+
+                author_record[akey] = author[akey]
+
+            author_record['_complete'] = True
+
+            self.db.authors.update_one({"_id": author_record['_id']}, {"$set": author_record})
+
+            pbar_ca.update(1)
+
+        pbar_ca.close()
+
+        rank_authors(self.db)
 

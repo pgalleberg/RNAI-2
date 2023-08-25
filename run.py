@@ -2,6 +2,9 @@ from rnai.main import RNAI
 
 rnai = RNAI(reset = True)
 rnai.populate_verticals()
+rnai.rank_verticals()
+rnai.process_authors()
+rnai.populate_author_records()
 rnai.network_portal.shutdown()
 
 
