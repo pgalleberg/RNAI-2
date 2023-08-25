@@ -8,7 +8,7 @@ def add_paper(db, vertical_id, paper_name, level):
 
     if paper_exists is None:
         if detect(paper_name) == 'en':
-            result = db.papers.insert_one({'title': paper_name, '_vertical_id': vertical_id, '_complete': False, '_bucket_exists': False, '_cites_complete': False, '_cite_by_complete': False, '_authors_listed': False, '_authors_complete': False, '_citations_listed': False, '_level': level, '_citation_count': None, '_cites': [], '_cited_by': []})
+            result = db.papers.insert_one({'title': paper_name, '_vertical_id': vertical_id, '_complete': False, '_reviewed': False,  '_bucket_exists': False, '_cites_complete': False, '_cite_by_complete': False, '_authors_listed': False, '_authors_complete': False, '_citations_listed': False, '_level': level, '_citation_count': None, '_cites': [], '_cited_by': []})
 
             paper_id = result.inserted_id
 

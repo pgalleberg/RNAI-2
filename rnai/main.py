@@ -56,8 +56,11 @@ class RNAI:
 
     def populate_verticals(self):
         while self.current_level < self.parameters['depth'] + 1:
+            print('Populating Verticals - Level ' + str(self.current_level) + ' - Generate Buckets')
             while len(list(self.db.papers.find({"_bucket_exists": False}))) > 0:
                 self.create_buckets()
+
+            print('Populating Verticals - Level ' + str(self.current_level) + ' - Process Papers')
 
             self.process_papers()
 
@@ -131,4 +134,14 @@ class RNAI:
                         
                     else:
                         upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": 'ERROR'}})
+
+            pbar_cp.update(1)
+
+        pbar_cp.close()
+
+    def rank_verticals(self):
+        verticals = self.db.verticals.find({})
+
+        for vertical in verticals:
+            
 

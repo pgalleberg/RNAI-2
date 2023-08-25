@@ -1,4 +1,4 @@
-import requests
+import time, requests
 from urllib.parse import urlparse
 from requests_ip_rotator import ApiGateway, EXTRA_REGIONS
 
@@ -11,6 +11,7 @@ src = 'https://scholar.google.com'
 src_parsed = urlparse(src)
 src_nopath = "%s://%s" % (src_parsed.scheme, src_parsed.netloc)
 
+from requests.exceptions import HTTPError
 
 class NetworkPortal:
     def __init__(self):
@@ -21,8 +22,21 @@ class NetworkPortal:
         #self.x = 0
 
     def make_request(self, url):
-        response = self.session.get(url)
-        response.raise_for_status()
+
+        while True:
+            try:
+                response = self.session.get(url)
+                response.raise_for_status()
+                
+                break
+            
+            except HTTPError as exc:
+                code = exc.response.status_code
+
+                time.sleep(2)
+
+                continue
+            
         html_record = response.text
 
         '''
