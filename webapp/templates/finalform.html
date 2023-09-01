@@ -24,31 +24,129 @@
       text-align: center;
     }
     </style>
+
+    <script type="module">
+      import { Configuration, OpenAIApi } from "../node_modules/openai";
+      const configuration = new Configuration({
+          apiKey: process.env.OPENAI_API_KEY,
+        });
+        const openai = new OpenAIApi(configuration);
+
+        export default async function (req, res) {
+          if (!configuration.apiKey) {
+            res.status(500).json({
+              error: {
+                message: "OpenAI API key not configured, please follow instructions in README.md",
+              }
+            });
+          }
+        }
+
+      document.addEventListener('DOMContentLoaded', function() {
+
+        const checkbox = document.getElementById('autoSuggestCheckbox');
+        const autoSuggestText = document.getElementById('autoSuggestText');
+
+        for (i=1; i<=5; i++){
+          id = "name" + i
+          disableButton(id)
+        }
+
+        checkbox.addEventListener('change', function() {
+          if (checkbox.checked) {
+            autoSuggestText.textContent = 'Auto Suggest: ON';
+            for (i=1; i<=5; i++){
+                id = "name" + i
+                disableButton(id)
+            }
+          } else {
+            autoSuggestText.textContent = 'Auto Suggest: OFF';
+            for (i=1; i<=5; i++){
+              id = "name" + i
+              enableButton(id)
+            }
+          }
+        });
+
+        const verticalNameInput = document.getElementById('verticalName')
+        verticalNameInput.addEventListener('blur', function() {
+          if (checkbox.checked) {
+            const verticalName = verticalNameInput.value;
+            console.log(`Start Fetching vertical names for: ${verticalName}`);
+            names = getGenericNames(verticalName)
+            console.log(`names: ${names}`)
+            
+            i = 1
+            for (const name of names){
+              id = "name" + i
+              fillField(id, name)
+              //enableButton(id)
+              i+=1
+            }
+          }
+        });
+
+        form = document.getElementById("mainForm")
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          let allFieldsFilled = true;
+
+          for (const element of form.elements){
+            if (element.tagName === "INPUT"){
+              if (element.value.trim() === ''){
+                allFieldsFilled = false;
+                break
+              }
+            }
+          }
+
+          if (allFieldsFilled){
+            form.submit();
+          } else {
+            alert("Please fill in all the fields")
+          }
+        })
+
+      });
+
+      function getGenericNames(verticalName){
+        console.log(`Vertical name received: ${verticalName}`)
+
+        
+
+        
+        
+        genericNames = ["GN1", "GN2", "GN3", "GN4", "GN5"]
+        return genericNames
+      }
+
+      function disableButton(id) {
+        genericName = document.getElementById(id)
+        genericName.disabled = true
+        genericName.style.backgroundColor = 'lightyellow'
+      }
+
+      function enableButton(id) {
+        genericName = document.getElementById(id)
+        genericName.disabled = false
+        genericName.style.backgroundColor = 'white'
+      }
+
+      function fillField(id, name) {
+        console.log(`id: ${id}, name: ${name}`)
+        genericName = document.getElementById(id)
+        genericName.value = name
+      }
+      
+    </script>
+
 </head>
 
 <body>
   <img src="{{ url_for('static', filename='RNAI_logo_II.png') }}" class="img" />
-  <!-- <h3>RNAI</h3> -->
-  <!-- <form  method="post">
-    <input type="text" name="vertical" placeholder="Vertical Name" required />
-    
-    <input type="text" name="paper1" placeholder="Title of First Paper" required />
-    <input type="text" name="paper2" placeholder="Title of Second Paper" required />
-    <input type="text" name="paper3" placeholder="Title of Third Paper" required />
-    <input type="text" name="paper4" placeholder="Title of Fourth Paper" required />
-    <input type="text" name="paper5" placeholder="Title of Fifth Paper" required />
 
-    <input type="text" name="name1" placeholder="First Generic Name" required />
-    <input type="text" name="name2" placeholder="Second Generic Name" required />
-    <input type="text" name="name3" placeholder="Third Generic Name" required />
-    <input type="text" name="name4" placeholder="Fourth Generic Name" required />
-    <input type="text" name="name5" placeholder="Fifth Generic Name" required />
-
-    <input type="submit" value="Submit" />
-  </form> -->
-
-
-  <form  method="post">
+  <form id="mainForm" method="post">
 
     <div class="grid-container">
 
@@ -61,7 +159,7 @@
             <input type="text" name="paper1" placeholder="Title of First Paper" required />
         </div>
         <div class="grid-item">
-            <input type="text" name="name1" placeholder="First Generic Name" required />
+            <input id="name1" type="text" name="name1" placeholder="First Generic Name" required />
         </div>  
         
         <div class="grid-item"></div>
@@ -69,17 +167,17 @@
             <input type="text" name="paper2" placeholder="Title of Second Paper" required />
         </div>
         <div class="grid-item">
-            <input type="text" name="name2" placeholder="Second Generic Name" required />
+            <input id="name2" type="text" name="name2" placeholder="Second Generic Name" required />
         </div>  
         
         <div class="grid-item">
-            <input type="text" name="vertical" placeholder="Vertical Name" required />
+            <input id="verticalName" type="text" name="vertical" placeholder="Vertical Name" required />
         </div>
         <div class="grid-item">
             <input type="text" name="paper3" placeholder="Title of Third Paper" required />
         </div>
         <div class="grid-item">
-            <input type="text" name="name3" placeholder="Third Generic Name" required />
+            <input id="name3" type="text" name="name3" placeholder="Third Generic Name" required />
         </div>  
         
         <div class="grid-item"></div>
@@ -87,7 +185,7 @@
             <input type="text" name="paper4" placeholder="Title of Fourth Paper" required />
         </div>
         <div class="grid-item">
-            <input type="text" name="name4" placeholder="Fourth Generic Name" required />
+            <input id="name4" type="text" name="name4" placeholder="Fourth Generic Name" required />
         </div> 
         
         <div class="grid-item"></div>
@@ -95,15 +193,22 @@
             <input type="text" name="paper5" placeholder="Title of Fifth Paper" required />
         </div>
         <div class="grid-item">
-            <input type="text" name="name5" placeholder="Fifth Generic Name" required />
+            <input id="name5" type="text" name="name5" placeholder="Fifth Generic Name" required/>
         </div>   
 
         <div class="grid-item"></div>
         <div class="grid-item">
             <input type="submit" value="Submit" />
         </div>
-        <div class="grid-item"></div>
-
+        <div class="grid-item">
+          <div style="padding-top: 10px;">
+            <label class="switch">
+              <input type="checkbox" id="autoSuggestCheckbox" checked>
+              <span class="slider round"></span>
+            </label>
+            <p id="autoSuggestText">Auto Suggest: ON</p>
+          </div>
+        </div>
     </div>
 
     <!-- <input type="submit" value="Submit" /> -->
@@ -119,5 +224,4 @@
   <p style="color:red"><i class="fas fa-times-circle fa-2x" style="color:red; margin-right: 10px; padding-top: 20px;"></i>{{ error }}</p>
   <p style="color:red">{{ error2 }}</p>
   {% endif %}
-
 </body>

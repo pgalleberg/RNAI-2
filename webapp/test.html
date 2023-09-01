@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Field Blur Event</title>
+</head>
+<body>
+    <form>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+    </form>
+
+    <script>
+        // Get the input element by its ID
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+
+        // Add a blur event listener to the input element
+        usernameInput.addEventListener('blur', function() {
+            console.log('User has finished writing in the username field');
+            // You can perform further actions here
+        });
+
+        emailInput.addEventListener('blur', function() {
+            console.log('User has finished writing in the email field');
+            // You can perform further actions here
+        });
+    </script>
+</body>
+</html>
