@@ -1,7 +1,9 @@
 from rnai.main import RNAI
 
-rnai = RNAI(reset = True)
-rnai.populate_verticals()
+rnai = RNAI(reset = False)
+#rnai.populate_verticals()
+
+rnai.process_papers(level = 3, cited_by_flag = False)
 rnai.rank_verticals()
 rnai.process_authors()
 rnai.populate_author_records()

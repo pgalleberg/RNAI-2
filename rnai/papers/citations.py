@@ -13,7 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-def get_citations(paper_id, network_portal):
+def get_citations(paper_id, network_portal, citation_count):
 
     start = 0
 
@@ -43,7 +43,7 @@ def get_citations(paper_id, network_portal):
             if not citation_name[0] == '[':
                 citations = citations + [citation_name]
 
-        if len(citations) > 19:
+        if len(citations) > citation_count:
             break
 
         start += 10

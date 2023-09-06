@@ -1,5 +1,5 @@
 from scholarly import scholarly
-import os, re, time, json, requests, random
+import os, re, time, json, requests, random, sys
 from bs4 import BeautifulSoup
 from bson import ObjectId
 from selenium import webdriver
@@ -31,6 +31,8 @@ class RNAI:
         self.mongo_client = MongoClient('mongodb+srv://vih:lwJGhZ37uM07vhrO@tsp.geu7l4s.mongodb.net/?retryWrites=true&w=majority', tlsCAFile = ca)
         self.db = self.mongo_client[collection]
 
+        self.retrieve_cite_parameters()
+
         self.papers, self.authors, self.current_level = {}, {}, 0
 
         self.network_portal = NetworkPortal()
@@ -58,7 +60,15 @@ class RNAI:
             pbar_v.update(1)
         
         pbar_v.close()
-    
+
+
+    def retrieve_cite_parameters(self, configuration_name = 'default'):
+
+        if configuration_name in ['default']:
+            self.configuration_params = self.mongo_client.rnai_deployment.cite_parameters.find_one({'name': configuration_name})
+        else:
+            sys.exit('CONFIGRURATION CITE ERROR')
+ 
     def reset(self):
         print('Resetting Database')
         for coll in self.db.list_collection_names():
@@ -72,7 +82,7 @@ class RNAI:
 
             print('Populating Verticals - Level ' + str(self.current_level) + ' - Process Papers')
 
-            self.process_papers()
+            self.process_papers(level = self.current_level)
 
             self.current_level = self.current_level + 1
             
@@ -89,13 +99,13 @@ class RNAI:
             add_r = self.db.bucket_papers.insert_one({"_paper_id": paper_to_bucket['_id'], "_html": html_record})
             upd_r = self.db.papers.update_one({"_id": paper_to_bucket['_id']}, {"$set": {"_bucket_exists": True}})
 
-            time.sleep(random.randint(100, 300)/100)
+            time.sleep(random.randint(50, 229)/100)
             
             pbar_cb.update(1)
 
         pbar_cb.close()
 
-    def process_papers(self):
+    def process_papers(self, level, cited_by_flag = True):
         
         pbar_cp = tqdm(total = self.db.papers.count_documents({"$and": [{"_cite_by_complete": False}, {"_bucket_exists": True}]}), leave = True)
         
@@ -122,7 +132,7 @@ class RNAI:
             elif paper_to_complete['_citation_count'] is None:
                 upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_citation_count": citation_count}})
 
-            if paper_to_complete['_cite_by_complete'] is False:
+            if (paper_to_complete['_cite_by_complete'] is False) and (cited_by_flag is True):
 
                 if main_result is not None:
                     link_element = main_result.find('a', {'data-clk': True})
@@ -133,7 +143,9 @@ class RNAI:
                 if link_element:
                     paper_id = link_element['data-clk'].split('&d=')[1].split('&')[0]
 
-                    citations = get_citations(paper_id, self.network_portal)
+                    _cites_level = self.configuration_params['cites'][level]
+
+                    citations = get_citations(paper_id, self.network_portal, _cites_level)
 
                     for citation in citations:
                         paper_id = add_paper(self.db, paper_to_complete['_vertical_id'], citation, self.current_level + 1)
@@ -144,6 +156,9 @@ class RNAI:
                         
                     else:
                         upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": 'ERROR'}})
+
+            elif cited_by_flag is False:
+                upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": True, '_complete':True}})
 
             pbar_cp.update(1)
 

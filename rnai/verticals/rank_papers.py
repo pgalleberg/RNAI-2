@@ -8,7 +8,7 @@ def rank_papers_in_vertical(db, vertical_id):
         if '_citation_count' not in pub_ranked.keys():
             pub_ranked['_citation_count'] = None
 
-        level_index = pub_ranked['_level_index']
+        level_index = pub_ranked['_level']
         citation_count = pub_ranked['_citation_count']
         occurrences = db.papers.count_documents({'_vertical_id': vertical_id, '_cited_by': pub_ranked['_id']})
         
