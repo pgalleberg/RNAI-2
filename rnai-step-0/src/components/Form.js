@@ -14,7 +14,7 @@ const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
 
             <div className="grid-item"></div>
             <div className="grid-item" style={{ paddingBottom: '10px' }}>Relevant Papers</div>
-            <div className="grid-item" style={{ paddingBottom: '10px' }}>Generic Vertical Name</div> 
+            <div className="grid-item" style={{ paddingBottom: '10px' }}>Generic Vertical Names</div> 
 
             <div className="grid-item"></div>
             <div className="grid-item">

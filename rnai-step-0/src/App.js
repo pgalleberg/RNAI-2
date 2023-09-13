@@ -1,7 +1,18 @@
 import Header from "./components/Header";
 import Form from "./components/Form";
+import SignUpEmail from "./components/SignUpEmail"; 
+import SignUpGoogle from "./components/SignUpGoogle"; 
+import LogIn from "./components/LogIn";
+import Line from "./components/Line";
+import Navbar from "./components/Navbar";
 import { Configuration, OpenAIApi } from "openai";
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { BrowserRouter as Router, Route, Routes, Redirect } from "react-router-dom"; 
+
+import { onAuthStateChanged } from "firebase/auth";
+import auth from "./firebase";
+import Tasks from "./components/Tasks";
+import TaskDetails from "./components/TaskDetails";
 
 const configuration = new Configuration({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -9,6 +20,22 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function App() {
+
+  const [user, setUser] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(true); // store the whole user object or just a part of it
+      } else {
+        setUser(false);
+      }
+    });
+
+    // Cleanup the observer on unmount
+    return () => unsubscribe();
+  }, []);
+
   const [names, setNames] = useState([
     { 
       id: 1,
@@ -83,10 +110,69 @@ function App() {
   }
 
   return (
-    <>
-      <Header />
-      <Form genericNames={names} fetchGenericNames={fetchGenericNames} changeGenericName={changeGenericName}/>
-    </>
+    <Router>
+      <>
+        <Routes>
+          <Route
+            path='/signup'
+            element={
+              <>
+              <Header />
+              <div className="form">
+                <SignUpEmail />
+                <Line />
+                <SignUpGoogle />
+              </div>
+              </>
+            }
+          />
+          <Route
+            path='/login'
+            element={
+              <>
+                <Header />
+                <div className="form">
+                  <LogIn />
+                  <Line />
+                  <SignUpGoogle />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path='/'
+            element={ 
+              <>
+                <Navbar />
+                <Header />
+                <Form genericNames={names} fetchGenericNames={fetchGenericNames} changeGenericName={changeGenericName}/>
+              </>
+            } 
+          />
+          <Route
+            path='/dashboard'
+            element={ 
+              //user ?
+              <>
+                <Navbar />
+                {/* <Header /> */}
+                <Tasks />
+              </>
+            } 
+          />
+          <Route
+            path='/task/:id'
+            element={ 
+              <>
+                <Navbar />
+                {/* <Header /> */}
+                <TaskDetails />
+              </>
+            } 
+          />
+        </Routes>
+      </>
+    </Router>
   );
 }
 

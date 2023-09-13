@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "query": "methane removal from ambient air",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "13/09/2023, 14:25:22"
+    },
+    {
+      "id": 2,
+      "query": "science of reading",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "13/09/2023, 14:25:22"
+    },
+    {
+      "id": 3,
+      "query": "bio-inspired burrowing robots",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "13/09/2023, 14:25:22"
+    },
+    {
+      "id": 4,
+      "query": "quantum computing",
+      "user": "Hassaan",
+      "status": "Failed",
+      "time": "13/09/2023, 14:25:22"
+    },
+    {
+      "id": 5,
+      "query": "solar energy",
+      "user": "Hassaan",
+      "status": "Completed",
+      "time": "13/09/2023, 14:25:22"
+    }
+  ]
+}
