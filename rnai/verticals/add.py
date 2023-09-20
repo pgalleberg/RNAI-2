@@ -1,10 +1,12 @@
+# get date and time
+from datetime import datetime
 
 
 def add_vertical(db, vertical_name):
     vertical_exists = db.verticals.find_one({"name": vertical_name})
 
     if vertical_exists is None:
-        result = db.verticals.insert_one({"name": vertical_name, "_complete": False})
+        result = db.verticals.insert_one({"name": vertical_name, "_complete": False, "status": "pending", "time": datetime.now()})
 
         vertical_id = result.inserted_id
 

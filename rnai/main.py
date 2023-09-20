@@ -23,7 +23,7 @@ from rnai.authors.author_ids import get_author_id_from_publication_result
 from rnai.authors.rank import rank_authors
 
 class RNAI:
-    def __init__(self, reset = False, collection = 'rnai', initial_data = os.path.join('data', 'initial_vertical_data.json')):
+    def __init__(self, reset = False, collection = 'rnai'):
         self.parameters = {'iterations': 10, 'citations': 100, 'wait_time': 25, 'depth': 4}
 
         print('Initialising RNAI Runtime')
@@ -37,12 +37,10 @@ class RNAI:
 
         self.network_portal = NetworkPortal()
 
-        with open(initial_data, 'r') as f:
-            self.initial_data = json.load(f)
-
         if reset is True:
             self.reset()
-
+        
+        '''
         print('Initialising Verticals')
 
         pbar_v = tqdm(total = len(self.initial_data.keys()), leave = True)
@@ -60,6 +58,19 @@ class RNAI:
             pbar_v.update(1)
         
         pbar_v.close()
+        '''
+
+    def initialise_vertical(self, vertical_name, papers_list):
+        vertical_id, log_string = add_vertical(self.db, vertical_name)
+        
+        pbar_ip = tqdm(total = len(papers_list), leave = True)
+        
+        for input_paper_name in papers_list:
+            paper_id, log_string = add_paper(self.db, vertical_id, input_paper_name, 0)
+            self.papers[input_paper_name] = paper_id
+            pbar_ip.update(1)
+
+        pbar_ip.close()
 
 
     def retrieve_cite_parameters(self, configuration_name = 'default'):
