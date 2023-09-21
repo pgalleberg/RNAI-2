@@ -1,39 +1,604 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "query": "methane removal from ambient air",
+      "query": "Methane removal from ambient air",
+      "user": "Hassaan",
+      "status": "Failed",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 1
+    },
+    {
+      "query": "carbon removal",
+      "user": "Hassaan",
+      "status": "Approved",
+      "time": "16/09/2023, 00:14:40",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Climate change mitigation",
+        "Renewable energy",
+        "Sustainable agriculture",
+        "Environmental conservation",
+        "Clean technology"
+      ],
+      "autoSuggest": true,
+      "id": 2
+    },
+    {
+      "query": "fleet electrification",
+      "user": "Hassaan",
+      "status": "Rejected",
+      "time": "19/09/2023, 21:00:40",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Clean energy and sustainability",
+        "Transportation and infrastructure",
+        "Renewable energy technologies",
+        "Energy efficiency and conservation",
+        "Climate change mitigation and adaptation"
+      ],
+      "autoSuggest": false,
+      "id": 3
+    },
+    {
+      "query": "The science of reading",
+      "user": "Hassaan",
+      "status": "Approved",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 4
+    },
+    {
+      "query": "bio-inspired burrowing robots",
+      "user": "Hassaan",
+      "status": "Approved",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 5
+    },
+    {
+      "query": "solar energy",
       "user": "Hassaan",
       "status": "Pending",
-      "time": "13/09/2023, 14:25:22"
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 6
+    },
+    {
+      "query": "wind turbines",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "19/09/2023, 22:06:32",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Clean technology",
+        "Sustainable development",
+        "Energy efficiency",
+        "Green infrastructure"
+      ],
+      "autoSuggest": true,
+      "id": 7
+    },
+    {
+      "query": "test",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "20/09/2023, 17:44:31",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Research and development funding for testing methodologies",
+        "2. Funding for test equipment and infrastructure development",
+        "3. Grants for test automation and software development",
+        "4. Funding for test data management and analysis",
+        "5. Support for test validation and verification research projects"
+      ],
+      "autoSuggest": true,
+      "id": 8
+    },
+    {
+      "query": "wind energy",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "20/09/2023, 17:46:56",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Clean energy",
+        "Sustainable development",
+        "Climate change mitigation",
+        "Green technology"
+      ],
+      "autoSuggest": true,
+      "id": 9
+    },
+    {
+      "query": "final test",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 20:51:51",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 1",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Quality assurance and testing",
+        "2. Product development and validation",
+        "3. Manufacturing process optimization",
+        "4. Test equipment and technology advancements",
+        "5. Industrial automation and control systems"
+      ],
+      "autoSuggest": true,
+      "id": 10
+    },
+    {
+      "query": "meth",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:01:31",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Substance abuse prevention and treatment",
+        "2. Public health and addiction research",
+        "3. Criminal justice reform and rehabilitation programs",
+        "4. Mental health support and counseling services",
+        "5. Community outreach and education initiatives"
+      ],
+      "autoSuggest": true,
+      "id": 11
+    },
+    {
+      "query": "testy",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:17:04",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Quality assurance and testing",
+        "2. Software testing and validation",
+        "3. Test automation and optimization",
+        "4. Performance testing and load testing",
+        "5. User experience testing and usability testing"
+      ],
+      "autoSuggest": true,
+      "id": 12
+    },
+    {
+      "query": "testyyy",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:17:52",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Technology and Innovation",
+        "2. Research and Development",
+        "3. Science and Engineering",
+        "4. Health and Medical Sciences",
+        "5. Education and Training"
+      ],
+      "autoSuggest": true,
+      "id": 13
+    },
+    {
+      "query": "yumm",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:23:06",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Food and Beverage Industry",
+        "2. Culinary Arts and Hospitality",
+        "3. Nutrition and Wellness",
+        "4. Sustainable Agriculture and Farming",
+        "5. Food Technology and Innovation"
+      ],
+      "autoSuggest": true,
+      "id": 14
+    },
+    {
+      "query": "Eminem",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:24:39",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Music industry",
+        "Arts and culture",
+        "Entertainment",
+        "Creative arts",
+        "Youth development"
+      ],
+      "autoSuggest": true,
+      "id": 15
+    },
+    {
+      "query": "yoo",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:27:24",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Technology and Innovation",
+        "2. Entrepreneurship and Startups",
+        "3. Social Impact and Sustainability",
+        "4. Research and Development",
+        "5. Education and Training"
+      ],
+      "autoSuggest": true,
+      "id": 16
+    },
+    {
+      "query": "sup",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Technology and Innovation",
+        "2. Entrepreneurship and Startups",
+        "3. Sustainable Development and Environmental Conservation",
+        "4. Health and Wellness",
+        "5. Education and Skills Development"
+      ],
+      "autoSuggest": true,
+      "id": 17
+    },
+    {
+      "query": "hi",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:29:52",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Technology and Innovation",
+        "2. Health and Wellness",
+        "3. Environmental Sustainability",
+        "4. Education and Skill Development",
+        "5. Social Impact and Community Development"
+      ],
+      "autoSuggest": true,
+      "id": 18
+    },
+    {
+      "query": "Hello",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:30:26",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Communication technology",
+        "2. Language learning and education",
+        "3. Social networking and community building",
+        "4. Artificial intelligence and natural language processing",
+        "5. Voice recognition and speech technology"
+      ],
+      "autoSuggest": true,
+      "id": 19
+    },
+    {
+      "query": "Heya",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:31:17",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Affordable housing",
+        "2. Women's empowerment",
+        "3. Education and skill development",
+        "4. Sustainable development",
+        "5. Community development"
+      ],
+      "autoSuggest": true,
+      "id": 20
+    },
+    {
+      "query": "H",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:32:43",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Research and development in \"H\" technologies",
+        "2. Innovation and entrepreneurship in \"H\" sector",
+        "3. Sustainable solutions for \"H\" challenges",
+        "4. Education and training programs for \"H\" professionals",
+        "5. Community development initiatives in \"H\" field"
+      ],
+      "autoSuggest": true,
+      "id": 21
+    },
+    {
+      "query": "methane",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:33:18",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Climate change mitigation",
+        "Sustainable agriculture",
+        "Environmental research and development",
+        "Clean technology innovation"
+      ],
+      "autoSuggest": true,
+      "id": 22
+    },
+    {
+      "query": "methane",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:35:32",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Climate change mitigation",
+        "Sustainable agriculture",
+        "Environmental research and development",
+        "Clean technology innovation"
+      ],
+      "autoSuggest": true,
+      "id": 23
+    },
+    {
+      "query": "Hola",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:37:30",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "1. Language education and cultural exchange programs",
+        "2. Technology and innovation in language learning",
+        "3. International business and trade development",
+        "4. Tourism and hospitality industry development",
+        "5. Community development and cross-cultural initiatives"
+      ],
+      "autoSuggest": true,
+      "id": 24
+    },
+    {
+      "query": "carbon removal",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "21/09/2023, 21:41:10",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Climate change mitigation",
+        "Renewable energy",
+        "Sustainable agriculture",
+        "Environmental conservation",
+        "Clean technology"
+      ],
+      "autoSuggest": true,
+      "id": 25
+    }
+  ],
+  "task_details": [
+    {
+      "id": 1,
+      "query": "Methane removal from ambient air",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
     },
     {
       "id": 2,
-      "query": "science of reading",
-      "user": "Hassaan",
-      "status": "Pending",
-      "time": "13/09/2023, 14:25:22"
+      "query": "carbon removal",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
     },
     {
       "id": 3,
-      "query": "bio-inspired burrowing robots",
-      "user": "Hassaan",
-      "status": "Pending",
-      "time": "13/09/2023, 14:25:22"
+      "query": "fleet electrification",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
     },
     {
       "id": 4,
-      "query": "quantum computing",
-      "user": "Hassaan",
-      "status": "Failed",
-      "time": "13/09/2023, 14:25:22"
+      "query": "The science of reading",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
     },
     {
       "id": 5,
+      "query": "bio-inspired burrowing robots",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+    },
+    {
+      "id": 6,
       "query": "solar energy",
-      "user": "Hassaan",
-      "status": "Completed",
-      "time": "13/09/2023, 14:25:22"
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
     }
   ]
 }

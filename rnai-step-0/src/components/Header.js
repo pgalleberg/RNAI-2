@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <>
       <img 
-        src={RNAILogo} className="img" 
+        src={RNAILogo} className="img" alt='RNAI logo'
         style={{marginTop: location.pathname === '/' && '-30px'}}
       />
     </>

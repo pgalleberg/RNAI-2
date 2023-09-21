@@ -10,7 +10,6 @@ const Navbar = () => {
 
     const navigate = useNavigate();
     const location = useLocation()
-    console.log("location: ", location)
 
     const handleLogout = () => {               
         signOut(auth).then(() => {
@@ -25,9 +24,9 @@ const Navbar = () => {
 
     return (
         <div className="navbar" style={{paddingBottom: location.pathname === '/' && '0px', marginTop: location.pathname === '/' && '0px'}}>
-            {   location.pathname == '/' ? <div></div> :
+            {   location.pathname === '/' ? <div></div> :
                 <Link to="/">
-                    <img src={ RNAILogo } style={{height: '100px'}}/>
+                    <img src={ RNAILogo } alt='RNAI logo' style={{height: '100px'}}/>
                 </Link>
             }
             <div>

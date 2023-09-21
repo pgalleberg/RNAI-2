@@ -5,14 +5,13 @@ import SignUpGoogle from "./components/SignUpGoogle";
 import LogIn from "./components/LogIn";
 import Line from "./components/Line";
 import Navbar from "./components/Navbar";
-import { Configuration, OpenAIApi } from "openai";
-import { useEffect, useState } from "react"
-import { BrowserRouter as Router, Route, Routes, Redirect } from "react-router-dom"; 
-
-import { onAuthStateChanged } from "firebase/auth";
-import auth from "./firebase";
 import Tasks from "./components/Tasks";
 import TaskDetails from "./components/TaskDetails";
+
+import { Configuration, OpenAIApi } from "openai";
+import { useEffect, useState } from "react"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; 
+
 
 const configuration = new Configuration({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -20,39 +19,32 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function App() {
+  console.log("App rerendered")
+  // const [userLoggedIn, setUserLoggedIn] = useState(false)
 
-  const [user, setUser] = useState(false)
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setUserLoggedIn(true); // store the whole user object or just a part of it
+  //       console.log("User Signed In: ", user)
+  //     } else {
+  //       setUserLoggedIn(false);
+  //       console.log("No user signed in")
+  //     }
+  //   });
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(true); // store the whole user object or just a part of it
-      } else {
-        setUser(false);
-      }
-    });
+  //   // Cleanup the observer on unmount
+  //   return () => unsubscribe();
+  // }, []);
 
-    // Cleanup the observer on unmount
-    return () => unsubscribe();
-  }, []);
+  const [names, setNames] = useState([])
 
-  const [names, setNames] = useState([
-    { 
-      id: 1,
-    }, 
-    { 
-      id: 2,
-    }, 
-    { 
-      id: 3,
-    }, 
-    { 
-      id: 4,
-    }, 
-    { 
-      id: 5,
-    }])
-  console.log("App::names:", names)
+  // useEffect(() => {
+  //   console.log("useEffect triggered")
+  //   setNames([])
+  // }, [])
+    
+  console.log("Generic Names:", names)
 
   const fetchGenericNames = async (verticalName) => {
     console.log("verticalName: ", verticalName)
@@ -103,11 +95,13 @@ function App() {
     return response.split('\n')
   }
 
-  const changeGenericName = (id, updatedName) => {
+  const changeGenericName = async (id, updatedName) => {
     console.log("id: ", id)
-    setNames(names.map((name) => name.id === id ? { ...name, genericName: updatedName } : name
-    ))
+    console.log("updatedName: ", updatedName)
+    setNames(names.map((name) => name.id === id ? { ...name, genericName: updatedName } : name))
+    console.log("names: ", names) 
   }
+
 
   return (
     <Router>
@@ -139,37 +133,37 @@ function App() {
               </>
             }
           />
-          <Route
-            path='/'
-            element={ 
-              <>
-                <Navbar />
-                <Header />
-                <Form genericNames={names} fetchGenericNames={fetchGenericNames} changeGenericName={changeGenericName}/>
-              </>
-            } 
-          />
-          <Route
-            path='/dashboard'
-            element={ 
-              //user ?
-              <>
-                <Navbar />
-                {/* <Header /> */}
-                <Tasks />
-              </>
-            } 
-          />
-          <Route
-            path='/task/:id'
-            element={ 
-              <>
-                <Navbar />
-                {/* <Header /> */}
-                <TaskDetails />
-              </>
-            } 
-          />
+          {/* <Route path='/' element={<> <ProtectedRoute /> </>} > */}
+            <Route
+              path='/'
+              element={ 
+                <>
+                  <Navbar />
+                  <Header />
+                  <Form genericNames={names} fetchGenericNames={fetchGenericNames} changeGenericName={changeGenericName}/>
+                </> 
+              } 
+            />
+            <Route
+              path='/dashboard'
+              element={ 
+                //user ?
+                <>
+                  <Navbar />
+                  <Tasks />
+                </>
+              } 
+            />
+            <Route
+              path='/task/:id'
+              element={ 
+                <>
+                  <Navbar />
+                  <TaskDetails />
+                </>
+              } 
+            />
+          {/* </Route> */}
         </Routes>
       </>
     </Router>
