@@ -1,11 +1,69 @@
 import { useState } from "react"
+import { Configuration, OpenAIApi } from "openai";
 import { useNavigate } from "react-router-dom";
 
-const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
+const configuration = new Configuration({
+    apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+  });
+const openai = new OpenAIApi(configuration);
+
+const Form = () => {
+    console.log("Form rendered")
+
+    const [autoSuggest, setAutoSuggest] = useState(true)
+    const [genericNames, setGenericNames] = useState([]) 
 
     console.log("genericNames: ", genericNames)
 
-    const [autoSuggest, setAutoSuggest] = useState(true)
+    const fetchGenericNames = async (verticalName) => {
+        console.log("verticalName: ", verticalName)
+        const rsp = await completion(verticalName)
+        console.log("response: ", rsp['data']['choices'][0]['message']['content'])
+        const parsed_rsp = parseResponse(rsp['data']['choices'][0]['message']['content'])
+        console.log('parsed_rsp: ', parsed_rsp)
+        setGenericNames([
+          { 
+            id: 1,
+            genericName: parsed_rsp[0]
+          }, 
+          { 
+            id: 2,
+            genericName: parsed_rsp[1]
+          }, 
+          { 
+            id: 3,
+            genericName: parsed_rsp[2]
+          }, 
+          { 
+            id: 4,
+            genericName: parsed_rsp[3]
+          }, 
+          { 
+            id: 5,
+            genericName: parsed_rsp[4]
+          }])
+      }
+    
+      const completion = (verticalName) => openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: createPrompt(verticalName)}],
+        temperature: 0.0,
+      });
+    
+      const createPrompt = (verticalName) => {
+        return `I am looking for funding in the area of "${verticalName}". However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. List each name in a new line without any formatting. For example:
+    
+        Topic 1
+        Topic 2
+        Topic 3
+        Topic 4
+        Topic 5`
+      }
+    
+      const parseResponse = (response) => {
+        return response.split('\n')
+      }
+    
 
     const addTask = async (task) => {
         console.log("addTask::task received: ", task)
@@ -59,7 +117,6 @@ const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
 
   return (
     <form id="mainForm" onSubmit={ onSubmit }>
-
         <div className="grid-container">
 
             <div className="grid-item"></div>
@@ -72,10 +129,10 @@ const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
             </div>
             <div className="grid-item">
                 <input id="name1" type="text" name="name1" placeholder="First Generic Name" 
-                value={genericNames[0] !== undefined ? genericNames[0].genericName: ''} required 
+                defaultValue={genericNames[0] !== undefined ? genericNames[0].genericName : ''} required 
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false}
-                onChange={(e) => changeGenericName(genericNames[0].id, e.target.value)}
+                // onChange={(e) => changeGenericName(genericNames[0].id, e.target.value)}
                 />
             </div>  
             
@@ -85,28 +142,27 @@ const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
             </div>
             <div className="grid-item">
                 <input id="name2" type="text" name="name2" placeholder="Second Generic Name" 
-                value={genericNames[1] !== undefined ? genericNames[1].genericName: ''} required 
+                defaultValue={genericNames[1] !== undefined ? genericNames[1].genericName: ''} required 
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false}
-                onChange={(e) => changeGenericName(genericNames[1].id, e.target.value)}
+                // onChange={(e) => changeGenericName(genericNames[1].id, e.target.value)}
                 />
             </div>  
             
             <div className="grid-item">
                 <input id="verticalName" type="text" name="vertical" placeholder="Vertical Name" required 
-                //value={verticalName} 
-                //onChange={(e) => setVerticalName(e.target.value)}
-                onBlur = {(e) => autoSuggest && fetchGenericNames(e.target.value)}/>
+                onBlur = {(e) => autoSuggest && fetchGenericNames(e.target.value)}
+                />
             </div>
             <div className="grid-item">
                 <input type="text" name="paper3" placeholder="Title of Third Paper" id="paper3" required />
             </div>
             <div className="grid-item">
                 <input id="name3" type="text" name="name3" placeholder="Third Generic Name" 
-                value={genericNames[2] !== undefined ? genericNames[2].genericName: ''} required 
+                defaultValue={genericNames[2] !== undefined ? genericNames[2].genericName: ''} required 
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false}
-                onChange={(e) => changeGenericName(genericNames[2].id, e.target.value)}
+                // onChange={(e) => changeGenericName(genericNames[2].id, e.target.value)}
                 />
             </div>  
             
@@ -116,10 +172,10 @@ const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
             </div>
             <div className="grid-item">
                 <input id="name4" type="text" name="name4" placeholder="Fourth Generic Name" 
-                value={genericNames[3] !== undefined ? genericNames[3].genericName: ''} required 
+                defaultValue={genericNames[3] !== undefined ? genericNames[3].genericName: ''} required 
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false} 
-                onChange={(e) => changeGenericName(genericNames[3].id, e.target.value)}
+                // onChange={(e) => changeGenericName(genericNames[3].id, e.target.value)}
                 />
             </div> 
             
@@ -129,10 +185,10 @@ const Form = ({ genericNames, fetchGenericNames, changeGenericName }) => {
             </div>
             <div className="grid-item">
                 <input id="name5" type="text" name="name5" placeholder="Fifth Generic Name" 
-                value={genericNames[4] !== undefined ? genericNames[4].genericName: ''} required 
+                defaultValue={genericNames[4] !== undefined ? genericNames[4].genericName: ''} required 
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false}
-                onChange={(e) => changeGenericName(genericNames[4].id, e.target.value)}
+                // onChange={(e) => changeGenericName(genericNames[4].id, e.target.value)}
                 />
             </div>   
 
