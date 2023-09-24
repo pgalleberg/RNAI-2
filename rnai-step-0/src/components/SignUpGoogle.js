@@ -33,7 +33,7 @@ const SignUpGoogle = () => {
   
     return (
         <div>
-            <button  onClick={ onClick }>
+            <button className='loginButton'  onClick={ onClick }>
                 <img src={googleIcon} alt="icon" width="35" height="35" />
                 <span style={{paddingLeft: '20px', verticalAlign: 'middle'}}>Continue with Google</span>
             </button>

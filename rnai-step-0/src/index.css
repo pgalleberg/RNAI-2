@@ -66,6 +66,9 @@ input[type="submit"] {
   cursor: pointer;
   width: 320px;
 }
+input[type="submit"]:hover {
+  filter: brightness(0.9);  /* Darkens the button slightly on hover */
+}
 
 /* The switch - the box around the slider */
 .switch {
@@ -146,7 +149,7 @@ border-radius: 50%;
   text-align: center;
 }
 
-button {
+.loginButton {
   background-color: white;
   width: 320px;
   font-size: 16px;
@@ -161,13 +164,13 @@ button {
   
 }
 
-button:hover {
+.loginButton:hover {
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add some box shadow on hover */
   background-color: whitesmoke;
 }
 
-button img {
+.loginButton img {
   vertical-align: middle;
 }
 
@@ -286,4 +289,23 @@ a {
 
 .reject {
   background-color: #F44336;
+}
+
+.editButton {
+  float: right;
+  border: none;
+  background-color: white;
+  padding: 10px 10px 10px 10px;
+  /* border: 1px solid red; */
+}
+
+.editButton:hover {
+  /* border: 1px solid grey; */
+  cursor: pointer;
+  background-color: whitesmoke;
+  border-radius: 5px;
+}
+
+p:focus {
+  padding: 10px;
 }

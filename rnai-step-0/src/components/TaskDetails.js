@@ -2,8 +2,7 @@ import { useEffect, useState } from "react"
 import Button from "./Button"
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
-
+import { faCircleCheck, faCircleXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 const TaskDetails = () => {
   console.log("TaskDetails rendered")
@@ -69,22 +68,55 @@ const TaskDetails = () => {
     
   }, [task, change])
 
+  function editDetails(subHeading){
+    console.log("Button clicked")
+    document.getElementById(subHeading).contentEditable = true
+    document.getElementById(subHeading).focus();
+
+    document.getElementById(subHeading + 'buttons').style.display = 'block'
+  }
+
+  function cancelEdit(subHeading, originalText){
+    document.getElementById(subHeading).contentEditable = false
+    document.getElementById(subHeading + 'buttons').style.display = 'none'
+    document.getElementById(subHeading).innerHTML = originalText
+  }
+
+  async function saveEdits(subHeading){
+    document.getElementById(subHeading).contentEditable = false
+    document.getElementById(subHeading + 'buttons').style.display = 'none'
+    setTaskDetails({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
+    const res = await fetch('http://127.0.0.1:5000/task_details/' + id, {
+        method: 'PUT',
+        headers: {
+          'Content-type' : 'application/json'
+        },
+        body: JSON.stringify({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
+      })
+  
+      await res.json()
+  }
+
   return (
     <div style={{width: '75%'}}>
-        <h1 style={{textAlign: 'left'}}>Vertical: {taskDetails.query}</h1>
-        <div style={{textAlign: 'left'}}>
-            <p><strong>Papers:</strong></p>
-            <p>{taskDetails.papers}</p>
-
-            <p><strong>Authors:</strong></p>
-            <p>{taskDetails.authors}</p>
-
-            <p><strong>Institutes:</strong></p>
-            <p>{taskDetails.institutes}</p>
-
-            <p><strong>Funding:</strong></p>
-            <p>{taskDetails.fundings}</p>
-        </div>
+      <h1 style={{textAlign: 'left'}}>Vertical: {taskDetails.query}</h1>
+          {Object.entries(taskDetails).map(([key, value]) => (
+            (key !== 'id' && key !== 'query') &&
+            <div style={{textAlign: 'left'}}>
+                <p><strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>
+                    {task.status === 'Completed' &&
+                      <button className="editButton" onClick={() => editDetails(key)}>
+                        <FontAwesomeIcon icon={faPenToSquare}/>
+                      </button>
+                    }
+                </p>
+                <p id={key} tabindex="-1">{value}</p>
+                <div id={key + 'buttons'} style={{textAlign: 'center', display: 'none'}}>
+                  <input type='submit' value="Save & Submit" onClick={() => saveEdits(key)} style={{width: '150px', marginRight: '20px'}}></input>
+                  <input type='submit' value="Cancel" onClick={() => cancelEdit(key, value)} style={{width: '75px', backgroundColor: 'grey'}}></input>
+                </div>
+            </div>
+          ))}
 
        {task.status === 'Completed' &&
         <div>

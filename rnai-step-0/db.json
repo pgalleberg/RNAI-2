@@ -91,7 +91,7 @@
     {
       "query": "bio-inspired burrowing robots",
       "user": "Hassaan",
-      "status": "Rejected",
+      "status": "Completed",
       "time": "15/09/2023, 21:28:13",
       "papers": [
         "Paper 1",
@@ -235,10 +235,10 @@
     {
       "id": 5,
       "query": "bio-inspired burrowing robots",
-      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
-      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
-      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
-      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in. Hasan",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia. Syed",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris. Hassaan",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut. Hola"
     },
     {
       "id": 6,
