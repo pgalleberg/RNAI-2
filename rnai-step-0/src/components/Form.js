@@ -7,6 +7,7 @@ const configuration = new Configuration({
   });
 const openai = new OpenAIApi(configuration);
 
+
 const Form = () => {
     console.log("Form rendered")
 
@@ -207,6 +208,7 @@ const Form = () => {
             </div>
         </div>
     </form>
+   
   )}
 
 export default Form

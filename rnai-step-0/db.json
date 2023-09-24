@@ -175,6 +175,28 @@
       ],
       "autoSuggest": true,
       "id": 8
+    },
+    {
+      "query": "methane",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "22/09/2023, 23:45:51",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Climate change mitigation",
+        "Sustainable agriculture",
+        "Environmental research and development",
+        "Clean technology innovation"
+      ],
+      "autoSuggest": true,
+      "id": 9
     }
   ],
   "task_details": [

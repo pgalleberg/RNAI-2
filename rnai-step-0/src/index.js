@@ -11,67 +11,82 @@ import Navbar from './components/Navbar';
 import Form from './components/Form';
 import Tasks from './components/Tasks';
 import TaskDetails from './components/TaskDetails';
-
 import { createBrowserRouter, RouterProvider} from "react-router-dom"; 
 
+import { AuthContext } from './AuthContext';
+
+import { Protected } from './components/Protected';
 
 const router = createBrowserRouter([
-    {
-      path: '/signup',
-      element: 
-        <>
+  {
+    id: 'root',
+    path: '/',
+    children: [
+     
+      {
+        path: '/',
+        element: 
+          <>
+            <Protected>
+              <Navbar />
+              <Header />
+              <Form />
+            </Protected>
+          </>
+      },
+      {
+        path: '/dashboard',
+        element: 
+          <> 
+            <Protected>
+              <Navbar />
+              <Tasks />
+            </Protected>
+          </>
+      },
+      {
+        path:'/task/:id',
+        element: 
+          <>
+            <Protected>
+              <Navbar />
+              <TaskDetails />
+            </Protected>
+          </>
+      }
+    ]
+  },
+  {
+    path: '/signup',
+    element: 
+      <>
+      <Header />
+      <div className="form">
+        <SignUpEmail />
+        <Line />
+        <SignUpGoogle />
+      </div>
+      </>
+  },
+  {
+    path: '/login',
+    element: 
+      <>
         <Header />
         <div className="form">
-          <SignUpEmail />
+          <LogIn />
           <Line />
           <SignUpGoogle />
         </div>
-        </>
-    },
-    {
-      path: '/login',
-      element: 
-        <>
-          <Header />
-          <div className="form">
-            <LogIn />
-            <Line />
-            <SignUpGoogle />
-          </div>
-        </>
-    },
-    {
-      path: '/',
-      element:
-        <>
-          <Navbar />
-          <Header />
-          <Form />
-        </> 
-    },
-    {
-      path: '/dashboard',
-      element: 
-        <>
-          <Navbar />
-          <Tasks />
-        </> 
-    },
-    {
-      path:'/task/:id',
-      element: 
-        <>
-          <Navbar />
-          <TaskDetails />
-        </>
-    }
-  ]
-);
+      </>
+  }
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <RouterProvider router={router} />
+  <AuthContext>
+  <RouterProvider router={router} />
+  </AuthContext>
   // </React.StrictMode>
 );
-

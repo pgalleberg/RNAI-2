@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import RNAILogo from '../RNAI_logo_II.png';
 import { useLocation } from 'react-router-dom'
 
-
 const Navbar = () => {
 
     const navigate = useNavigate();
@@ -14,8 +13,8 @@ const Navbar = () => {
     const handleLogout = () => {               
         signOut(auth).then(() => {
         // Sign-out successful.
-            navigate("/login");
             console.log("Signed out successfully")
+            navigate("/login");
         }).catch((error) => {
             // An error happened.
             console.log("Error: ", error)
