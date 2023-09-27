@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from rnai.main import RNAI
 from multiprocessing import Process
+from bson.json_util import dumps
 
 app = Flask(__name__)
 
@@ -23,7 +24,7 @@ def initialise():
 
     print(request_parameters)
 
-    vertical_processes[request_parameters['query']] = Process(target=vertical_creation_process, kwargs=dict(vertical_name=request_parameters['query'], papers_list=request_parameters['names']))
+    vertical_processes[request_parameters['query']] = Process(target=vertical_creation_process, kwargs=dict(vertical_name=request_parameters['query'], papers_list=request_parameters['papers']))
 
     vertical_processes[request_parameters['query']].start()   
 
@@ -37,7 +38,7 @@ def status():
     result_v = []
 
     for vertical in vertical_data:
-        result_v.append(vertical)
+        result_v.append(dumps(vertical))
 
     return jsonify({"status": "success", "verticals": result_v})
 
