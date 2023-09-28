@@ -162,3 +162,4 @@ cython_debug/
 
 # Node Packages
 node_modules/
+node_modules.tar.gz
