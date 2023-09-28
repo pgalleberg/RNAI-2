@@ -161,4 +161,4 @@ cython_debug/
 #.idea/
 
 # Node Packages
-#node_modules/
+node_modules/
