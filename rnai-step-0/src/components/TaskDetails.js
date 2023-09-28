@@ -27,7 +27,7 @@ const TaskDetails = () => {
 
 
   const fetchTaskDetails = async () => {
-    const url = 'http://127.0.0.1:5000/task_details/' + id
+    const url = process.env.REACT_APP_WEBSERVER + 'task_details/' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -35,7 +35,7 @@ const TaskDetails = () => {
   }
 
   const fetchTask = async () => {
-    const url = 'http://127.0.0.1:5000/tasks/' + id
+    const url = process.env.REACT_APP_WEBSERVER + 'tasks/' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -50,7 +50,7 @@ const TaskDetails = () => {
   useEffect(() => {
     console.log("useEffect 2 triggered")
     const updateTask = async () => {
-      const res = await fetch('http://127.0.0.1:5000/tasks/' + id, {
+      const res = await fetch(process.env.REACT_APP_WEBSERVER + 'tasks/' + id, {
         method: 'PUT',
         headers: {
           'Content-type' : 'application/json'
@@ -86,7 +86,7 @@ const TaskDetails = () => {
     document.getElementById(subHeading).contentEditable = false
     document.getElementById(subHeading + 'buttons').style.display = 'none'
     setTaskDetails({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
-    const res = await fetch('http://127.0.0.1:5000/task_details/' + id, {
+    const res = await fetch(process.env.REACT_APP_WEBSERVER + 'task_details/' + id, {
         method: 'PUT',
         headers: {
           'Content-type' : 'application/json'
@@ -110,7 +110,7 @@ const TaskDetails = () => {
                       </button>
                     }
                 </p>
-                <p id={key} tabindex="-1">{value}</p>
+                <p id={key} tabIndex="-1">{value}</p>
                 <div id={key + 'buttons'} style={{textAlign: 'center', display: 'none'}}>
                   <input type='submit' value="Save & Submit" onClick={() => saveEdits(key)} style={{width: '150px', marginRight: '20px'}}></input>
                   <input type='submit' value="Cancel" onClick={() => cancelEdit(key, value)} style={{width: '75px', backgroundColor: 'grey'}}></input>

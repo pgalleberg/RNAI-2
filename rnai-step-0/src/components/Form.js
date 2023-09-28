@@ -47,18 +47,30 @@ const Form = () => {
     
       const completion = (verticalName) => openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: createPrompt(verticalName)}],
+        messages: [
+          { role: "system", content: "You are a research assistant."},
+          { role: "user", content: createPrompt(verticalName)}
+        ],
         temperature: 0.0,
       });
     
       const createPrompt = (verticalName) => {
-        return `I am looking for funding in the area of "${verticalName}". However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. List each name in a new line without any formatting. For example:
-    
-        Topic 1
-        Topic 2
-        Topic 3
-        Topic 4
-        Topic 5`
+        return `I am looking for funding in the area of methane removal from ambient air. However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. 
+
+        List each topic on a new line without any bullet points. 
+        
+        Generic Topics:
+        Climate change mitigation and adaptation
+        Environmental sustainability and conservation
+        Clean energy and renewable technologies
+        Air pollution control and reduction
+        Greenhouse gas emissions reduction and management
+        
+        I am looking for funding in the area of ${verticalName}. However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. 
+        
+        List each topic on a new line without any bullet points. 
+        
+        Generic Topics:`
       }
     
       const parseResponse = (response) => {
@@ -69,7 +81,7 @@ const Form = () => {
     const addTask = async (task) => {
         console.log("addTask::task received: ", task)
         console.log("addTask::JSON.stringify(task): ", JSON.stringify(task))
-        const res = await fetch('http://127.0.0.1:5000/tasks',{ /* TODO: Should I send request to tasks/user */
+        const res = await fetch(process.env.REACT_APP_WEBSERVER + 'tasks',{ /* TODO: Should I send request to tasks/user */
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'

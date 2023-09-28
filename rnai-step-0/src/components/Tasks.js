@@ -45,7 +45,7 @@ const Tasks = () => {
     }, [])
 
     const fetchTasks = async () => {
-      const res = await fetch('http://127.0.0.1:5000/tasks')
+      const res = await fetch(process.env.REACT_APP_WEBSERVER + 'tasks')
       const data = await res.json()
 
       console.log("fetchTasks::Tasks: ", data)
