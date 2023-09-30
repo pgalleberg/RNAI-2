@@ -1,10 +1,10 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import auth from "../firebase";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTimes } from 'react-icons/fa'
 
-const LogIn = () => {
+const LogIn = ({ setEmail_ }) => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -51,6 +51,23 @@ const LogIn = () => {
     console.log("Finally here")  
   }
 
+  const forgotPassword = async (e) => {
+    e.preventDefault();
+    setEmail_(email)
+    navigate('/reset-password')
+    // await sendPasswordResetEmail(auth, email)
+    // .then(() => {
+    //   console.log("Sending email")
+    //   // Password reset email sent!
+    //   // ..
+    // })
+    // .catch((error) => {
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   // ..
+    // });
+  }
+
   return (
     <div>
       <form onSubmit={ onSubmit }  autoComplete="on">
@@ -77,7 +94,7 @@ const LogIn = () => {
           </p> }
 
           <div style={{textAlign: 'left', fontSize: '12px', paddingBottom: '10px'}}>
-            <a href='#'>Forgot Password?</a>
+            <a href='#' onClick={forgotPassword}>Forgot Password?</a>
           </div>
 
           <div>

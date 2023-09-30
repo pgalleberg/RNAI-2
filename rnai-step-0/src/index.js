@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
@@ -16,77 +16,111 @@ import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import { AuthContext } from './AuthContext';
 
 import { Protected } from './components/Protected';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
-const router = createBrowserRouter([
-  {
-    id: 'root',
-    path: '/',
-    children: [
-     
-      {
-        path: '/',
-        element: 
-          <>
-            <Protected>
-              <Navbar />
-              <Header />
-              <Form />
-            </Protected>
-          </>
-      },
-      {
-        path: '/dashboard',
-        element: 
-          <> 
-            <Protected>
-              <Navbar />
-              <Tasks />
-            </Protected>
-          </>
-      },
-      {
-        path:'/task/:id',
-        element: 
-          <>
-            <Protected>
-              <Navbar />
-              <TaskDetails />
-            </Protected>
-          </>
-      }
-    ]
-  },
-  {
-    path: '/signup',
-    element: 
-      <>
-      <Header />
-      <div className="form">
-        <SignUpEmail />
-        <Line />
-        <SignUpGoogle />
-      </div>
-      </>
-  },
-  {
-    path: '/login',
-    element: 
-      <>
+function App(){
+
+  // const email = "syedhass@usc.edu"
+
+  const [email, setEmail] = useState('')
+  
+  const setEmail_ = (email) => {
+    console.log("setting email")
+    setEmail(email)
+  }
+
+  const router = createBrowserRouter([
+    {
+      id: 'root',
+      path: '/',
+      children: [
+       
+        {
+          path: '/',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <Header />
+                <Form />
+              </Protected>
+            </>
+        },
+        {
+          path: '/dashboard',
+          element: 
+            <> 
+              <Protected>
+                <Navbar />
+                <Tasks />
+              </Protected>
+            </>
+        },
+        {
+          path:'/task/:id',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <TaskDetails />
+              </Protected>
+            </>
+        }
+      ]
+    },
+    {
+      path: '/signup',
+      element: 
+        <>
         <Header />
         <div className="form">
-          <LogIn />
+          <SignUpEmail />
           <Line />
           <SignUpGoogle />
         </div>
-      </>
-  }
-]);
+        </>
+    },
+    {
+      path: '/login',
+      element: 
+        <>
+          <Header />
+          <div className="form">
+            <LogIn setEmail_={setEmail}/>
+            <Line />
+            <SignUpGoogle />
+          </div>
+        </>
+    },
+    {
+      path: '/reset-password',
+      element: 
+        <>
+          <Header />
+          <ForgotPassword setEmail_={setEmail_} email_={email}/>
+        </>
+    },
+    {
+      path: '/reset-password/send-email',
+      element: 
+        <>
+          <Header />
+          <ResetPassword email={email}/>
+        </>
+    }
+  ]);
+
+  return <RouterProvider router={router} />
+}
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
   <AuthContext>
-  <RouterProvider router={router} />
+    <App />
   </AuthContext>
   // </React.StrictMode>
 );
