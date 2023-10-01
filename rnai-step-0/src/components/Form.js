@@ -249,7 +249,7 @@ const Form = () => {
             <div className="grid-item">
             <div style={{ paddingTop: '10px' }}>
                 <label className="switch">
-                <input type="checkbox" id="autoSuggestCheckbox" checked={autoSuggest} onChange={(e) => setAutoSuggest(e.currentTarget.checked)}/>
+                <input type="checkbox" id="autoSuggestCheckbox" checked={autoSuggest} onChange={(e) => setAutoSuggest(e.currentTarget.checked)} disabled={loading}/>
                 <span className="slider round"></span>
                 </label>
                 <p id="autoSuggestText">Auto Suggest: ON</p>
