@@ -1,12 +1,17 @@
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaTimes } from 'react-icons/fa'
 
 const LogIn = ({ setEmail_ }) => {
 
-  const [email, setEmail] = useState('')
+  let location = useLocation();
+  let searchParams = new URLSearchParams(location.search);
+  let emailId = searchParams.get('emailId')
+  console.log("emailId: ", emailId)
+
+  const [email, setEmail] = useState(emailId)
   const [password, setPassword] = useState('')
 
   const [correctEmail, setCorrectEmail] = useState('true')
@@ -45,27 +50,12 @@ const LogIn = ({ setEmail_ }) => {
       }
 
     });
-
-    // setCorrectEmail(true)
-    // setCorrectPwd(true)
-    console.log("Finally here")  
   }
 
   const forgotPassword = async (e) => {
     e.preventDefault();
     setEmail_(email)
     navigate('/reset-password')
-    // await sendPasswordResetEmail(auth, email)
-    // .then(() => {
-    //   console.log("Sending email")
-    //   // Password reset email sent!
-    //   // ..
-    // })
-    // .catch((error) => {
-    //   const errorCode = error.code;
-    //   const errorMessage = error.message;
-    //   // ..
-    // });
   }
 
   return (
