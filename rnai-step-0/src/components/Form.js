@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Configuration, OpenAIApi } from "openai";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const configuration = new Configuration({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -13,10 +15,18 @@ const Form = () => {
 
     const [autoSuggest, setAutoSuggest] = useState(true)
     const [genericNames, setGenericNames] = useState([]) 
+    const [loading, setLoading] = useState(false)
 
     console.log("genericNames: ", genericNames)
 
+    // const naviagation = useNavigation()
+    // const searching = naviagation.location
+    // console.log("navigation: ", naviagation)
+    // console.log("searching: ", searching)
+
+
     const fetchGenericNames = async (verticalName) => {
+        setLoading(true);
         console.log("verticalName: ", verticalName)
         const rsp = await completion(verticalName)
         console.log("response: ", rsp['data']['choices'][0]['message']['content'])
@@ -43,6 +53,8 @@ const Form = () => {
             id: 5,
             genericName: parsed_rsp[4]
           }])
+
+          setLoading(false);
       }
     
       const completion = (verticalName) => openai.createChatCompletion({
@@ -140,12 +152,16 @@ const Form = () => {
             <div className="grid-item">
                 <input type="text" name="paper1" placeholder="Title of First Paper" id="paper1" required />
             </div>
-            <div className="grid-item">
-                <input id="name1" type="text" name="name1" placeholder="First Generic Name" 
+            <div className="grid-item"> 
+              <input id="name1" type="text" name="name1" placeholder="First Generic Name" 
                 defaultValue={genericNames[0] !== undefined ? genericNames[0].genericName : ''} required 
-                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
+                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white'}}
                 disabled={autoSuggest ? true : false}
                 // onChange={(e) => changeGenericName(genericNames[0].id, e.target.value)}
+                />
+                <FontAwesomeIcon 
+                  icon={faSpinner} spin size="lg" color="black"
+                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
                 />
             </div>  
             
@@ -160,11 +176,20 @@ const Form = () => {
                 disabled={autoSuggest ? true : false}
                 // onChange={(e) => changeGenericName(genericNames[1].id, e.target.value)}
                 />
+                <FontAwesomeIcon 
+                  icon={faSpinner} spin size="lg" color="black"
+                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                />
             </div>  
             
             <div className="grid-item">
                 <input id="verticalName" type="text" name="vertical" placeholder="Vertical Name" required 
-                onBlur = {(e) => autoSuggest && fetchGenericNames(e.target.value)}
+                onBlur = {(e) => {
+                  autoSuggest && 
+                    e.target.value.length > 5 
+                      ? fetchGenericNames(e.target.value)
+                      : setGenericNames([])
+                }}
                 />
             </div>
             <div className="grid-item">
@@ -176,6 +201,10 @@ const Form = () => {
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false}
                 // onChange={(e) => changeGenericName(genericNames[2].id, e.target.value)}
+                />
+                <FontAwesomeIcon 
+                  icon={faSpinner} spin size="lg" color="black"
+                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
                 />
             </div>  
             
@@ -190,6 +219,10 @@ const Form = () => {
                 disabled={autoSuggest ? true : false} 
                 // onChange={(e) => changeGenericName(genericNames[3].id, e.target.value)}
                 />
+                <FontAwesomeIcon 
+                  icon={faSpinner} spin size="lg" color="black"
+                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                />
             </div> 
             
             <div className="grid-item"></div>
@@ -202,6 +235,10 @@ const Form = () => {
                 style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
                 disabled={autoSuggest ? true : false}
                 // onChange={(e) => changeGenericName(genericNames[4].id, e.target.value)}
+                />
+                <FontAwesomeIcon 
+                  icon={faSpinner} spin size="lg" color="black"
+                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
                 />
             </div>   
 
