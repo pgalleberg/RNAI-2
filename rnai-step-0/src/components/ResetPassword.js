@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { sendPasswordResetEmail } from "firebase/auth";
 import auth from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaRegEnvelopeOpen } from 'react-icons/fa'
 
 
@@ -44,7 +44,7 @@ const ResetPassword = ({ email }) => {
 
   return (
     
-    <div style={{width: '320px'}}>
+    <div style={{width: '320px', position: 'relative'}}>
         <FaRegEnvelopeOpen style={{color: '#10a37f', fontSize: '60px'}} />
 
         <p style={{fontSize: '28px'}}>Check Your Email</p>
@@ -52,7 +52,9 @@ const ResetPassword = ({ email }) => {
         <button onClick={resendEmail} className='resendEmail'>
             <span style={{fontWeight: 'lighter'}}>Resend Email</span>
         </button>
-
+        <div>
+            <Link to='/reset-password' className="backLink">Back</Link>
+        </div>
     </div>
   )
 }

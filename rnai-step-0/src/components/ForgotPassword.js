@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 const ForgotPassword = ({ setEmail_, email_ }) => {
     const [email, setEmail] = useState(email_)
@@ -12,7 +12,7 @@ const ForgotPassword = ({ setEmail_, email_ }) => {
     }
 
     return (
-        <div style={{width: '320px'}}>
+        <div style={{width: '320px', position: 'relative'}}>
             <p style={{fontWeight: 'bold', fontSize: '28px'}}>Reset your password</p>
             <p style={{fontSize: '14px', lineHeight: '20px'}}>Enter your email address and we will send you instructions to reset your password.</p>
             <form onSubmit={ onSubmit }  autoComplete="on">
@@ -26,6 +26,7 @@ const ForgotPassword = ({ setEmail_, email_ }) => {
                 <input type="submit" value="Continue"/>
                 </div>
             </form>
+            <Link to='/login' className="backLink">Back</Link>
         </div>
     )
 }
