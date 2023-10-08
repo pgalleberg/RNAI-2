@@ -244,13 +244,15 @@ const Form = () => {
 
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="submit" value="Submit" />
+                <input style={{cursor: loading && 'wait'}} type="submit" value="Submit" disabled={loading}/>
             </div>
             <div className="grid-item">
             <div style={{ paddingTop: '10px' }}>
                 <label className="switch">
-                <input type="checkbox" id="autoSuggestCheckbox" checked={autoSuggest} onChange={(e) => setAutoSuggest(e.currentTarget.checked)} disabled={loading}/>
-                <span className="slider round"></span>
+                <input type="checkbox" id="autoSuggestCheckbox" 
+                checked={autoSuggest} onChange={(e) => setAutoSuggest(e.currentTarget.checked)} disabled={loading}
+                />
+                <span className="slider round"  style={{cursor: loading && 'wait'}}></span>
                 </label>
                 <p id="autoSuggestText">Auto Suggest: ON</p>
             </div>
