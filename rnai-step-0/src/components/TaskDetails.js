@@ -27,7 +27,7 @@ const TaskDetails = () => {
 
 
   const fetchTaskDetails = async () => {
-    const url = process.env.REACT_APP_WEBSERVER + 'task_details/' + id
+    const url = process.env.REACT_APP_MOCK_WEBSERVER + 'task_details/' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -35,7 +35,7 @@ const TaskDetails = () => {
   }
 
   const fetchTask = async () => {
-    const url = process.env.REACT_APP_WEBSERVER + 'tasks/' + id
+    const url = process.env.REACT_APP_MOCK_WEBSERVER + 'tasks/' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -50,7 +50,7 @@ const TaskDetails = () => {
   useEffect(() => {
     console.log("useEffect 2 triggered")
     const updateTask = async () => {
-      const res = await fetch(process.env.REACT_APP_WEBSERVER + 'tasks/' + id, {
+      const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'tasks/' + id, {
         method: 'PUT',
         headers: {
           'Content-type' : 'application/json'
@@ -86,7 +86,7 @@ const TaskDetails = () => {
     document.getElementById(subHeading).contentEditable = false
     document.getElementById(subHeading + 'buttons').style.display = 'none'
     setTaskDetails({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
-    const res = await fetch(process.env.REACT_APP_WEBSERVER + 'task_details/' + id, {
+    const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'task_details/' + id, {
         method: 'PUT',
         headers: {
           'Content-type' : 'application/json'

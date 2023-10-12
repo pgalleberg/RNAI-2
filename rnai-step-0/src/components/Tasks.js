@@ -45,7 +45,7 @@ const Tasks = () => {
     }, [])
 
     const fetchTasks = async () => {
-      const res = await fetch(process.env.REACT_APP_WEBSERVER + 'tasks')
+      const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'tasks')
       const data = await res.json()
 
       console.log("fetchTasks::Tasks: ", data)
