@@ -1,13 +1,7 @@
 import { useState } from "react"
-import { Configuration, OpenAIApi } from "openai";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-
-const configuration = new Configuration({
-    apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-  });
-const openai = new OpenAIApi(configuration);
 
 
 const Form = () => {
@@ -19,76 +13,37 @@ const Form = () => {
 
     console.log("genericNames: ", genericNames)
 
-    // const naviagation = useNavigation()
-    // const searching = naviagation.location
-    // console.log("navigation: ", naviagation)
-    // console.log("searching: ", searching)
-
-
     const fetchGenericNames = async (verticalName) => {
-        setLoading(true);
-        console.log("verticalName: ", verticalName)
-        const rsp = await completion(verticalName)
-        console.log("response: ", rsp['data']['choices'][0]['message']['content'])
-        const parsed_rsp = parseResponse(rsp['data']['choices'][0]['message']['content'])
-        console.log('parsed_rsp: ', parsed_rsp)
-        setGenericNames([
-          { 
-            id: 1,
-            genericName: parsed_rsp[0]
-          }, 
-          { 
-            id: 2,
-            genericName: parsed_rsp[1]
-          }, 
-          { 
-            id: 3,
-            genericName: parsed_rsp[2]
-          }, 
-          { 
-            id: 4,
-            genericName: parsed_rsp[3]
-          }, 
-          { 
-            id: 5,
-            genericName: parsed_rsp[4]
-          }])
+      setLoading(true);
+      const res = await fetch('http://127.0.0.1:5000/getGenericNames?verticalName=' + verticalName) 
+      console.log("fetchTasks::res: ", res)
+      const data = await res.json()
+      console.log("fetchTasks::data: ", data)
+      
+      setGenericNames([
+        { 
+          id: 1,
+          genericName: data[0]
+        }, 
+        { 
+          id: 2,
+          genericName: data[1]
+        }, 
+        { 
+          id: 3,
+          genericName: data[2]
+        }, 
+        { 
+          id: 4,
+          genericName: data[3]
+        }, 
+        { 
+          id: 5,
+          genericName: data[4]
+        }])
 
-          setLoading(false);
-      }
-    
-      const completion = (verticalName) => openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are a research assistant."},
-          { role: "user", content: createPrompt(verticalName)}
-        ],
-        temperature: 0.0,
-      });
-    
-      const createPrompt = (verticalName) => {
-        return `I am looking for funding in the area of methane removal from ambient air. However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. 
-
-        List each topic on a new line without any bullet points. 
-        
-        Generic Topics:
-        Climate change mitigation and adaptation
-        Environmental sustainability and conservation
-        Clean energy and renewable technologies
-        Air pollution control and reduction
-        Greenhouse gas emissions reduction and management
-        
-        I am looking for funding in the area of ${verticalName}. However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. 
-        
-        List each topic on a new line without any bullet points. 
-        
-        Generic Topics:`
-      }
-    
-      const parseResponse = (response) => {
-        return response.split('\n')
-      }
-    
+        setLoading(false);
+    }
 
     const addTask = async (task) => {
         console.log("addTask::task received: ", task)
