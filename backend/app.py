@@ -58,13 +58,3 @@ def parseResponse(response):
 
 if __name__ == '__main__':
     app.run()
-
-
-# const completion = (verticalName) => openai.createChatCompletion({
-#         model: "gpt-3.5-turbo",
-#         messages: [
-#           { role: "system", content: "You are a research assistant."},
-#           { role: "user", content: createPrompt(verticalName)}
-#         ],
-#         temperature: 0.0,
-#       });
