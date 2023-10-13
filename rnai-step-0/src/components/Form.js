@@ -15,7 +15,7 @@ const Form = () => {
 
     const fetchGenericNames = async (verticalName) => {
       setLoading(true);
-      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + '/getGenericNames?verticalName=' + verticalName) 
+      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'getGenericNames?verticalName=' + verticalName) 
       console.log("fetchTasks::res: ", res)
       const data = await res.json()
       console.log("fetchTasks::data: ", data)
