@@ -13,4 +13,4 @@ db = mongo_client.rnai_deployment
 for coll in db.list_collection_names():
     db.drop_collection(coll)
     
-db.cite_parameters.insert_one({'name': 'default', 'depth': 5, 'cites': [18, 10, 5, 5, 5]})
+db.cite_parameters.insert_one({'name': 'default', 'depth': 5, 'cites': [10, 5, 2, 2, 2]})

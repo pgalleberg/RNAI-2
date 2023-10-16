@@ -1,0 +1,259 @@
+Initialising RNAI Runtime
+Starting API gateways in 17 regions.
+Using 17 endpoints with name 'https://scholar.google.com - IP Rotate API' (17 new).
+ * Serving Flask app 'main'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.5.241:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 119-386-647
+54.86.50.139 - - [29/Sep/2023 16:41:29] "GET /tasks/webmaster HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/RNAI-2/main.py', reloading
+Initialising RNAI Runtime
+Starting API gateways in 17 regions.
+Using 17 endpoints with name 'https://scholar.google.com - IP Rotate API' (17 new).
+ * Restarting with stat
+Traceback (most recent call last):
+  File "/home/ubuntu/RNAI-2/main.py", line 6, in <module>
+    from flask_cors import CORS
+ModuleNotFoundError: No module named 'flask_cors'
+Initialising RNAI Runtime
+Starting API gateways in 17 regions.
+Using 17 endpoints with name 'https://scholar.google.com - IP Rotate API' (17 new).
+ * Serving Flask app 'main'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.5.241:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 106-474-069
+54.86.50.139 - - [29/Sep/2023 16:47:02] "GET /tasks/webmaster HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/RNAI-2/main.py', reloading
+Initialising RNAI Runtime
+Starting API gateways in 17 regions.
+Using 17 endpoints with name 'https://scholar.google.com - IP Rotate API' (17 new).
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 106-474-069
+54.86.50.139 - - [29/Sep/2023 16:48:34] "[35m[1mGET /tasks/webmaster HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/app.py", line 2213, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/app.py", line 2193, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/ubuntu/RNAI-2/main.py", line 47, in webmaster
+    return jsonify({"status": "success", "tasks_list": result_v})
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/json/__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/json/provider.py", line 215, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/json/provider.py", line 180, in dumps
+    return json.dumps(obj, **kwargs)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 201, in encode
+    chunks = list(chunks)
+  File "/usr/lib/python3.10/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/usr/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.10/json/encoder.py", line 325, in _iterencode_list
+    yield from chunks
+  File "/usr/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.10/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/home/ubuntu/RNAI-2/venv/lib/python3.10/site-packages/flask/json/provider.py", line 120, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type ObjectId is not JSON serializable
+ * Detected change in '/home/ubuntu/RNAI-2/main.py', reloading
+Initialising RNAI Runtime
+Starting API gateways in 17 regions.
+Using 17 endpoints with name 'https://scholar.google.com - IP Rotate API' (17 new).
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 106-474-069
+54.86.50.139 - - [29/Sep/2023 16:49:29] "GET /tasks/webmaster HTTP/1.1" 200 -
+43.246.227.190 - - [29/Sep/2023 16:50:59] "OPTIONS /tasks/webmaster HTTP/1.1" 200 -
+43.246.227.190 - - [29/Sep/2023 16:50:59] "GET /tasks/webmaster HTTP/1.1" 200 -
+Initialising RNAI Runtime
+Starting API gateways in 17 regions.
+Using 17 endpoints with name 'https://scholar.google.com - IP Rotate API' (17 new).
+{'admin_id': 'WgBrnJjBN6WWsVe1bDjZ56eNhTc2', 'query': 'Science of Reading', 'time': '27/09/2023, 21:28:12', 'papers': ['How Psychological Science Informs the Teaching of Reading', 'Reading in the Brain: The New Science of How We Read', 'The science of reading and its educational implications', 'Overcoming Dyslexia', 'reading acquisition'], 'names': ['Renewable energy sources', 'Climate change mitigation', 'Air pollution control', 'Environmental sustainability', 'Greenhouse gas reduction'], 'autoSuggest': True}
+54.86.50.139 - - [29/Sep/2023 16:56:55] "POST /tasks/initialise HTTP/1.1" 200 -
+{'admin_id': 'HA9OfXU1seWeS8sPijKBuq31SFE2', 'query': 'Methane removal from ambient air', 'time': '27/09/2023, 21:28:12', 'papers': ['Atmospheric methane removal: a research agenda', 'A novel green technology: Reducing carbon dioxide and eliminating methane from the atmosphere', 'Methane removal and atmospheric restoration', 'New Directions: Atmospheric methane removal as a way to mitigate climate change?', 'Methane removal seen as tool to slow warming'], 'names': ['Renewable energy sources', 'Climate change mitigation', 'Air pollution control', 'Environmental sustainability', 'Greenhouse gas reduction'], 'autoSuggest': True}
+54.86.50.139 - - [29/Sep/2023 16:57:12] "POST /tasks/initialise HTTP/1.1" 200 -
+{'admin_id': 'WgBrnJjBN6WWsVe1bDjZ56eNhTc2', 'query': 'Bio-inspired burrowing robots', 'time': '27/09/2023, 21:28:12', 'papers': ['Razor clam to RoboClam: burrowing drag reduction mechanisms and their robotic adaptation', 'Undulatory swimming in sand: experimental and simulation studies of a robotic sandfish', 'Controlling subterranean forces enables a fast, steerable, burrowing soft robot', 'Design, fabrication and control of a multi-material-multi-actuator soft robot inspired by burrowing worms', 'Soft Robot Actuation Strategies for Locomotion in Granular Substrates'], 'names': ['Renewable energy sources', 'Climate change mitigation', 'Air pollution control', 'Environmental sustainability', 'Greenhouse gas reduction'], 'autoSuggest': True}
+54.86.50.139 - - [29/Sep/2023 16:57:24] "POST /tasks/initialise HTTP/1.1" 200 -
+43.246.227.190 - - [29/Sep/2023 17:23:34] "GET /tasks/webmaster HTTP/1.1" 200 -
+167.248.133.38 - - [29/Sep/2023 18:50:14] "[33mGET / HTTP/1.1[0m" 404 -
+167.248.133.38 - - [29/Sep/2023 18:50:24] code 505, message Invalid HTTP version (2.0)
+167.248.133.38 - - [29/Sep/2023 18:50:24] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+172.104.11.34 - - [29/Sep/2023 23:41:34] code 400, message Bad request version ('À\x14À')
+172.104.11.34 - - [29/Sep/2023 23:41:34] "[35m[1m\x16\x03\x01\x00\x85\x01\x00\x00\x81\x03\x03\x1eÒf\x1b,.^Ì\x18¶H^S\x81÷\x92¸Õ\x0b\x1b\x99Ã¬\x0d\x09Q`°-¬=¤\x00\x00 À/À0À+À,Ì¨Ì©À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+205.210.31.229 - - [29/Sep/2023 23:52:13] "[33mGET / HTTP/1.1[0m" 404 -
+45.79.181.179 - - [30/Sep/2023 00:38:33] code 400, message Bad request version ('À\x14À')
+45.79.181.179 - - [30/Sep/2023 00:38:33] "[35m[1m\x16\x03\x01\x00{\x01\x00\x00w\x03\x03,\x19\x08_¯\x9eèîÝ*\x86î\x901\x97u=<U\x99s\x9aµ\x08ü¦Ò\x1f}ON\x17\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+35.203.211.66 - - [30/Sep/2023 02:14:08] code 400, message Bad request version ('À(À$À\x14À')
+35.203.211.66 - - [30/Sep/2023 02:14:08] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03b[|\x84¼°&³°ðÐ\x98ÔWe¿À\x85\x9c>Øi^¿5 £Ô\x91YÄ¶\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À\x09À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+198.235.24.131 - - [30/Sep/2023 02:21:31] "[33mGET / HTTP/1.1[0m" 404 -
+205.210.31.13 - - [30/Sep/2023 04:51:18] "[33mGET / HTTP/1.0[0m" 404 -
+144.126.206.181 - - [30/Sep/2023 04:58:53] code 400, message Bad request syntax ('\x16\x03\x01\x01ü\x01\x00\x01ø\x03\x03kE1:rÈ\x01\x1aw3t°Q²\x8fòà¾Þ')
+144.126.206.181 - - [30/Sep/2023 04:58:53] "[35m[1m\x16\x03\x01\x01ü\x01\x00\x01ø\x03\x03kE1:rÈ\x01\x1aw3t°Q²\x8fòà¾Þ[0m" HTTPStatus.BAD_REQUEST -
+162.142.125.223 - - [30/Sep/2023 05:46:43] code 400, message Bad request version ('À\x14À')
+162.142.125.223 - - [30/Sep/2023 05:46:43] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03\x16Ä¤.ñ\x16¬\x7fr\x87éúÐ\x07Uøbó\x99Â\x91Íè\x83\x94\x85ì\x02*»ó? V\x01 £rÏ×Y;3YI(­#SÆ\x17²\x03\\lu=\x1a\x98»8\x9eæü\x0d\x00&Ì¨Ì©À/À0À+À,À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+162.142.125.223 - - [30/Sep/2023 05:46:44] "[33mGET / HTTP/1.1[0m" 404 -
+162.142.125.223 - - [30/Sep/2023 05:46:44] "[33mGET / HTTP/1.1[0m" 404 -
+162.142.125.223 - - [30/Sep/2023 05:46:45] code 505, message Invalid HTTP version (2.0)
+162.142.125.223 - - [30/Sep/2023 05:46:45] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+198.235.24.247 - - [30/Sep/2023 07:01:04] "[33mGET / HTTP/1.0[0m" 404 -
+183.136.225.9 - - [30/Sep/2023 10:48:12] "[33mGET / HTTP/1.1[0m" 404 -
+183.136.225.9 - - [30/Sep/2023 10:48:12] "[33mGET / HTTP/1.1[0m" 404 -
+183.136.225.9 - - [30/Sep/2023 10:48:13] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+183.136.225.9 - - [30/Sep/2023 10:48:13] "[33mGET /robots.txt HTTP/1.1[0m" 404 -
+167.94.138.51 - - [30/Sep/2023 12:59:34] code 400, message Bad request version ('À\x14À')
+167.94.138.51 - - [30/Sep/2023 12:59:34] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03¾6NÅ\x1f\x83Ó'U\x17x\x0cYLGU\x10h½ãï\x84µ¥½\x98D\x81ø²\x1eµ \x18ÛÉ¦?áF-\x9eú¬t2\x99áI\x9cQ\x16ð\x80¤\x93\x06}\x87\x89\x8a\x18º£¿\x00&Ì¨Ì©À/À0À+À,À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+167.94.138.51 - - [30/Sep/2023 12:59:36] "[33mGET / HTTP/1.1[0m" 404 -
+167.94.138.51 - - [30/Sep/2023 12:59:37] "[33mGET / HTTP/1.1[0m" 404 -
+167.94.138.51 - - [30/Sep/2023 12:59:37] code 505, message Invalid HTTP version (2.0)
+167.94.138.51 - - [30/Sep/2023 12:59:37] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+152.32.139.96 - - [30/Sep/2023 16:43:47] code 400, message Bad request version ('À\x14À')
+152.32.139.96 - - [30/Sep/2023 16:43:47] "[35m[1m\x16\x03\x01\x01\x09\x01\x00\x01\x05\x03\x03Ö\x95\x0fTÔÛºì\x0c\x9b\x8b¸\x0c\\\x14FÔ.Üq\x88\x00\x85\x1e\x0b]\x94§s½\x83Ð L\x89i\x89ñ\x9aB\\\x84%ù²Ñ:íµ8¹\x8d5\x95\x93\x1e\x04jüÝ\x05-\x83\x03B\x00&Ì¨Ì©À/À0À+À,À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+152.32.139.96 - - [30/Sep/2023 16:43:58] "[33mGET / HTTP/1.1[0m" 404 -
+152.32.139.96 - - [30/Sep/2023 16:43:58] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+152.32.139.96 - - [30/Sep/2023 16:43:59] "[33mGET /robots.txt HTTP/1.1[0m" 404 -
+152.32.139.96 - - [30/Sep/2023 16:43:59] "[33mGET /sitemap.xml HTTP/1.1[0m" 404 -
+45.95.169.184 - - [30/Sep/2023 18:26:25] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00\x11\x00\x00\x01é\x00\x01\x00\x00\x00ÿÿÿÿ\x01\x00\x00\x00\x00\x00\x00\x00')
+45.95.169.184 - - [30/Sep/2023 18:26:25] "[35m[1m\x00\x00\x00\x11\x00\x00\x01é\x00\x01\x00\x00\x00ÿÿÿÿ\x01\x00\x00\x00\x00\x00\x00\x00\x0c\x02\x00\x00\x00\x10MyCustomAssembly\x05\x01\x00\x00\x00[0m" HTTPStatus.BAD_REQUEST -
+205.210.31.234 - - [30/Sep/2023 20:03:58] "[33mGET / HTTP/1.0[0m" 404 -
+162.216.150.147 - - [30/Sep/2023 20:14:16] code 400, message Bad request version ('À(À$À\x14À')
+162.216.150.147 - - [30/Sep/2023 20:14:16] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03Y\x02s\x0f\x09^´ùs7x\x86R\x86³xD?ÒÔ\x8a\x94¼Û¬xD\x07ÙË\x09*\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À\x09À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+91.191.209.202 - - [30/Sep/2023 22:03:38] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+91.191.209.202 - - [30/Sep/2023 22:03:38] "[35m[1m\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie: mstshash=Administr[0m" HTTPStatus.BAD_REQUEST -
+45.79.172.21 - - [30/Sep/2023 23:46:58] code 400, message Bad request version ('À\x14À')
+45.79.172.21 - - [30/Sep/2023 23:46:58] "[35m[1m\x16\x03\x01\x00\x85\x01\x00\x00\x81\x03\x03ûj·\x89\x83\x00¦3#wó\x8fÁa5\x11Q\x8c_å\x80ö´¿×¢\x18xå\x8d\x03¢\x00\x00 À/À0À+À,Ì¨Ì©À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+198.235.24.32 - - [01/Oct/2023 02:07:11] "[33mGET / HTTP/1.1[0m" 404 -
+35.203.210.232 - - [01/Oct/2023 03:43:00] code 400, message Bad request version ('À(À$À\x14À')
+35.203.210.232 - - [01/Oct/2023 03:43:00] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03\x85ñ?\x06T\x0eîÚ\x17a\x805\x99á\x8dðÞò¿}á\x9d!»\x88û\x0dø\x81;G#\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À\x09À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+198.235.24.28 - - [01/Oct/2023 04:40:19] "[33mGET / HTTP/1.0[0m" 404 -
+107.170.232.57 - - [01/Oct/2023 05:37:12] code 400, message Bad request version ('À\x14À')
+107.170.232.57 - - [01/Oct/2023 05:37:12] "[35m[1m\x16\x03\x01\x00\x8b\x01\x00\x00\x87\x03\x03û²á¼Ï¹1ón:ÎÑÑíc\x17Ð\x1fð\x0b\x19ÚG^pÔáe\x08i\x9e@\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+198.199.118.103 - - [01/Oct/2023 05:40:13] "[33mGET / HTTP/1.1[0m" 404 -
+188.166.87.67 - - [01/Oct/2023 13:22:56] "[33mGET / HTTP/1.1[0m" 404 -
+54.86.50.139 - - [01/Oct/2023 16:43:17] "GET /tasks/webmaster HTTP/1.1" 200 -
+35.203.211.95 - - [01/Oct/2023 20:00:37] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03·\x8d¤ª\x033Ï')
+35.203.211.95 - - [01/Oct/2023 20:00:37] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03·\x8d¤ª\x033Ï\x85¸M.P\x89kj¯?g¶×o\x93?Ù¡Z±[0m" HTTPStatus.BAD_REQUEST -
+205.210.31.149 - - [01/Oct/2023 21:23:29] "[33mGET / HTTP/1.0[0m" 404 -
+205.210.31.46 - - [01/Oct/2023 21:30:48] "[33mGET / HTTP/1.1[0m" 404 -
+205.210.31.34 - - [01/Oct/2023 22:04:59] "[33mGET / HTTP/1.1[0m" 404 -
+43.131.43.27 - - [01/Oct/2023 23:39:23] code 400, message Bad request version ('À\x13À')
+43.131.43.27 - - [01/Oct/2023 23:39:23] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03I\x06²ù¼\x99iÀYûøºe-\x83Ud]\x0e\x8d·b8´gÆÝ9dZ8f gÁ\x81i³öòË°©\x19NÖ½\x95g|püé<Z¡\x90T·é¥8'O;\x00&À+À/À,À0Ì©Ì¨À\x09À\x13À[0m" HTTPStatus.BAD_REQUEST -
+43.131.43.27 - - [01/Oct/2023 23:39:34] "[33mGET / HTTP/1.1[0m" 404 -
+198.235.24.93 - - [02/Oct/2023 01:11:26] "[33mGET / HTTP/1.0[0m" 404 -
+192.241.218.12 - - [02/Oct/2023 09:33:16] "[33mGET /v2/ HTTP/1.1[0m" 404 -
+167.248.133.52 - - [02/Oct/2023 09:36:55] code 400, message Bad request version ('À\x14À')
+167.248.133.52 - - [02/Oct/2023 09:36:55] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03j\x07\x8bkQ´Ä¾\x98Uß:-\x81¹g\x8b±?Bº\x06\x10\x034;Ù7\x82j\x98] \x08\x1dÚÔ\x18\x95÷´z3Ü\x17&\x09\x11÷óp¶£-©\x06l\x01È¥\x85\x9cD"b\x00&Ì¨Ì©À/À0À+À,À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+167.248.133.52 - - [02/Oct/2023 09:36:56] "[33mGET / HTTP/1.1[0m" 404 -
+167.248.133.52 - - [02/Oct/2023 09:36:56] "[33mGET / HTTP/1.1[0m" 404 -
+167.248.133.52 - - [02/Oct/2023 09:36:56] code 505, message Invalid HTTP version (2.0)
+167.248.133.52 - - [02/Oct/2023 09:36:56] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+162.142.125.221 - - [02/Oct/2023 11:30:40] code 400, message Bad request version ('7u5_è¸Â\x9e.\x05â¼')
+162.142.125.221 - - [02/Oct/2023 11:30:40] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03C\x0c­>Q\x1e\x92\x1a\x8b&\x96\x82\x00÷\x83\x172ít\x07\x1d\x01uz\x93&ÿÊ\x15@PÚ 7u5_è¸Â\x9e.\x05â¼[0m" HTTPStatus.BAD_REQUEST -
+162.142.125.221 - - [02/Oct/2023 11:30:41] "[33mGET / HTTP/1.1[0m" 404 -
+162.142.125.221 - - [02/Oct/2023 11:30:41] "[33mGET / HTTP/1.1[0m" 404 -
+162.142.125.221 - - [02/Oct/2023 11:30:41] code 505, message Invalid HTTP version (2.0)
+162.142.125.221 - - [02/Oct/2023 11:30:41] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+167.94.146.55 - - [02/Oct/2023 15:52:20] code 400, message Bad request version ('À\x14À')
+167.94.146.55 - - [02/Oct/2023 15:52:20] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03ºÁÝ\x04I/\x99N8M\x92HXèÝÉ\x8c®%2å\x932wMD\x9bÉ.2,ä ³ÂLð\x060#¿t%c,»\x0f<D\x18È|*\x0e\x0f\x0bÉ\x9eøü\x85\x9d#\x8dÛ\x00&Ì¨Ì©À/À0À+À,À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+167.94.146.55 - - [02/Oct/2023 15:52:21] "[33mGET / HTTP/1.1[0m" 404 -
+167.94.146.55 - - [02/Oct/2023 15:52:21] "[33mGET / HTTP/1.1[0m" 404 -
+167.94.146.55 - - [02/Oct/2023 15:52:22] code 505, message Invalid HTTP version (2.0)
+167.94.146.55 - - [02/Oct/2023 15:52:22] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+205.210.31.11 - - [02/Oct/2023 18:32:31] "[33mGET / HTTP/1.0[0m" 404 -
+205.210.31.230 - - [02/Oct/2023 18:37:40] "[33mGET / HTTP/1.1[0m" 404 -
+192.155.90.220 - - [02/Oct/2023 23:37:45] code 400, message Bad request version ('À\x14À')
+192.155.90.220 - - [02/Oct/2023 23:37:45] "[35m[1m\x16\x03\x01\x00\x85\x01\x00\x00\x81\x03\x03¦\x7f\x18ZÚªE]Z÷ÌkCpç³Kè-ÓÜË¼Ð\x95iÂVÛ\x98Ø1\x00\x00 À/À0À+À,Ì¨Ì©À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+172.105.128.11 - - [03/Oct/2023 00:41:29] code 400, message Bad request version ('À\x14À')
+172.105.128.11 - - [03/Oct/2023 00:41:29] "[35m[1m\x16\x03\x01\x00{\x01\x00\x00w\x03\x03[àl­\x14\x9e\x03\x11\x0b4£AÍ\x86\x0cæ\x1dL6öz\x99ÒR½h\x17éªD#n\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+205.210.31.29 - - [03/Oct/2023 01:10:06] "[33mGET / HTTP/1.0[0m" 404 -
+144.126.236.164 - - [03/Oct/2023 03:43:01] code 400, message Bad request syntax ('\x16\x03\x01\x01ü\x01\x00\x01ø\x03\x03ú,P\\ý\x1a6ÔC0(ÑPÁ\x90\x06\x07\x04¸@j¯¼z¿\x98ì\x89á9ì\x02\x00\x01<Ì\x14Ì\x13Ì\x15À0À,À(À$À\x14À')
+144.126.236.164 - - [03/Oct/2023 03:43:01] "[35m[1m\x16\x03\x01\x01ü\x01\x00\x01ø\x03\x03ú,P\\ý\x1a6ÔC0(ÑPÁ\x90\x06\x07\x04¸@j¯¼z¿\x98ì\x89á9ì\x02\x00\x01<Ì\x14Ì\x13Ì\x15À0À,À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+35.203.211.165 - - [03/Oct/2023 08:45:02] code 400, message Bad request version ('À(À$À\x14À')
+35.203.211.165 - - [03/Oct/2023 08:45:02] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03ö#ÛFûÌ\x92|\x18)\x0fÕoY¾\x91í³§i)eö\x03ö§Ádpçº\x0d\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À\x09À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+111.7.96.156 - - [03/Oct/2023 11:58:04] "[33mGET / HTTP/1.1[0m" 404 -
+54.86.50.139 - - [03/Oct/2023 15:47:45] "GET /tasks/webmaster HTTP/1.1" 200 -
+162.216.150.199 - - [03/Oct/2023 17:42:04] code 400, message Bad HTTP/0.9 request type ("\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03\x8f¯m#lú(~¼Ò\x82£©lbzôf´}ß\x81glÄïîØå\x03}\x1b\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À")
+162.216.150.199 - - [03/Oct/2023 17:42:04] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03\x8f¯m#lú(~¼Ò\x82£©lbzôf´}ß\x81glÄïîØå\x03}\x1b\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À\x09À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+198.235.24.140 - - [03/Oct/2023 19:20:08] "[33mGET / HTTP/1.0[0m" 404 -
+167.94.145.57 - - [03/Oct/2023 20:32:16] code 400, message Bad request version ('ªUx"È¤\x9e¶')
+167.94.145.57 - - [03/Oct/2023 20:32:16] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03¤DÝQÇõd[çïjØ\x85Õx»\x04lLfÞ_ÛËºA= ;\x8a«D ªUx"È¤\x9e¶[0m" HTTPStatus.BAD_REQUEST -
+167.94.145.57 - - [03/Oct/2023 20:32:18] "[33mGET / HTTP/1.1[0m" 404 -
+167.94.145.57 - - [03/Oct/2023 20:32:18] "[33mGET / HTTP/1.1[0m" 404 -
+167.94.145.57 - - [03/Oct/2023 20:32:18] code 505, message Invalid HTTP version (2.0)
+167.94.145.57 - - [03/Oct/2023 20:32:18] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+198.235.24.218 - - [04/Oct/2023 09:50:28] "[33mGET / HTTP/1.1[0m" 404 -
+205.210.31.152 - - [04/Oct/2023 23:55:31] "[33mGET / HTTP/1.1[0m" 404 -
+205.210.31.224 - - [05/Oct/2023 00:41:48] "[33mGET / HTTP/1.1[0m" 404 -
+35.203.210.23 - - [05/Oct/2023 03:06:05] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03¹\x02_ü,g\x02ª\x81]¸')
+35.203.210.23 - - [05/Oct/2023 03:06:05] "[35m[1m\x16\x03\x01\x00î\x01\x00\x00ê\x03\x03¹\x02_ü,g\x02ª\x81]¸\x1f\x1a\x90u\x14\x97X­è\x07<¹[0m" HTTPStatus.BAD_REQUEST -
+35.203.210.23 - - [05/Oct/2023 03:06:06] code 400, message Bad request version ('À(À$À\x14À')
+35.203.210.23 - - [05/Oct/2023 03:06:06] "[35m[1m\x16\x03\x01\x00Ê\x01\x00\x00Æ\x03\x03º\x1eÅ9à&-L@ì¥Lå\x7fT\\ï«ù>þ3hD\x0b\x0bÐú\x9a\x08á]\x00\x00hÌ\x14Ì\x13À/À+À0À,À\x11À\x07À'À#À\x13À\x09À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+167.99.94.158 - - [05/Oct/2023 03:17:08] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x01ü\x01\x00\x01ø\x03\x03bS\x13Î6q¼æn¢RØ\x94\x83>¿Ó\x83@Õ]\x15Gî\x97ÈUY~')
+167.99.94.158 - - [05/Oct/2023 03:17:08] "[35m[1m\x16\x03\x01\x01ü\x01\x00\x01ø\x03\x03bS\x13Î6q¼æn¢RØ\x94\x83>¿Ó\x83@Õ]\x15Gî\x97ÈUY~\x1eúB\x00\x01<Ì\x14Ì\x13Ì\x15À0À,À(À$À\x14À[0m" HTTPStatus.BAD_REQUEST -
+198.235.24.12 - - [05/Oct/2023 06:23:57] "[33mGET / HTTP/1.0[0m" 404 -
+205.210.31.150 - - [05/Oct/2023 07:08:15] "[33mGET / HTTP/1.0[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:16] code 400, message Bad request version ('tñÀDÚm\x8f·\x9dC\x9dèu\x1aé\x07\x0frLãÅ')
+167.71.48.191 - - [05/Oct/2023 11:34:16] "[35m[1m\x16\x03\x01\x00ê\x01\x00\x00æ\x03\x03\x1a÷ùªh¹­+6\x87©\x1fÉL{'*\x9e\x0b\x04|3»dú\\¦z\x99ºP5 tñÀDÚm\x8f·\x9dC\x9dèu\x1aé\x07\x0frLãÅ[0m" HTTPStatus.BAD_REQUEST -
+167.71.48.191 - - [05/Oct/2023 11:34:16] "[33mGET / HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:17] "[33mGET / HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:17] "[33mGET /version HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:18] "[33mGET /.vscode/sftp.json HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:18] "[33mGET /about HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:18] "[33mGET /debug/default/view?panel=config HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:19] "[33mGET /v2/_catalog HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:19] "[33mGET /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:19] "[33mGET /server-status HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:20] "[33mGET /login.action HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:20] "[33mGET /_all_dbs HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:21] "[33mGET /.DS_Store HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:21] "[33mGET /.env HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:21] "[33mGET /.git/config HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:22] "[33mGET /s/236313e2231313e22353e23313/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:22] "[33mGET /config.json HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:22] "[33mGET /telescope/requests HTTP/1.1[0m" 404 -
+167.71.48.191 - - [05/Oct/2023 11:34:23] "[33mGET /?rest_route=/wp/v2/users/ HTTP/1.1[0m" 404 -
+118.123.105.85 - - [05/Oct/2023 12:00:25] "[33mGET / HTTP/1.0[0m" 404 -
+118.123.105.85 - - [05/Oct/2023 12:00:25] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+118.123.105.85 - - [05/Oct/2023 12:00:25] "[33mGET /robots.txt HTTP/1.1[0m" 404 -
+118.123.105.85 - - [05/Oct/2023 12:00:26] "[33mGET /.well-known/security.txt HTTP/1.1[0m" 404 -
+Populating Verticals - Level 0 - Generate Buckets
+Populating Verticals - Level 0 - Process Papers
+Populating Verticals - Level 0 - Generate Buckets
+Populating Verticals - Level 0 - Process Papers
+Populating Verticals - Level 1 - Generate Buckets
+Populating Verticals - Level 1 - Process Papers
+Populating Verticals - Level 2 - Generate Buckets
+Populating Verticals - Level 2 - Process Papers
+Populating Verticals - Level 0 - Generate Buckets
+Populating Verticals - Level 0 - Process Papers
+Populating Verticals - Level 1 - Generate Buckets
+Populating Verticals - Level 1 - Process Papers

@@ -24,7 +24,7 @@ from rnai.authors.rank import rank_authors
 
 class RNAI:
     def __init__(self, reset = False, collection = 'rnai'):
-        self.parameters = {'iterations': 10, 'citations': 100, 'wait_time': 25, 'depth': 4}
+        self.parameters = {'iterations': 10, 'citations': 10, 'wait_time': 25, 'depth': 4}
 
         print('Initialising RNAI Runtime')
 
@@ -39,39 +39,13 @@ class RNAI:
 
         if reset is True:
             self.reset()
-        
-        '''
-        print('Initialising Verticals')
 
-        pbar_v = tqdm(total = len(self.initial_data.keys()), leave = True)
-        for vertical_name in self.initial_data.keys():
-            vertical_id, log_string = add_vertical(self.db, vertical_name)
-            
-            pbar_ip = tqdm(total = len(self.initial_data[vertical_name]['papers_list']), leave = True)
-            
-            for input_paper_name in self.initial_data[vertical_name]['papers_list']:
-                paper_id, log_string = add_paper(self.db, vertical_id, input_paper_name, 0)
-                self.papers[input_paper_name] = paper_id
-                pbar_ip.update(1)
-
-            pbar_ip.close()
-            pbar_v.update(1)
-        
-        pbar_v.close()
-        '''
-
-    def initialise_vertical(self, vertical_name, papers_list):
-        vertical_id, log_string = add_vertical(self.db, vertical_name)
-        
-        pbar_ip = tqdm(total = len(papers_list), leave = True)
-        
+    def initialise_vertical(self, vertical_name, papers_list, start_time, admin_id):
+        vertical_id, log_string = add_vertical(self.db, vertical_name, start_time, admin_id)
+                
         for input_paper_name in papers_list:
             paper_id, log_string = add_paper(self.db, vertical_id, input_paper_name, 0)
             self.papers[input_paper_name] = paper_id
-            pbar_ip.update(1)
-
-        pbar_ip.close()
-
 
     def retrieve_cite_parameters(self, configuration_name = 'default'):
 
@@ -98,8 +72,6 @@ class RNAI:
             self.current_level = self.current_level + 1
             
     def create_buckets(self):
-        pbar_cb = tqdm(total = self.db.papers.count_documents({"_bucket_exists": False}), leave = True)
-
         papers_to_bucket = list(self.db.papers.find({"_bucket_exists": False}))
 
         for paper_to_bucket in papers_to_bucket:
@@ -111,15 +83,9 @@ class RNAI:
             upd_r = self.db.papers.update_one({"_id": paper_to_bucket['_id']}, {"$set": {"_bucket_exists": True}})
 
             time.sleep(random.randint(50, 229)/100)
-            
-            pbar_cb.update(1)
-
-        pbar_cb.close()
 
     def process_papers(self, level, cited_by_flag = True):
-        
-        pbar_cp = tqdm(total = self.db.papers.count_documents({"$and": [{"_cite_by_complete": False}, {"_bucket_exists": True}]}), leave = True)
-        
+                
         papers_to_complete = list(self.db.papers.find({"$and": [{"_cite_by_complete": False}, {"_bucket_exists": True}]}))
 
         for paper_to_complete in papers_to_complete:
@@ -171,10 +137,6 @@ class RNAI:
             elif cited_by_flag is False:
                 upd_r = self.db.papers.update_one({"_id": paper_to_complete['_id']}, {"$set": {"_cite_by_complete": True, '_complete':True}})
 
-            pbar_cp.update(1)
-
-        pbar_cp.close()
-
     def rank_verticals(self):
         verticals = self.db.verticals.find({})
 
@@ -182,8 +144,6 @@ class RNAI:
             rank_papers_in_vertical(self.db, vertical['_id'])
     
     def process_authors(self):
-        pbar_ca = tqdm(total = self.db.papers.count_documents({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}), leave = True)
-
         papers_to_complete = list(self.db.papers.find({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}))
 
         for paper_record in papers_to_complete:
@@ -204,13 +164,7 @@ class RNAI:
                         
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_authors_listed": True, "_authors": a_inserted_ids}})
 
-            pbar_ca.update(1)
-
-        pbar_ca.close()
-
     def populate_author_records(self):
-        pbar_ca = tqdm(total = self.db.authors.count_documents({"_complete": False}), leave = True)
-
         for author_record in self.db.authors.find({"_complete": False}):
             author = scholarly.search_author_id(author_record['_ags_id'])
             for akey in author.keys():
@@ -223,10 +177,6 @@ class RNAI:
             author_record['_complete'] = True
 
             self.db.authors.update_one({"_id": author_record['_id']}, {"$set": author_record})
-
-            pbar_ca.update(1)
-
-        pbar_ca.close()
 
         rank_authors(self.db)
 
