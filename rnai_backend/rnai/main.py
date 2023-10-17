@@ -9,6 +9,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import certifi
 import logging
+import spacy
 
 ca = certifi.where()
 
@@ -17,7 +18,7 @@ from rnai.verticals.add import add_vertical
 from rnai.verticals.rank_papers import rank_papers_in_vertical
 from rnai.papers.add import add_paper
 from rnai.papers.citations import get_citations
-
+from rnai.authors.retrieve import restrieve_author_details
 from rnai.authors.author_ids import get_author_id_from_publication_result
 
 from rnai.authors.rank import rank_authors
@@ -36,6 +37,8 @@ class RNAI:
         self.papers, self.authors, self.current_level = {}, {}, 0
 
         self.network_portal = NetworkPortal()
+
+        self.nlp_module = spacy.load("en_core_web_sm")
 
         if reset is True:
             self.reset()
