@@ -1,8 +1,9 @@
 from tqdm import tqdm
 
 def rank_papers_in_vertical(db, vertical_id):
-    publications_to_rank = list(db.papers.find({'_vertical_id': vertical_id}))
-    pbar_rv = tqdm(total = db.papers.count_documents({"_vertical_id": vertical_id}), leave = True)
+    publications_to_rank = list(db.papers.find({'$and': [{'_vertical_id': vertical_id}, {'_score': {'$exists': False}}]}))
+
+    pbar_rv = tqdm(total = len(publications_to_rank), leave = True)
 
     for pub_ranked in publications_to_rank:
         if '_citation_count' not in pub_ranked.keys():
@@ -17,6 +18,7 @@ def rank_papers_in_vertical(db, vertical_id):
             ranking = ((5 - level_index) / 5) + (citation_count / 100) + (occurrences / 25)
             
             db.papers.update_one({'_id': pub_ranked['_id']}, {'$set': {'_score': ranking}})
-            pbar_rv.update(1)
+        
+        pbar_rv.update(1)
 
     pbar_rv.close()

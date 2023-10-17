@@ -10,6 +10,12 @@ CORS(app)
 
 rnai = RNAI(reset = False)
 
+
+#rnai.process_authors()
+
+rnai.populate_author_records()
+
+sgsgs
 vertical_processes = {}
 
 def vertical_creation_process(vertical_name, papers_list, start_time, admin_id):
@@ -82,6 +88,18 @@ def vertical_details():
         output['papers'].append(dumps([paper['_id'], paper['title']]))
 
     return jsonify({"status": "success", "vertical_details": output})
+'''
+@app.route('/display/papers', methods = ['GET'])
+def get_papers():
+
+    request_parameters = request.json
+
+
+@app.route('/display/authors', methods = ['GET'])
+
+
+@app.route
+'''
 
 if __name__ == '__main__':
     app.run(debug = True, host= '0.0.0.0')

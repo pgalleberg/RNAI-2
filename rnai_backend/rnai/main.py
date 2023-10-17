@@ -20,8 +20,8 @@ from rnai.papers.add import add_paper
 from rnai.papers.citations import get_citations
 from rnai.authors.retrieve import restrieve_author_details
 from rnai.authors.author_ids import get_author_id_from_publication_result
-
 from rnai.authors.rank import rank_authors
+from rnai.organisation.institute import add_institute
 
 class RNAI:
     def __init__(self, reset = False, collection = 'rnai'):
@@ -149,6 +149,8 @@ class RNAI:
     def process_authors(self):
         papers_to_complete = list(self.db.papers.find({"$and": [{"_authors_listed": False}, {"_bucket_exists": True}]}))
 
+        pbar_pa = tqdm(total = len(papers_to_complete), leave = True)
+
         for paper_record in papers_to_complete:
             html_record = self.db.bucket_papers.find_one({"_paper_id": paper_record['_id']})['_html']
             parsed_content = BeautifulSoup(html_record, 'html.parser')
@@ -167,19 +169,28 @@ class RNAI:
                         
                     upd_r = self.db.papers.update_one({"_id": paper_record['_id']}, {"$set": {"_authors_listed": True, "_authors": a_inserted_ids}})
 
+            pbar_pa.update(1)
+
     def populate_author_records(self):
+
+        pbar_par = tqdm(total = len(list(self.db.authors.find({"_complete": False}))), leave = True)
         for author_record in self.db.authors.find({"_complete": False}):
-            author = scholarly.search_author_id(author_record['_ags_id'])
-            for akey in author.keys():
 
-                if type(author[akey]) is int:
-                    author[akey] = str(author[akey])
+            author_data = restrieve_author_details(nlp_module = self.nlp_module, author_id = author_record['_ags_id'])
 
-                author_record[akey] = author[akey]
+            author_data['institute_name'] = author_data['org_name']
 
+            if author_data['org_name'] is not None:
+                inst_id = add_institute(self.db, author_data['org_name'])
+                author_data['institute_id'] = inst_id
+
+            for akey in author_data.keys():
+                author_record[akey] = author_data[akey]
+                
             author_record['_complete'] = True
 
             self.db.authors.update_one({"_id": author_record['_id']}, {"$set": author_record})
+            pbar_par.update(1)
 
         rank_authors(self.db)
 

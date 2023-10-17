@@ -13,7 +13,9 @@ def restrieve_author_details(nlp_module, author_id):
 
     author_data = {}
 
-    url = 'https://scholar.google.com/citations?hl=en&user=' + id
+    author_data['scholar_id'] = None
+
+    url = 'https://scholar.google.com/citations?hl=en&user=' + author_id
 
     proxies = ["190.64.18.177:80", "212.145.210.146:80", "115.132.32.91:8080", "202.86.138.18:8080", "192.99.160.45:8080", "50.173.140.150:80"]
 
@@ -25,7 +27,7 @@ def restrieve_author_details(nlp_module, author_id):
 
     parsed_content = BeautifulSoup(html_record, 'html.parser')
 
-    author_data['scholar_id'] = re.findall(id, parsed_content.find("link", rel="canonical").get('href', ""))[0]
+    author_data['scholar_id'] = re.findall(author_id, parsed_content.find("link", rel="canonical").get('href', ""))[0]
     author_data['name'] = parsed_content.find('div', id='gsc_prf_in').text
 
     affiliation = parsed_content.find('div', class_='gsc_prf_il')
@@ -71,5 +73,9 @@ def restrieve_author_details(nlp_module, author_id):
     author_data['role'] = role
 
     author_data['citation_count'] = int(parsed_content.find_all('td', class_='gsc_rsb_std')[0].text)
+
+    if author_data['scholar_id'] is None:
+        iskjhgiskjghei
+    
 
     return author_data
