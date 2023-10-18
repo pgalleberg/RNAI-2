@@ -9,9 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 rnai = RNAI(reset = False)
-rnai.process_authors()
 
-sgsgs
 vertical_processes = {}
 
 def vertical_creation_process(vertical_name, papers_list, start_time, admin_id):

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-import re, requests, spacy, nltk, random
+import re, requests, spacy, nltk, random, time
 from nltk import word_tokenize, pos_tag
 
 nltk.download('punkt')
@@ -10,6 +10,8 @@ nlp = spacy.load("en_core_web_sm")
 delimiters = [',', '-', '|', ';', ':']
 
 def restrieve_author_details(nlp_module, author_id):
+
+    time.sleep(0.8)
 
     author_data = {}
 
@@ -73,9 +75,5 @@ def restrieve_author_details(nlp_module, author_id):
     author_data['role'] = role
 
     author_data['citation_count'] = int(parsed_content.find_all('td', class_='gsc_rsb_std')[0].text)
-
-    if author_data['scholar_id'] is None:
-        iskjhgiskjghei
-    
 
     return author_data

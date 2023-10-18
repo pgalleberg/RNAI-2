@@ -173,8 +173,8 @@ class RNAI:
 
     def populate_author_records(self):
 
-        pbar_par = tqdm(total = len(list(self.db.authors.find({"_complete": False}))), leave = True)
-        for author_record in self.db.authors.find({"_complete": False}):
+        pbar_par = tqdm(total = len(list(self.db.authors.find({}))), leave = True)
+        for author_record in self.db.authors.find({}):
 
             author_data = restrieve_author_details(nlp_module = self.nlp_module, author_id = author_record['_ags_id'])
 
