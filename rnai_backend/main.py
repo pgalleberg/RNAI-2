@@ -9,11 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 rnai = RNAI(reset = False)
-
-
-#rnai.process_authors()
-
-rnai.populate_author_records()
+rnai.process_authors()
 
 sgsgs
 vertical_processes = {}
@@ -88,18 +84,36 @@ def vertical_details():
         output['papers'].append(dumps([paper['_id'], paper['title']]))
 
     return jsonify({"status": "success", "vertical_details": output})
-'''
-@app.route('/display/papers', methods = ['GET'])
-def get_papers():
 
+@app.route('/paper_content/by_vertical_id', methods = ['GET'])
+def get_papers_by_vertical_id():
     request_parameters = request.json
 
+    output = {'papers': []}
 
-@app.route('/display/authors', methods = ['GET'])
+    papers_from_query = list(rnai.db.papers.find({'_vertical_id': ObjectId(request_parameters['vertical_id'])}))
+    
+    papers_list = sorted(papers_from_query, key=lambda x: x['_score'], reverse=True)[:request_parameters['paper_count']]
 
+    for paper_return in papers_list:
+        output['papers'].append(dumps(paper_return))
 
-@app.route
-'''
+    return jsonify({"status": "success", "papers": output})
+
+@app.route('/paper_content/by_paper_id', methods = ['GET'])
+def get_papers_by_paper_id():
+    request_parameters = request.json
+
+    output = {'papers': []}
+
+    papers_from_query = list(rnai.db.papers.find({'_id': ObjectId(request_parameters['paper_id'])}))
+    
+    papers_list = sorted(papers_from_query, key=lambda x: x['_score'], reverse=True)[:request_parameters['paper_count']]
+
+    for paper_return in papers_list:
+        output['papers'].append(dumps(paper_return))
+
+    return jsonify({"status": "success", "papers": output})
 
 if __name__ == '__main__':
     app.run(debug = True, host= '0.0.0.0')

@@ -181,7 +181,7 @@ class RNAI:
             author_data['institute_name'] = author_data['org_name']
 
             if author_data['org_name'] is not None:
-                inst_id = add_institute(self.db, author_data['org_name'])
+                inst_id, _ = add_institute(self.db, author_data['org_name'])
                 author_data['institute_id'] = inst_id
 
             for akey in author_data.keys():
