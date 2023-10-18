@@ -7,7 +7,7 @@ This document/wiki covers the documentation for the functionality of the RNAI co
 The current prototype deployment runs as a nohup entry, with the following command:
 
 ```bash
-nohup python3 rnai_backend/rnai/main.py &
+nohup python3 rnai_backend/main.py &
 ```
 
 This process will be updated to run as a service in the future - with a VPC with private and public subnets and a direct integration to MongoDB via a private endpoint.
