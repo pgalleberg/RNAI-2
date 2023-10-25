@@ -2,11 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner, faCheck, faTimes, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
-const Task = ({ task }) => {
+const Task = ({ task, admin }) => {
   console.log("Task rendered")
   return (
     <>
         <span className="result-item">{task.query}</span>
+        {admin && <span className="result-item">{task.user}</span>}
         <span className="result-item">{task.time}</span>
         
         {

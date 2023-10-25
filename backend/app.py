@@ -1,13 +1,23 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_cors import cross_origin
 import openai
 import os
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import auth
+
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+# user = auth.get_user('FlWrr0rJgtgXLsp2vHAkL2Ef1u53')
+# print('Successfully fetched user data: {0}'.format(user.uid))
+# print(user.email)
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 print("ORIGIN: ", os.getenv("ORIGIN"))
-CORS(app, resources={r"/*": {"origins": os.getenv("ORIGIN")}})
+#CORS(app, resources={r"/*": {"origins": os.getenv("ORIGIN")}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 openai.api_key = os.getenv("OPENAI_API_KEY")
 print('openai.api_key: ', openai.api_key)
 
@@ -55,6 +65,32 @@ def createPrompt(verticalName):
       
 def parseResponse(response):
     return response.split('\n')
+
+
+@app.route('/createAdmin', methods=['PATCH'])
+def createAdmin():
+    email = request.args.get('email')
+    user = auth.get_user_by_email(email)
+    uid = user.uid
+    auth.set_custom_user_claims(uid, {'admin': True})
+    
+    response_data =  {"message": "User upgraded to super admin",
+                      "email": email,
+                      "uid": uid}
+    
+    return jsonify(response_data), 200
+
+
+
+# @app.route('/verifyAdmin', methods=['GET'])
+# def verifyAdmin():
+#     user = request.args.get('uid')
+
+#     if user.custom_claims.get('admin') is True:
+#         return True
+#     else:
+#         return False
+
 
 if __name__ == '__main__':
     app.run()

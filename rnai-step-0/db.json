@@ -3,6 +3,7 @@
     {
       "query": "Methane removal from ambient air",
       "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
       "status": "Failed",
       "time": "15/09/2023, 21:28:13",
       "papers": [
@@ -25,6 +26,7 @@
     {
       "query": "carbon removal",
       "user": "Hassaan",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
       "status": "Approved",
       "time": "16/09/2023, 00:14:40",
       "papers": [
@@ -47,6 +49,7 @@
     {
       "query": "fleet electrification",
       "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
       "status": "Rejected",
       "time": "19/09/2023, 21:00:40",
       "papers": [
@@ -69,6 +72,7 @@
     {
       "query": "The science of reading",
       "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
       "status": "Approved",
       "time": "15/09/2023, 21:28:13",
       "papers": [
@@ -91,6 +95,7 @@
     {
       "query": "bio-inspired burrowing robots",
       "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
       "status": "Completed",
       "time": "15/09/2023, 21:28:13",
       "papers": [
@@ -113,6 +118,7 @@
     {
       "query": "solar energy",
       "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
       "status": "Pending",
       "time": "15/09/2023, 21:28:13",
       "papers": [
@@ -134,7 +140,8 @@
     },
     {
       "query": "Test 1",
-      "user": "Hassaan",
+      "user": "Hoorien",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
       "status": "Pending",
       "time": "22/09/2023, 20:02:00",
       "papers": [
@@ -156,7 +163,8 @@
     },
     {
       "query": "methane",
-      "user": "Hassaan",
+      "user": "Hoorien",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
       "status": "Pending",
       "time": "22/09/2023, 21:16:15",
       "papers": [
@@ -178,7 +186,8 @@
     },
     {
       "query": "methane",
-      "user": "Hassaan",
+      "user": "Hoorien",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
       "status": "Pending",
       "time": "22/09/2023, 23:45:51",
       "papers": [
