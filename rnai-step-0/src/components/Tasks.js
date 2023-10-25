@@ -28,8 +28,12 @@ const Tasks = () => {
           console.log(error);
         });
 
-        const getTasks = async () => {
-          const tasksFromServer = await fetchTasks()
+        const getTasks = async (uid) => {
+          if (uid !== undefined){
+            const tasksFromServer = await fetchTasks(uid)
+          } else {
+            const tasksFromServer = await fetchTasks()
+          }
           setTasks(tasksFromServer)
         }
 
