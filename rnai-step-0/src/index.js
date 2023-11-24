@@ -18,6 +18,8 @@ import { AuthContext } from './AuthContext';
 import { Protected } from './components/Protected';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import PaperDetails from './components/PaperDetails';
+import Author from './components/Author';
 
 function App(){
 
@@ -64,6 +66,26 @@ function App(){
               <Protected>
                 <Navbar />
                 <TaskDetails />
+              </Protected>
+            </>
+        },
+        {
+          path:'/paper/:id',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <PaperDetails />
+              </Protected>
+            </>
+        },
+        {
+          path:'/author/:id',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <Author />
               </Protected>
             </>
         }

@@ -349,3 +349,83 @@ p:focus {
   font-size: 15px;
   text-decoration: underline;
 }
+
+.papers {
+  /* border: 1px solid black; */
+  text-align: left;
+}
+
+.papers a {
+  color: #1857B6;
+}
+
+.papers a:hover {
+  text-decoration: underline;
+}
+
+.authors {
+  /* line-height: 2.0; */
+}
+
+.author {
+  /* border: 1px solid red; */
+  background-color: whitesmoke;
+  color: black;
+  font-size: 13px;
+  padding: 3px;
+  white-space: nowrap;
+  display: inline-block;
+  margin: 3px;
+}
+
+.authors a:hover {
+  text-decoration: none;
+}
+
+
+.detail {
+  line-height: 3.0;
+  color: gray;
+}
+
+.detail::after {
+  content: " • ";
+}
+
+.text {
+  background-color: whitesmoke;
+  font-weight: bold;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.pdf {
+  color: green;
+}
+
+.pdf a {
+  color: green;
+}
+
+.pdf a:hover {
+  text-decoration: none;
+  border: 1px solid green;
+}
+
+.expand-citations, .expand-references{
+  color: #1857B6;
+  cursor: pointer;
+}
+
+.citations a, .references a{
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.citations a:hover, .references a:hover{
+  font-weight: bolder;
+  text-decoration: none;
+}

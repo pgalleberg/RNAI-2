@@ -7,9 +7,6 @@ __pycache__/
 # C extensions
 *.so
 
-# 
-serviceAccountKey.json
-
 # Distribution / packaging
 .Python
 build/
@@ -166,3 +163,12 @@ cython_debug/
 # Node Packages
 node_modules/
 node_modules.tar.gz
+
+# This contains backups, test files, etc. 
+extra/
+
+# Redis snapshots
+dump.rdb
+
+# serviceAccountKey.json - config file for Google Firebase
+serviceAccountKey.json

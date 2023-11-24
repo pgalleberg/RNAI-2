@@ -7,12 +7,12 @@ const Task = ({ task, admin }) => {
   return (
     <>
         <span className="result-item">{task.query}</span>
-        {admin && <span className="result-item">{task.user}</span>}
+        {admin && <span className="result-item">{task.user.name}</span>}
         <span className="result-item">{task.time}</span>
         
         {
           task.status === "Completed" || task.status === "Approved" || task.status === "Rejected"?
-            <Link to={`/task/${task.id}`} className='result-item' 
+            <Link to={`/task/${task._id}`} className='result-item' 
               style={{color: task.status === "Rejected" ?'#e14141' : "#10a37f"}}>
               <span>{task.status} &nbsp;&nbsp;</span>
             </Link>

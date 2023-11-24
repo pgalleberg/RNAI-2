@@ -96,7 +96,7 @@
       "query": "bio-inspired burrowing robots",
       "user": "Hassaan",
       "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
-      "status": "Completed",
+      "status": "Approved",
       "time": "15/09/2023, 21:28:13",
       "papers": [
         "Paper 1",
@@ -206,6 +206,28 @@
       ],
       "autoSuggest": true,
       "id": 9
+    },
+    {
+      "query": "methane removal from ambient air",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "01/11/2023, 11:11:15",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Climate change mitigation and adaptation ",
+        "Environmental sustainability and conservation ",
+        "Clean energy and renewable technologies ",
+        "Air pollution control and reduction ",
+        "Greenhouse gas emissions reduction and management"
+      ],
+      "autoSuggest": true,
+      "id": 10
     }
   ],
   "task_details": [

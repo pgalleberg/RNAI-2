@@ -3,11 +3,13 @@ import Button from "./Button"
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import Paper from "./Paper"
 
 const TaskDetails = () => {
   console.log("TaskDetails rendered")
   const { id } = useParams();
-  const [taskDetails, setTaskDetails] = useState({})
+  console.log("TaskDetails::id: ", id)
+  const [taskDetails, setTaskDetails] = useState([])
   const [task, setTask] = useState({})
   const [change, setChange] = useState(false)
 
@@ -16,6 +18,7 @@ const TaskDetails = () => {
     const getTaskDetails = async () => {
       console.log("useEffect::fetchTaskDetails")
       const taskDetails = await fetchTaskDetails()
+      console.log("useEffect::taskDetails: ", taskDetails)
       setTaskDetails(taskDetails)
 
       console.log("useEffect::fetchTask")
@@ -27,7 +30,7 @@ const TaskDetails = () => {
 
 
   const fetchTaskDetails = async () => {
-    const url = process.env.REACT_APP_MOCK_WEBSERVER + 'task_details/' + id
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + 'vertical_details?id=' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -35,7 +38,7 @@ const TaskDetails = () => {
   }
 
   const fetchTask = async () => {
-    const url = process.env.REACT_APP_MOCK_WEBSERVER + 'tasks/' + id
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + 'task?id=' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -50,7 +53,7 @@ const TaskDetails = () => {
   useEffect(() => {
     console.log("useEffect 2 triggered")
     const updateTask = async () => {
-      const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'tasks/' + id, {
+      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks/' + id, {
         method: 'PUT',
         headers: {
           'Content-type' : 'application/json'
@@ -86,7 +89,7 @@ const TaskDetails = () => {
     document.getElementById(subHeading).contentEditable = false
     document.getElementById(subHeading + 'buttons').style.display = 'none'
     setTaskDetails({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
-    const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'task_details/' + id, {
+    const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'task_details/' + id, {
         method: 'PUT',
         headers: {
           'Content-type' : 'application/json'
@@ -99,8 +102,9 @@ const TaskDetails = () => {
 
   return (
     <div style={{width: '75%'}}>
-      <h1 style={{textAlign: 'left'}}>Vertical: {taskDetails.query}</h1>
-          {Object.entries(taskDetails).map(([key, value]) => (
+      <h1 style={{textAlign: 'left'}}>Vertical: {task.query}</h1>
+      <hr></hr>
+          {/* {Object.entries(taskDetails).map(([key, value]) => (
             (key !== 'id' && key !== 'query') &&
             <div style={{textAlign: 'left'}}>
                 <p><strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>
@@ -116,7 +120,13 @@ const TaskDetails = () => {
                   <input type='submit' value="Cancel" onClick={() => cancelEdit(key, value)} style={{width: '75px', backgroundColor: 'grey'}}></input>
                 </div>
             </div>
-          ))}
+          ))} */}
+
+      <div className='papers'>
+        {taskDetails.map((paper, index) => (
+          <Paper paperDetails={paper} index={index}/>
+        ))}
+      </div>
 
        {task.status === 'Completed' &&
         <div>

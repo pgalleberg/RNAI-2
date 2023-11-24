@@ -2,11 +2,12 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-
+import auth from "../firebase";
 
 const Form = () => {
     console.log("Form rendered")
-
+    const user = auth.currentUser;
+    console.log("user: ", user)
     const [autoSuggest, setAutoSuggest] = useState(true)
     const [genericNames, setGenericNames] = useState([]) 
     const [loading, setLoading] = useState(false)
@@ -48,7 +49,7 @@ const Form = () => {
     const addTask = async (task) => {
         console.log("addTask::task received: ", task)
         console.log("addTask::JSON.stringify(task): ", JSON.stringify(task))
-        const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'tasks',{ /* TODO: Should I send request to tasks/user */
+        const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks',{ /* TODO: Should I send request to tasks/user */
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -56,9 +57,9 @@ const Form = () => {
             body: JSON.stringify(task)
         })
 
-        const data = await res.json()
+        //const data = await res.json() //don't need to await here
 
-        console.log("addTask::data added: ", data)
+        //console.log("addTask::data added: ", data)
     }
 
     const navigate = useNavigate()
@@ -70,7 +71,11 @@ const Form = () => {
         const now = new Date();
         const task = {
             "query": document.getElementById("verticalName").value,
-            "user": "Hassaan", /* TODO: Write the actual web master or super admin name/email address here.*/
+            "user": {
+              "uid": user.uid,
+              "name": user.displayName,
+              "email": user.email
+            },
             "status": "Pending",
             "time": now.toLocaleString(),
             "papers": [
@@ -122,7 +127,7 @@ const Form = () => {
             
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper2" placeholder="Title of Second Paper" id="paper2" required />
+                <input type="text" name="paper2" placeholder="Title of Second Paper" id="paper2" /> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name2" type="text" name="name2" placeholder="Second Generic Name" 
@@ -148,7 +153,7 @@ const Form = () => {
                 />
             </div>
             <div className="grid-item">
-                <input type="text" name="paper3" placeholder="Title of Third Paper" id="paper3" required />
+                <input type="text" name="paper3" placeholder="Title of Third Paper" id="paper3" /> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name3" type="text" name="name3" placeholder="Third Generic Name" 
@@ -165,7 +170,7 @@ const Form = () => {
             
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper4" placeholder="Title of Fourth Paper" id="paper4" required />
+                <input type="text" name="paper4" placeholder="Title of Fourth Paper" id="paper4" /> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name4" type="text" name="name4" placeholder="Fourth Generic Name" 
@@ -182,7 +187,7 @@ const Form = () => {
             
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper5" placeholder="Title of Fifth Paper" id="paper5" required />
+                <input type="text" name="paper5" placeholder="Title of Fifth Paper" id="paper5" /> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name5" type="text" name="name5" placeholder="Fifth Generic Name" 

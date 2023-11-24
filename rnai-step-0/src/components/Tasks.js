@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import Task from "./Task";
-import auth
- from "../firebase";
+import auth from "../firebase";
 console.log("Tasks component initialized")
 
 const Tasks = () => {
     console.log("Tasks component rendered")
+    const user = auth.currentUser;
+    console.log("user: ", user)
     const [tasks, setTasks] = useState([])
+    const [polling, setPolling] = useState([])
     const [admin, setAdmin] = useState(false)
 
     useEffect(() => {
@@ -15,34 +17,21 @@ const Tasks = () => {
         //check if admin
         auth.currentUser.getIdTokenResult()
         .then((idTokenResult) => {
-          // Confirm the user is an Admin.
           console.log("idTokenResult.claims.admin: ", idTokenResult.claims.admin)
           if (!!idTokenResult.claims.admin) {
-            // Show admin UI.
-            // showAdminUI();
             setAdmin(true)
-            console.log("admin set to true")
           } 
         })
         .catch((error) => {
           console.log(error);
         });
 
-        const getTasks = async (uid) => {
-          if (uid !== undefined){
-            const tasksFromServer = await fetchTasks(uid)
-          } else {
-            const tasksFromServer = await fetchTasks()
-          }
-          setTasks(tasksFromServer)
-        }
-
-        getTasks()
+        fetchTasks()
     }, [])
 
     const fetchTasks = async () => {
-      console.log("url: ", process.env.REACT_APP_MOCK_WEBSERVER + 'tasks')
-      const res = await fetch(process.env.REACT_APP_MOCK_WEBSERVER + 'tasks')
+      console.log("url: ", process.env.REACT_APP_FLASK_WEBSERVER + 'tasks?uid=' + user.uid)
+      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks?uid=' + user.uid)
       console.log("res: ", res)
       const data = await res.json()
     
@@ -50,8 +39,27 @@ const Tasks = () => {
       data.reverse()
       console.log("fetchTasks::Tasks reversed: ", data)
       
-      return data
+      setTasks(data)
+
+      setPolling(data.some(task => task.status === 'Pending'))
     }
+
+    useEffect(() => {
+
+      let interval = null
+      if (polling){
+        interval = setInterval(() => {
+          fetchTasks()
+        }, 10000)
+      }
+
+      return () => {
+        if (interval) {
+          clearInterval(interval);
+        }
+      }
+
+    }, [polling])
 
   return (
     <div className={admin ? "result-admin" : "result"}>
@@ -60,7 +68,7 @@ const Tasks = () => {
         <h2>Submission Time</h2>
         <h2>Status</h2>
         <h2> </h2>
-        {tasks.map((task) => <Task key={task.id} task={task} admin={admin}/>)}
+        {tasks.map((task) => <Task key={task._id} task={task} admin={admin}/>)}
     </div>
   )
 }
