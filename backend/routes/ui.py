@@ -3,6 +3,7 @@ import requests
 from bson.objectid import ObjectId
 from config import db
 import os
+from pymongo import ReturnDocument
 
 ui = Blueprint("ui", __name__)
 webserver = os.getenv('WEBSERVER')
@@ -15,17 +16,18 @@ def getTasks():
     collection = db['verticals']
     
     #check if the uid belongs to the admin
-    url = webserver + 'verifyAdmin?uid=' + uid
-    print("getTasks::url: ", url)
-    response = requests.get(url)
-    isAdmin = response.json()['admin']
-    print("getTasks::isAdmin: ", isAdmin)
+    # url = webserver + 'verifyAdmin?uid=' + uid
+    # print("getTasks::url: ", url)
+    # response = requests.get(url)
+    # isAdmin = response.json()['admin']
+    # print("getTasks::isAdmin: ", isAdmin)
     
-    if (not isAdmin):
-        query = {"user.uid": uid}
-    else:
-        query = {}
+    # if (not isAdmin):
+    #     query = {"user.uid": uid}
+    # else:
+    #     query = {}
     
+    query = {"user.uid": uid}
     result_set = list(collection.find(query))
         
     for result in result_set:
@@ -104,9 +106,8 @@ def getPaperDetails():
 
     collection = db['papers']
     query = {
-        "_id": ObjectId(id),
+        "paperId": id,
     }
-
 
     paper_details = collection.find_one(query)
     print("getPaperDetails::paper_details: ", paper_details)
@@ -133,3 +134,27 @@ def getAuthorDetails():
     print("getAuthorDetails::author_details: ", author_details)
 
     return jsonify(author_details), 200
+
+
+@ui.route('/update_vertical', methods=['PATCH'])
+def updateVertical():
+    body = request.json    
+    print("updateVertical::body: ", body)
+    print("updateVertical::_id: ", body['_id'])
+    print("updateVertical::status: ", body['status'])
+
+    collection = db['verticals']
+    query = {
+        "_id": ObjectId(body['_id'])
+    }
+    update = {
+        "$set": {
+            "status": body['status']
+        }
+    }
+
+    updated_document = collection.find_one_and_update(query, update, return_document=ReturnDocument.AFTER)
+    updated_document["_id"] = str(updated_document["_id"])
+
+    return updated_document, 200
+
