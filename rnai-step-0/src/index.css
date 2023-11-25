@@ -1,11 +1,11 @@
 @font-face {
   font-family: "ColfaxAI";
-  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
-      format("woff2"),
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2) format("woff2"),
     url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: "ColfaxAI";
   src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format("woff2"),
@@ -13,6 +13,7 @@
   font-weight: bold;
   font-style: normal;
 }
+
 body,
 input {
   font-size: 16px;
@@ -20,6 +21,7 @@ input {
   color: #353740;
   font-family: "ColfaxAI", Helvetica, sans-serif;
 }
+
 body {
   display: flex;
   flex-direction: column;
@@ -27,16 +29,20 @@ body {
   /* padding-top: 60px; */
   text-align: center;
 }
+
 .icon {
   width: 34px;
 }
+
 .img {
   width: 500px;
   margin-bottom: 60px;
 }
-.img:hover{
+
+.img:hover {
   cursor: pointer;
 }
+
 h3 {
   font-size: 32px;
   line-height: 40px;
@@ -44,21 +50,26 @@ h3 {
   color: #202123;
   margin: 16px 0 40px;
 }
+
 /* form {
   display: flex;
   flex-direction: column;
   width: 320px;
 } */
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   padding: 12px 16px;
   border: 1px solid #10a37f;
   border-radius: 4px;
   margin-bottom: 24px;
 }
+
 ::placeholder {
   color: #8e8ea0;
   opacity: 1;
 }
+
 input[type="submit"] {
   padding: 12px 0;
   color: #fff;
@@ -69,72 +80,74 @@ input[type="submit"] {
   cursor: pointer;
   width: 320px;
 }
+
 input[type="submit"]:hover {
-  filter: brightness(0.9);  /* Darkens the button slightly on hover */
+  filter: brightness(0.9);
+  /* Darkens the button slightly on hover */
 }
 
 /* The switch - the box around the slider */
 .switch {
-position: relative;
-display: inline-block;
-width: 60px;
-height: 34px;
-/* border: 1px solid red; */
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  /* border: 1px solid red; */
 }
 
 /* Hide default HTML checkbox */
 .switch input {
-opacity: 0;
-width: 0;
-height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 /* The slider */
 .slider {
-position: absolute;
-cursor: pointer;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-color: #ccc;
--webkit-transition: .4s;
-transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 
 .slider:before {
-position: absolute;
-content: "";
-height: 26px;
-width: 26px;
-left: 4px;
-bottom: 4px;
-background-color: white;
--webkit-transition: .4s;
-transition: .4s;
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 
-input:checked + .slider {
-background-color: #10a37f;
+input:checked+.slider {
+  background-color: #10a37f;
 }
 
-input:focus + .slider {
-box-shadow: 0 0 1px #10a37f;
+input:focus+.slider {
+  box-shadow: 0 0 1px #10a37f;
 }
 
-input:checked + .slider:before {
--webkit-transform: translateX(26px);
--ms-transform: translateX(26px);
-transform: translateX(26px);
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 
 /* Rounded sliders */
 .slider.round {
-border-radius: 34px;
+  border-radius: 34px;
 }
 
 .slider.round:before {
-border-radius: 50%;
+  border-radius: 50%;
 }
 
 .grid-container {
@@ -143,6 +156,7 @@ border-radius: 50%;
   /* background-color: #2196F3;  */
   /* padding: 10px; */
 }
+
 .grid-item {
   /* background-color: rgba(255, 255, 255, 0.8); */
   /* border: 1px solid rgba(0, 0, 0, 0.8); */
@@ -164,12 +178,13 @@ border-radius: 50%;
   border-radius: 4px;
   /* margin-bottom: 24px; */
   text-align: left;
-  
+
 }
 
 .loginButton:hover {
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add some box shadow on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Add some box shadow on hover */
   background-color: whitesmoke;
 }
 
@@ -219,7 +234,8 @@ a {
   padding-right: 10%; */
   width: 90%;
   display: flex;
-  justify-content: space-between; /* This will push children items to the right */
+  justify-content: space-between;
+  /* This will push children items to the right */
   padding-bottom: 100px;
 }
 
@@ -288,12 +304,12 @@ a {
   text-align: center;
 }
 
-.btn.approve:hover{
+.btn.approve:hover {
   opacity: 0.9;
   background-color: #4CAF50;
 }
 
-.btn.reject:hover{
+.btn.reject:hover {
   opacity: 0.9;
   background-color: #F44336;
 }
@@ -389,7 +405,7 @@ p:focus {
 }
 
 .detail::after {
-  content: " • ";
+  content: "\00a0\2022\00a0";
 }
 
 .text {
@@ -412,12 +428,14 @@ p:focus {
   border: 1px solid green;
 }
 
-.expand-citations, .expand-references{
+.expand-citations,
+.expand-references {
   color: #1857B6;
   cursor: pointer;
 }
 
-.citations a, .references a{
+.citations a,
+.references a {
   display: inline-block;
   width: 100%;
   white-space: nowrap;
@@ -425,7 +443,8 @@ p:focus {
   text-overflow: ellipsis;
 }
 
-.citations a:hover, .references a:hover{
+.citations a:hover,
+.references a:hover {
   font-weight: bolder;
   text-decoration: none;
 }
