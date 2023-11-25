@@ -46,32 +46,32 @@ const TaskDetails = () => {
   }
 
   const updateStatus = async (action) => {
-    action === 'Approve' ? setTask({ ...task, status: 'Approved'}) : setTask({ ...task, status: 'Rejected'})
+    action === 'Approve' ? setTask({ ...task, status: 'Approved' }) : setTask({ ...task, status: 'Rejected' })
     setChange(true)
   }
 
   useEffect(() => {
     console.log("useEffect 2 triggered")
     const updateTask = async () => {
-      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks/' + id, {
-        method: 'PUT',
+      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'update_vertical', {
+        method: 'PATCH',
         headers: {
-          'Content-type' : 'application/json'
+          'Content-type': 'application/json'
         },
         body: JSON.stringify(task)
       })
-  
+
       await res.json()
     }
 
-    if (task.status !== undefined && change === true){
+    if (task.status !== undefined && change === true) {
       console.log("useEffect 2::updateTask")
       updateTask()
     }
-    
+
   }, [task, change])
 
-  function editDetails(subHeading){
+  function editDetails(subHeading) {
     console.log("Button clicked")
     document.getElementById(subHeading).contentEditable = true
     document.getElementById(subHeading).focus();
@@ -79,32 +79,32 @@ const TaskDetails = () => {
     document.getElementById(subHeading + 'buttons').style.display = 'block'
   }
 
-  function cancelEdit(subHeading, originalText){
+  function cancelEdit(subHeading, originalText) {
     document.getElementById(subHeading).contentEditable = false
     document.getElementById(subHeading + 'buttons').style.display = 'none'
     document.getElementById(subHeading).innerHTML = originalText
   }
 
-  async function saveEdits(subHeading){
+  async function saveEdits(subHeading) {
     document.getElementById(subHeading).contentEditable = false
     document.getElementById(subHeading + 'buttons').style.display = 'none'
     setTaskDetails({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
     const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'task_details/' + id, {
-        method: 'PUT',
-        headers: {
-          'Content-type' : 'application/json'
-        },
-        body: JSON.stringify({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
-      })
-  
-      await res.json()
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
+    })
+
+    await res.json()
   }
 
   return (
-    <div style={{width: '75%'}}>
-      <h1 style={{textAlign: 'left'}}>Vertical: {task.query}</h1>
+    <div style={{ width: '75%' }}>
+      <h1 style={{ textAlign: 'left' }}>Vertical: {task.query}</h1>
       <hr></hr>
-          {/* {Object.entries(taskDetails).map(([key, value]) => (
+      {/* {Object.entries(taskDetails).map(([key, value]) => (
             (key !== 'id' && key !== 'query') &&
             <div style={{textAlign: 'left'}}>
                 <p><strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>
@@ -124,31 +124,31 @@ const TaskDetails = () => {
 
       <div className='papers'>
         {taskDetails.map((paper, index) => (
-          <Paper paperDetails={paper} index={index}/>
+          <Paper paperDetails={paper} index={index} />
         ))}
       </div>
 
-       {task.status === 'Completed' &&
+      {task.status === 'Completed' &&
         <div>
-          <Button text={'Approve'} className={'btn approve'} onClick={() => updateStatus('Approve')}/>
-          <Button text={'Reject'} className={'btn reject'} onClick={() => updateStatus('Reject')}/>
+          <Button text={'Approve'} className={'btn approve'} onClick={() => updateStatus('Approve')} />
+          <Button text={'Reject'} className={'btn reject'} onClick={() => updateStatus('Reject')} />
         </div>}
 
-        {task.status === 'Rejected' &&
+      {task.status === 'Rejected' &&
         <div >
-          <FontAwesomeIcon icon={faCircleXmark} style={{height: '75px', color: '#e14141', paddingTop: '30px'}} />
+          <FontAwesomeIcon icon={faCircleXmark} style={{ height: '75px', color: '#e14141', paddingTop: '30px' }} />
           <br />
-          <h3 style={{color: "#e14141"}}>Rejected</h3>
+          <h3 style={{ color: "#e14141" }}>Rejected</h3>
         </div>}
 
-        {task.status === 'Approved' &&
+      {task.status === 'Approved' &&
         <div>
-          <FontAwesomeIcon icon={faCircleCheck} style={{height: '75px', color: '#10a37f', paddingTop: '30px'}} />
+          <FontAwesomeIcon icon={faCircleCheck} style={{ height: '75px', color: '#10a37f', paddingTop: '30px' }} />
           <br />
-          <h3 style={{color: "#10a37f"}}>Approved</h3>
+          <h3 style={{ color: "#10a37f" }}>Approved</h3>
         </div>}
 
-        
+
     </div>
   )
 }
