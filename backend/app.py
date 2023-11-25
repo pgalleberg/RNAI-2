@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from celery import Celery, chain, group, chord
 from flask import request
@@ -41,6 +41,7 @@ headers = {
 def getPapersFromS2(vertical_id, paper_titles):
     print('getPapersFromS2::getPapersFromS2 called')
 
+    paper_titles = [title for title in paper_titles if title.strip() != '']
     task_chains = [
         chain(
             getPaperId.s(title), 
@@ -85,6 +86,7 @@ def getPaperDetails(paper_id, vertical_id, depth):
         try:
             url = "https://api.semanticscholar.org/graph/v1/paper/" + paper_id + "?fields=url,title,venue,publicationVenue,year,authors,abstract,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationTypes,publicationDate,journal,tldr,citations,references"
             paper_details = requests.get(url, headers=headers).json()
+            print("getPaperDetails::paper_details: {}".format(paper_details))
             paper_details["vertical_id"] = vertical_id
             paper_details["depth"] = depth
             paper_details["source"] = 'manual'
@@ -115,6 +117,7 @@ def getPaperDetailsBulk(paper_details, sourced_from):
             if len(paper_ids) > 0:
                 response = requests.post(
                     "https://api.semanticscholar.org/graph/v1/paper/batch",
+                    headers=headers,
                     params={'fields': 'url,title,venue,publicationVenue,year,authors,abstract,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationTypes,publicationDate,journal,tldr,citations,references'},
                     json={'ids': paper_ids}
                 )
@@ -154,6 +157,7 @@ def getAuthorDetails(paper_details):
             if len(author_ids) > 0:
                 response = requests.post(
                     "https://api.semanticscholar.org/graph/v1/author/batch",
+                    headers=headers,
                     params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex,papers'},
                     json={'ids': author_ids}
                 )
@@ -196,6 +200,7 @@ def getAuthorDetailsBulk(paper_details_bulk, vertical_id, depth):
             if len(author_ids) > 0:
                 response = requests.post(
                     "https://api.semanticscholar.org/graph/v1/author/batch",
+                    headers=headers,
                     params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex'},#,papers
                     json={'ids': author_ids}
                 )
