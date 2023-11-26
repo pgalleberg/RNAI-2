@@ -185,7 +185,7 @@ def getAuthorDetails(paper_details):
 def getAuthorDetailsBulk(paper_details_bulk, vertical_id, depth):
     print("getAuthorDetailsBulk::getAuthorDetailsBulk API called")
     print("getAuthorDetailsBulk::paper_details_bulk: {}".format(paper_details_bulk))
-    if paper_details_bulk != None and paper_details_bulk.get("message", -1) == -1:
+    if paper_details_bulk != None and isinstance(paper_details_bulk, dict) and paper_details_bulk.get("message", -1) == -1:
         try:
             author_paper_mapping = {}
             for paper in paper_details_bulk:
