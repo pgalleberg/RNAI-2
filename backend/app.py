@@ -81,8 +81,9 @@ def getPaperId(title):
 
 @celery.task(rate_limit='10/s')
 def getPaperDetails(paper_id, vertical_id, depth):
+    print("getPaperDetails::getPaperDetails API called")
+    print("getPaperDetails::paper_id: {}".format(paper_id))
     if paper_id != -1 and paper_id != None:
-        print("getPaperDetails::getPaperDetails API called")
         try:
             url = "https://api.semanticscholar.org/graph/v1/paper/" + paper_id + "?fields=url,title,venue,publicationVenue,year,authors,abstract,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationTypes,publicationDate,journal,tldr,citations,references"
             paper_details = requests.get(url, headers=headers).json()
@@ -103,9 +104,9 @@ def getPaperDetails(paper_id, vertical_id, depth):
 
 @celery.task(rate_limit='1/s')
 def getPaperDetailsBulk(paper_details, sourced_from):
-    if paper_details != None:
-        print("getPaperDetailsBulk::getPaperDetailsBulk API called")
-        print("getPaperDetailsBulk::paper_details: {}".format(paper_details))
+    print("getPaperDetailsBulk::getPaperDetailsBulk API called")
+    print("getPaperDetailsBulk::paper_details: {}".format(paper_details))
+    if paper_details != None and paper_details.get("message", -1) == -1:
         try:
             source_paper_id = paper_details['paperId']
             papers = paper_details[sourced_from]
@@ -145,8 +146,9 @@ def getPaperDetailsBulk(paper_details, sourced_from):
 
 @celery.task(rate_limit='10/s')
 def getAuthorDetails(paper_details):
-    if paper_details != None:
-        print("getAuthorDetails::getAuthorDetails API called")
+    print("getAuthorDetails::getAuthorDetails API called")
+    print("getAuthorDetails::paper_details: {}".format(paper_details))
+    if paper_details != None and paper_details.get("message", -1) == -1:
         try:
             authors = paper_details['authors']
             author_ids = [author['authorId'] for author in authors]
@@ -181,8 +183,9 @@ def getAuthorDetails(paper_details):
     
 @celery.task(rate_limit='10/s')
 def getAuthorDetailsBulk(paper_details_bulk, vertical_id, depth):
-    if paper_details_bulk != None:
-        print("getAuthorDetailsBulk::getAuthorDetailsBulk API called")
+    print("getAuthorDetailsBulk::getAuthorDetailsBulk API called")
+    print("getAuthorDetailsBulk::paper_details_bulk: {}".format(paper_details_bulk))
+    if paper_details_bulk != None and paper_details_bulk.get("message", -1) == -1:
         try:
             author_paper_mapping = {}
             for paper in paper_details_bulk:
