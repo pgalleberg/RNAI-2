@@ -172,3 +172,5 @@ dump.rdb
 
 # serviceAccountKey.json - config file for Google Firebase
 serviceAccountKey.json
+
+.rnai-step-0.pem

@@ -87,8 +87,10 @@ const Paper = ({ paperDetails, index }) => {
                         <div className="citations" style={{ display: 'none' }}>
                             <br></br>
                             {paperDetails.citations.map((citation) => (
-                                <Link to={`/paper/${citation.paperId}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</Link>
-                                // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</a>
+                                paperDetails.depth == 0 ?
+                                    <Link to={`/paper/${citation.paperId}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</Link>
+                                    : <p>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</p>
+                                    // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</a>
                             ))}
                             {/* <span className="expand-citations" onClick={() => expand(index)}>Expand</span> */}
                         </div>
@@ -105,8 +107,10 @@ const Paper = ({ paperDetails, index }) => {
                         <div className="references" style={{ display: 'none' }}>
                             <br></br>
                             {paperDetails.references.map((reference) => (
-                                <Link to={`/paper/${reference.paperId}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</Link>
-                                // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</a>
+                                paperDetails.depth == 0 ?
+                                    <Link to={`/paper/${reference.paperId}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</Link>
+                                    : <p>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</p>
+                                    // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</a>
                             ))}
                             {/* <span className="expand-references" onClick={() => expand(index)}>Expand</span> */}
                         </div>

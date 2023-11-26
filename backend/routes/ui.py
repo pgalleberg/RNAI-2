@@ -107,9 +107,15 @@ def getPaperDetails():
     collection = db['papers']
     query = {
         "paperId": id,
+        "depth": 0
     }
 
     paper_details = collection.find_one(query)
+
+    if paper_details == None:
+        query["depth"] = query["depth"] + 1
+        paper_details = collection.find_one(query)
+
     print("getPaperDetails::paper_details: ", paper_details)
     paper_details['_id'] = str(paper_details['_id'])
     print("getPaperDetails::paper_details: ", paper_details)

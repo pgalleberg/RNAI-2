@@ -14,7 +14,7 @@ const PaperDetails = () => {
             setPaperDetails(paperDetails)
         }
         getPaperDetails()
-    }, []);
+    }, [id]);
 
     const fetchPaperDetails = async () => {
         const url = process.env.REACT_APP_FLASK_WEBSERVER + 'paper_details?id=' + id
