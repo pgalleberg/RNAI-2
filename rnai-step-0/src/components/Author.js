@@ -32,12 +32,13 @@ const Author = () => {
             <p>hIndex: {authorDetails.hIndex}</p>
             <p>url: {authorDetails.url}</p>
             
-            {authorDetails.papers.map((paper) => (
-                <>
-                <Link to={`/author/${paper.paperId}`}><p className=''>{paper.title}</p></Link>
-                <span>&nbsp;&nbsp;</span>
-                </>
-            ))}
+            {/* {authorDetails.papers &&
+                authorDetails.papers.map((paper) => (
+                    <>
+                        <Link to={`/author/${paper.paperId}`}><p className=''>{paper.title}</p></Link>
+                        <span>&nbsp;&nbsp;</span>
+                    </>
+            ))} */}
 
         </div>
     )
