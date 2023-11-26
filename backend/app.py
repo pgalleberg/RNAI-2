@@ -10,6 +10,9 @@ import requests
 import traceback
 from bson.objectid import ObjectId
 import os
+from celery.exceptions import SoftTimeLimitExceeded, MaxRetriesExceededError
+from S2Error import S2Error
+import time
 
 app = Flask(__name__)
 
@@ -37,7 +40,7 @@ headers = {
     'x-api-key': s2_api_key
 }
 
-@celery.task() #name='__main__.tasks.getPapersFromS2'
+@celery.task(soft_time_limit=60, autoretry_for=(SoftTimeLimitExceeded,), max_retries=3, default_retry_delay=10) #name='__main__.tasks.getPapersFromS2'
 def getPapersFromS2(vertical_id, paper_titles):
     print('getPapersFromS2::getPapersFromS2 called')
 
@@ -57,8 +60,8 @@ def getPapersFromS2(vertical_id, paper_titles):
 
     chord(task_chains)(update_vertical.si(vertical_id, 'Completed'))
 
-@celery.task(rate_limit='1/s')
-def getPaperId(title):
+@celery.task(bind=True, rate_limit='1/s', soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def getPaperId(self, title):
     print("getPaperId::getPaperId API called")
     if title.strip() != '':
         try:
@@ -66,9 +69,25 @@ def getPaperId(title):
             print("getPaperId::sending request")
             response = requests.get(url, headers=headers).json()
             print('getPaperId::response: ', response)
+
+            if response.get("message", -1) != -1 or response.get("error", -1) != -1:
+                raise S2Error("Semantic Scholar API Error")
+
             paper_id = response['data'][0]['paperId']
             print('getPaperId::paperId: ', paper_id)
             return paper_id
+        
+        except (SoftTimeLimitExceeded, S2Error) as e:
+            print("getPaperId::SoftTimeLimitExceeded/S2Error")
+            print("getPaperId::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getPaperId::MaxRetriesExceededError")
+                print("getPaperId::e: {}".format(e))
+
         
         except Exception as e:
             print("getPaperId::e: {}".format(e))
@@ -79,8 +98,8 @@ def getPaperId(title):
             return -1
 
 
-@celery.task(rate_limit='10/s')
-def getPaperDetails(paper_id, vertical_id, depth):
+@celery.task(bind=True, rate_limit='10/s', soft_time_limit=60, max_retries=3, default_retry_delay=15)
+def getPaperDetails(self, paper_id, vertical_id, depth):
     print("getPaperDetails::getPaperDetails API called")
     print("getPaperDetails::paper_id: {}".format(paper_id))
     if paper_id != -1 and paper_id != None:
@@ -88,12 +107,30 @@ def getPaperDetails(paper_id, vertical_id, depth):
             url = "https://api.semanticscholar.org/graph/v1/paper/" + paper_id + "?fields=url,title,venue,publicationVenue,year,authors,abstract,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationTypes,publicationDate,journal,tldr,citations,references"
             paper_details = requests.get(url, headers=headers).json()
             print("getPaperDetails::paper_details: {}".format(paper_details))
+
+            if paper_details.get("message", -1) != -1 or paper_details.get("error", -1) != -1:
+                raise S2Error("Semantic Scholar API Error")
+            
             paper_details["vertical_id"] = vertical_id
             paper_details["depth"] = depth
             paper_details["source"] = 'manual'
             paper_details["source_paper_id"] = paper_id
+
+            paper_details["references"] = paper_details["references"][0:500]
+            paper_details["citations"] = paper_details["citations"][0:500]
             
             return paper_details
+
+        except (SoftTimeLimitExceeded, S2Error) as e:
+            print("getPaperDetails::SoftTimeLimitExceeded/S2Error")
+            print("getPaperDetails::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getPaperDetails::MaxRetriesExceededError")
+                print("getPaperDetails::e: {}".format(e))
 
         except Exception as e:
             print("getPaperDetails::e: {}".format(e))
@@ -102,8 +139,8 @@ def getPaperDetails(paper_id, vertical_id, depth):
                 print("getPaperDetails::paper_details: {}".format(paper_details))
 
 
-@celery.task(rate_limit='1/s')
-def getPaperDetailsBulk(paper_details, sourced_from):
+@celery.task(bind=True, rate_limit='1/s', soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def getPaperDetailsBulk(self, paper_details, sourced_from):
     print("getPaperDetailsBulk::getPaperDetailsBulk API called")
     print("getPaperDetailsBulk::paper_details: {}".format(paper_details))
     if paper_details != None and paper_details.get("message", -1) == -1:
@@ -124,7 +161,10 @@ def getPaperDetailsBulk(paper_details, sourced_from):
                 )
 
                 papers = response.json()
-                print("getPaperDetailsBulk::papers: {}".format(papers))
+
+                if isinstance(papers, dict) and (papers.get("message", -1) != -1 or papers.get("message", -1) != -1):
+                    print("getPaperDetailsBulk::papers: {}".format(papers))
+                    raise S2Error("Semantic Scholar API Error")
 
                 papers = [paper for paper in papers if paper != None]
 
@@ -137,6 +177,17 @@ def getPaperDetailsBulk(paper_details, sourced_from):
 
                 return papers
 
+        except (SoftTimeLimitExceeded, S2Error) as e:
+            print("getPaperDetailsBulk::SoftTimeLimitExceeded/S2Error")
+            print("getPaperDetailsBulk::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getPaperDetailsBulk::MaxRetriesExceededError")
+                print("getPaperDetailsBulk::e: {}".format(e))
+
         except Exception as e:
             print("getPaperDetailsBulk::e: {}".format(e))
             print("getPaperDetailsBulk::error_details: {}".format(traceback.format_exc()))
@@ -144,8 +195,8 @@ def getPaperDetailsBulk(paper_details, sourced_from):
                 print("getPaperDetailsBulk::response: {}".format(response))        
 
 
-@celery.task(rate_limit='10/s')
-def getAuthorDetails(paper_details):
+@celery.task(bind=True, rate_limit='10/s', soft_time_limit=60, max_retries=3, default_retry_delay=15)
+def getAuthorDetails(self, paper_details):
     print("getAuthorDetails::getAuthorDetails API called")
     print("getAuthorDetails::paper_details: {}".format(paper_details))
     if paper_details != None and paper_details.get("message", -1) == -1:
@@ -165,6 +216,11 @@ def getAuthorDetails(paper_details):
                 )
 
                 authors = response.json()
+
+                if isinstance(authors, dict) and (authors.get("message", -1) != -1 or authors.get("message", -1) != -1):
+                    print("getAuthorDetails::authors: {}".format(authors))
+                    raise S2Error("Semantic Scholar API Error")
+                
                 authors = [author for author in authors if author != None]
 
                 for author in authors:
@@ -173,7 +229,18 @@ def getAuthorDetails(paper_details):
                     author["depth"] = depth     
 
                 return authors
-            
+        
+        except (SoftTimeLimitExceeded, S2Error) as e:
+            print("getAuthorDetails::SoftTimeLimitExceeded/S2Error")
+            print("getAuthorDetails::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getAuthorDetails::MaxRetriesExceededError")
+                print("getAuthorDetails::e: {}".format(e))
+
         except Exception as e:
             print("getAuthorDetails::e: {}".format(e))
             print("getAuthorDetails::error_details: {}".format(traceback.format_exc()))
@@ -181,11 +248,11 @@ def getAuthorDetails(paper_details):
                 print("getAuthorDetails::response: {}".format(response))
 
     
-@celery.task(rate_limit='10/s')
-def getAuthorDetailsBulk(paper_details_bulk, vertical_id, depth):
+@celery.task(bind=True, rate_limit='10/s', soft_time_limit=60, max_retries=3, default_retry_delay=15)
+def getAuthorDetailsBulk(self, paper_details_bulk, vertical_id, depth):
     print("getAuthorDetailsBulk::getAuthorDetailsBulk API called")
     print("getAuthorDetailsBulk::paper_details_bulk: {}".format(paper_details_bulk))
-    if paper_details_bulk != None and isinstance(paper_details_bulk, dict) and paper_details_bulk.get("message", -1) == -1:
+    if paper_details_bulk != None and isinstance(paper_details_bulk, list):
         try:
             author_paper_mapping = {}
             for paper in paper_details_bulk:
@@ -209,17 +276,33 @@ def getAuthorDetailsBulk(paper_details_bulk, vertical_id, depth):
                 )
 
                 authors = response.json()
+
+                if isinstance(authors, dict) and (authors.get("message", -1) != -1 or authors.get("error", -1) != -1):
+                    print("getAuthorDetailsBulk::authors: {}".format(authors))
+                    raise S2Error("Semantic Scholar API Error")
+
                 authors = [author for author in authors if author != None]
 
                 for author in authors:
-                    # print("getAuthorDetailsBulk::author: {}".format(author))
+                    print("getAuthorDetailsBulk::author: {}".format(author))
                     author['source_paper_ids'] = author_paper_mapping[author['authorId']]
                     author['verticalPaperCount'] = len(author_paper_mapping[author['authorId']])
                     author["vertical_id"] = vertical_id
                     author["depth"] = depth     
 
                 return authors
-        
+            
+        except (SoftTimeLimitExceeded, S2Error) as e:
+            print("getAuthorDetailsBulk::SoftTimeLimitExceeded/S2Error")
+            print("getAuthorDetailsBulk::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getAuthorDetailsBulk::MaxRetriesExceededError")
+                print("getAuthorDetailsBulk::e: {}".format(e))
+
         except Exception as e:
             print("getAuthorDetailsBulk::e: {}".format(e))
             print("getAuthorDetailsBulk::error_details: {}".format(traceback.format_exc()))
@@ -227,8 +310,8 @@ def getAuthorDetailsBulk(paper_details_bulk, vertical_id, depth):
                 print("getAuthorDetailsBulk::response: {}".format(response))
             
 
-@celery.task
-def insertInDb(record, table):
+@celery.task(bind=True, soft_time_limit=180, max_retries=3, default_retry_delay=30)
+def insertInDb(self, record, table):
     if record != None:
         try:
             collection = db[table]
@@ -248,7 +331,18 @@ def insertInDb(record, table):
 
                 if len(record) > 0:
                     collection.insert_many(record)
-                
+
+        except SoftTimeLimitExceeded as e:
+            print("insertInDb::SoftTimeLimitExceeded")
+            print("insertInDb::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("insertInDb::MaxRetriesExceededError")
+                print("insertInDb::e: {}".format(e))
+
         except Exception as e:
             print("insertInDb::e: {}".format(e))
             print("insertInDb::error_details: {}".format(traceback.format_exc()))
@@ -257,8 +351,9 @@ def insertInDb(record, table):
             print("insertInDb::len(record): {}".format(len(record)))
             print("insertInDb::record: {}".format(record))
 
-@celery.task
-def update_vertical(id, status):
+
+@celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def update_vertical(self, id, status):
     try:
         print("update_vertical::id:", id)
         print("update_vertical::status:", status)
@@ -275,6 +370,17 @@ def update_vertical(id, status):
 
         print('update_vertical::updated_document: ', updated_document)
     
+    except SoftTimeLimitExceeded as e:
+            print("update_vertical::SoftTimeLimitExceeded")
+            print("update_vertical::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("update_vertical::MaxRetriesExceededError")
+                print("update_vertical::e: {}".format(e))
+
     except Exception as e:
         print("update_vertical::e: {}".format(e))
         print("update_vertical::error_details: {}".format(traceback.format_exc()))
