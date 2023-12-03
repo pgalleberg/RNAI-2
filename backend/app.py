@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
 from celery import Celery, chain, group, chord
 from flask import request
@@ -12,7 +12,6 @@ from bson.objectid import ObjectId
 import os
 from celery.exceptions import SoftTimeLimitExceeded, MaxRetriesExceededError
 from S2Error import S2Error
-import time
 
 app = Flask(__name__)
 
@@ -48,7 +47,7 @@ def getPapersFromS2(vertical_id, paper_titles):
     task_chains = [
         chain(
             getPaperId.s(title), 
-            getPaperDetails.s(vertical_id, 0), 
+            getPaperDetails.s(vertical_id, 0),
             group(
                 insertInDb.s('papers'),
                 chain(getAuthorDetails.s(), insertInDb.s('authors')),
@@ -96,7 +95,7 @@ def getPaperId(self, title):
                 print("getPaperId::response: {}".format(response))
             
             return -1
-
+        
 
 @celery.task(bind=True, rate_limit='10/s', soft_time_limit=60, max_retries=3, default_retry_delay=15)
 def getPaperDetails(self, paper_id, vertical_id, depth):
@@ -211,7 +210,7 @@ def getAuthorDetails(self, paper_details):
                 response = requests.post(
                     "https://api.semanticscholar.org/graph/v1/author/batch",
                     headers=headers,
-                    params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex,papers'},
+                    params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex,papers.title,papers.url,papers.influentialCitationCount'},
                     json={'ids': author_ids}
                 )
 
@@ -224,7 +223,7 @@ def getAuthorDetails(self, paper_details):
                 authors = [author for author in authors if author != None]
 
                 for author in authors:
-                    author['source_paper_id'] = paper_id
+                    author['source_papers'] = [{'id':paper_id, 'title': paper_details['title'], 'citationCount': paper_details['citationCount'], 'influentialCitationCount': paper_details['influentialCitationCount']}]
                     author["vertical_id"] = vertical_id
                     author["depth"] = depth     
 
@@ -256,13 +255,16 @@ def getAuthorDetailsBulk(self, paper_details_bulk, vertical_id, depth):
         try:
             author_paper_mapping = {}
             for paper in paper_details_bulk:
+                paper_id = paper['paperId']
+                paper_title = paper['title']
+                paper_citationCount = paper['citationCount']
+                paper_influentialCitationCount = paper['influentialCitationCount']
                 for author in paper['authors']:
                     author_id = author['authorId']
-                    paper_id = paper['paperId']
                     if author_paper_mapping.get(author_id, False) == False:
-                        author_paper_mapping[author_id] = [paper_id]
+                        author_paper_mapping[author_id] = [{'id': paper_id, 'title': paper_title, 'citationCount': paper_citationCount, 'influentialCitationCount': paper_influentialCitationCount}]
                     else:
-                        author_paper_mapping[author_id].append(paper_id)
+                        author_paper_mapping[author_id].append({'id': paper_id, 'title': paper_title, 'citationCount': paper_citationCount, 'influentialCitationCount': paper_influentialCitationCount})
 
             #print("getAuthorDetailsBulk::author_paper_mapping: ", author_paper_mapping)
             author_ids = list(author_paper_mapping.keys())
@@ -284,8 +286,8 @@ def getAuthorDetailsBulk(self, paper_details_bulk, vertical_id, depth):
                 authors = [author for author in authors if author != None]
 
                 for author in authors:
-                    print("getAuthorDetailsBulk::author: {}".format(author))
-                    author['source_paper_ids'] = author_paper_mapping[author['authorId']]
+                    # print("getAuthorDetailsBulk::author: {}".format(author))
+                    author['source_papers'] = author_paper_mapping[author['authorId']]
                     author['verticalPaperCount'] = len(author_paper_mapping[author['authorId']])
                     author["vertical_id"] = vertical_id
                     author["depth"] = depth     
@@ -315,20 +317,19 @@ def insertInDb(self, record, table):
     if record != None:
         try:
             collection = db[table]
-
             print("insertInDb::table: {}".format(table))
 
             if isinstance(record, dict):
                 collection.insert_one(record)
-            elif isinstance(record, list):
 
+            elif isinstance(record, list):
                 # remove all nones. Catering to record = [None, None] & record = [None, [{}, ...]]
                 record = [rec for rec in record if rec != None]
 
                 # if 2d list then pass only the last index. Catering to record = [None, [{}, ...]] => [[{}, ...]]
                 if len(record) > 0 and isinstance(record[0], list):
                     record = record[0]
-
+               
                 if len(record) > 0:
                     collection.insert_many(record)
 
@@ -412,7 +413,7 @@ def createVertical():
 if __name__ == "__main__":
     app.run()
 
-# getPapersFromS2.delay('6557a45d503f29770fd5b5c8', ["Atmospheric methane removal: a research agenda", "New Directions: Atmospheric methane removal as a way to mitigate climate change?"])
+# getPapersFromS2.delay('6557a45d503f29770fd5b5c8', ["Atmospheric methane removal: a research agenda"])
 
 # New Directions: Atmospheric methane removal as a way to mitigate climate change?
 # Soft Robot Actuation Strategies for Locomotion in Granular Substrates

@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-import requests
 from bson.objectid import ObjectId
 from config import db
 import os
@@ -11,7 +10,7 @@ webserver = os.getenv('WEBSERVER')
 @ui.route('/tasks', methods=['GET'])
 def getTasks():
     uid = request.args.get('uid')
-    print('uid: ', uid)
+    print('getTasks::uid: ', uid)
 
     collection = db['verticals']
     
@@ -31,9 +30,6 @@ def getTasks():
     result_set = list(collection.find(query))
         
     for result in result_set:
-        print(result)
-
-    for result in result_set:
         result['_id'] = str(result['_id'])
 
     return jsonify(result_set), 200
@@ -41,47 +37,22 @@ def getTasks():
 @ui.route('/task', methods=['GET'])
 def getTask():
     id = request.args.get('id')
-    print('tasks::id: ', id)
+    print('getTask::id: ', id)
 
     collection = db["verticals"]
     id = ObjectId(id)
     result = collection.find_one({"_id": id})
     result['_id'] = str(result['_id'])
-    #print("task::result: ", result)
 
-    # return jsonify(list(result)), 200
     return jsonify(result), 200
 
-@ui.route('/pending_tasks', methods=['POST'])
-def getPendingTasks():
-    print("request.json: ", request.json)
-    print("request: ", request)
-    print("request.data: ", request.data)
-
-    result_set = []
-    for id in request.json:
-        id = ObjectId(id)
-        query = {"_id": id}
-        collection = db["verticals"]
-        result = collection.find_one(query)
-        result['_id'] = str(result['_id'])
-        print("result: ", result)
-        result_set.append(result)
-
-    print("result_set: ", result_set)
-
-    latest_statuses = {}
-    for result in result_set:
-        latest_statuses[result['_id']] = result['status']
-
-    return jsonify(latest_statuses), 200
 
 @ui.route('/vertical_details', methods=['GET'])
 def getVerticalDetails():
     id = request.args.get('id')
 
     # get all the papers w.r.t. vertical id
-    print('vertical_details::id: ', id)
+    print('getVerticalDetails::id: ', id)
 
     collection = db['papers']
     # id = ObjectId(id)
@@ -101,22 +72,25 @@ def getVerticalDetails():
 
 @ui.route('/paper_details', methods=['GET'])
 def getPaperDetails():
-    id = request.args.get('id')
-    print('paper_details::id: ', id)
+    paper_id = request.args.get('paper_id')
+    vertical_id = request.args.get('vertical_id')
+
+    print('getPaperDetails::paper_id: ', paper_id)
+    print('getPaperDetails::vertical_id: ', vertical_id)
 
     collection = db['papers']
     query = {
-        "paperId": id,
+        "paperId": paper_id,
+        "vertical_id": vertical_id,
         "depth": 0
     }
-
+   
     paper_details = collection.find_one(query)
 
     if paper_details == None:
         query["depth"] = query["depth"] + 1
         paper_details = collection.find_one(query)
 
-    print("getPaperDetails::paper_details: ", paper_details)
     paper_details['_id'] = str(paper_details['_id'])
     print("getPaperDetails::paper_details: ", paper_details)
 
@@ -125,29 +99,54 @@ def getPaperDetails():
 
 @ui.route('/author_details', methods=['GET'])
 def getAuthorDetails():
-    id = request.args.get('id')
-    print('author_details::id: ', id)
+    author_id = request.args.get('author_id')
+    vertical_id = request.args.get('vertical_id')
+
+    print('getAuthorDetails::author_id: ', author_id)
+    print('getAuthorDetails::vertical_id: ', vertical_id)
 
     collection = db['authors']
+    # first find author at depth 0 - could be multiple records
     query = {
-        "authorId": id,
+        "authorId": author_id,
+        "vertical_id": vertical_id,
+        "depth": 0
     }
 
+    author_details_depth_0 = collection.find(query)
+    author_details_depth_0 = list(author_details_depth_0)
+    print("getAuthorDetails::author_details_depth_0: ", author_details_depth_0)
 
-    author_details = collection.find_one(query)
-    print("getAuthorDetails::author_details: ", author_details)
-    author_details['_id'] = str(author_details['_id'])
-    print("getAuthorDetails::author_details: ", author_details)
+    # find author at depth 1 
+    query["depth"] = 1
+    author_details_depth_1 = collection.find(query)
+    author_details_depth_1 = list(author_details_depth_1)
+    
+    # combine source papers
+    author_details = author_details_depth_0 + author_details_depth_1
+    source_papers = {}
+    for record in author_details:
+        for source_paper in record['source_papers']:
+            paper_id = source_paper['id']
+            paper_title = source_paper['title']
+            paper_citationCount = source_paper['citationCount']
+            paper_influentialCitationCount = source_paper['influentialCitationCount']
+            source_papers[paper_id] = {'title': paper_title, 'citationCount': paper_citationCount, 'influentialCitationCount': paper_influentialCitationCount}
 
-    return jsonify(author_details), 200
+    print("getAuthorDetails::source_papers: ", source_papers)
+
+    author = author_details[0]
+    author['source_papers'] = source_papers
+    author['_id'] = str(author['_id'])
+    print("getAuthorDetails::author: ", author)
+
+    return jsonify(author), 200
 
 
 @ui.route('/update_vertical', methods=['PATCH'])
 def updateVertical():
     body = request.json    
     print("updateVertical::body: ", body)
-    print("updateVertical::_id: ", body['_id'])
-    print("updateVertical::status: ", body['status'])
 
     collection = db['verticals']
     query = {

@@ -124,7 +124,7 @@ const TaskDetails = () => {
 
       <div className='papers'>
         {taskDetails.map((paper, index) => (
-          <Paper paperDetails={paper} index={index} />
+          <Paper key={paper._id} paperDetails={paper} index={index} />
         ))}
       </div>
 

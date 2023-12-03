@@ -31,12 +31,12 @@ const Paper = ({ paperDetails, index }) => {
 
     return (
         <div>
-            <Link to={`/paper/${paperDetails.paperId}`}><h2>{paperDetails.title}</h2></Link>
+            <Link to={`/paper/${paperDetails.paperId}/${paperDetails.vertical_id}`}><h2>{paperDetails.title}</h2></Link>
 
             <div className="authors">
                 {paperDetails.authors.map((author) => (
                     <>
-                        <Link to={`/author/${author.authorId}`}><span className='author'>{author.name}</span></Link>
+                        <Link to={`/author/${author.authorId}/${paperDetails.vertical_id}`}><span className='author'>{author.name}</span></Link>
                         <span>&nbsp;&nbsp;</span>
                     </>
                 ))}
@@ -88,7 +88,7 @@ const Paper = ({ paperDetails, index }) => {
                             <br></br>
                             {paperDetails.citations.map((citation) => (
                                 paperDetails.depth == 0 ?
-                                    <Link to={`/paper/${citation.paperId}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</Link>
+                                    <Link to={`/paper/${citation.paperId}/${paperDetails.vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</Link>
                                     : <p>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</p>
                                     // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</a>
                             ))}
@@ -108,7 +108,7 @@ const Paper = ({ paperDetails, index }) => {
                             <br></br>
                             {paperDetails.references.map((reference) => (
                                 paperDetails.depth == 0 ?
-                                    <Link to={`/paper/${reference.paperId}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</Link>
+                                    <Link to={`/paper/${reference.paperId}/${paperDetails.vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</Link>
                                     : <p>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</p>
                                     // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</a>
                             ))}

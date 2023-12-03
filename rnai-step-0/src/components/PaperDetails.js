@@ -4,8 +4,9 @@ import Paper from "./Paper";
 
 const PaperDetails = () => {
     console.log("PaperDetails rendered")
-    const { id } = useParams();
-    console.log("PaperDetails::id: ", id)
+    const { paper_id, vertical_id } = useParams();
+    console.log("PaperDetails::paper_id: ", paper_id)
+    console.log("PaperDetails::vertical_id: ", vertical_id)
     const [paperDetails, setPaperDetails] = useState(null)
 
     useEffect(() => {
@@ -14,10 +15,10 @@ const PaperDetails = () => {
             setPaperDetails(paperDetails)
         }
         getPaperDetails()
-    }, [id]);
+    }, [paper_id]);
 
     const fetchPaperDetails = async () => {
-        const url = process.env.REACT_APP_FLASK_WEBSERVER + 'paper_details?id=' + id
+        const url = process.env.REACT_APP_FLASK_WEBSERVER + 'paper_details?paper_id=' + paper_id + '&vertical_id=' + vertical_id
         const res = await fetch(url)
         const data = await res.json()
 

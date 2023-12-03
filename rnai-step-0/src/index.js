@@ -70,7 +70,7 @@ function App(){
             </>
         },
         {
-          path:'/paper/:id',
+          path:'/paper/:paper_id/:vertical_id',
           element: 
             <>
               <Protected>
@@ -80,7 +80,7 @@ function App(){
             </>
         },
         {
-          path:'/author/:id',
+          path:'/author/:author_id/:vertical_id',
           element: 
             <>
               <Protected>

@@ -448,3 +448,59 @@ p:focus {
   font-weight: bolder;
   text-decoration: none;
 }
+
+.author-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  /* border: 1px solid black; */
+  width: 90%;
+}
+
+.author-card {
+  /* border: 1px solid green; */
+  box-shadow: 0 0 1px whitesmoke;
+  background-color: whitesmoke;
+  /* height: 40vh; */
+  /* padding: 30px; */
+  align-self: start;
+}
+
+.background {
+  background-color: #10a37f;
+  height: 8vh;
+  /* border: 1px solid black; */
+}
+
+.author-details {
+  text-align: left;
+  padding: 10px;
+}
+
+.author-details p{
+  font-size: 14px;
+  /* line-height: 60%; */
+  margin: 5px;
+  color: darkslategrey;
+}
+
+/* .author-stats {
+  display: block;
+  text-align: right;
+} */
+
+.author-stat {
+  display: flex;
+  justify-content: space-between; /* This will push the first p to the left and the second p to the right */
+  align-items: center; /* This will align p tags vertically in the center */
+}
+
+.author-papers {
+  text-align: left;
+  margin-left: 40px;
+  /* border: 1px solid blue; */
+  overflow: hidden;
+}
+
+.author-papers p {
+  font-size: 20px;
+}
