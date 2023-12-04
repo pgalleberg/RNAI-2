@@ -51,7 +51,7 @@ const Author = () => {
                         <p><strong>{authorDetails.citationCount}</strong></p>
                     </div>
                     {
-                        authorDetails.paper &&
+                        authorDetails.papers &&
                             <div className="author-stat">
                                 <p>Highly Influential Citations</p>
                                 <p><strong>{authorDetails.papers.reduce((total, paper) => total + paper.influentialCitationCount, 0)}</strong></p>
@@ -76,6 +76,9 @@ const Author = () => {
             
             <div className='author-papers references'>
                 <p>Vertical Specific Publications</p>
+                <p style={{fontSize: '10px', color: 'gray', marginTop: '0px'}}>
+                    &#42;&nbsp;Internal links (all papers are present in database)
+                </p>
                 {Object.keys(authorDetails.source_papers).map((key) => (
                     <>
                         <Link to={`/paper/${key}/${vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{authorDetails.source_papers[key].title}</Link>
@@ -87,6 +90,9 @@ const Author = () => {
                     authorDetails.papers && (
                         <>
                             <p>All Publications</p>
+                            <p style={{fontSize: '10px', color: 'gray', marginTop: '0px'}}>
+                                &#42;&nbsp;External links (all papers are not present in the database)
+                            </p>
                             {authorDetails.papers.map((paper) => (
                                 <>
                                     <Link target="_blank" to={paper.url}>&nbsp;&nbsp;•&nbsp;&nbsp;{paper.title}</Link>
