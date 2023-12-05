@@ -379,10 +379,6 @@ p:focus {
   text-decoration: underline;
 }
 
-.authors {
-  /* line-height: 2.0; */
-}
-
 .author {
   /* border: 1px solid red; */
   background-color: whitesmoke;
@@ -394,10 +390,9 @@ p:focus {
   margin: 3px;
 }
 
-.authors a:hover {
-  text-decoration: none;
+.author:hover {
+  color: #1857B6;
 }
-
 
 .detail {
   line-height: 3.0;
