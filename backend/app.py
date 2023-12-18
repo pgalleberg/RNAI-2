@@ -211,7 +211,7 @@ def getAuthorDetails(self, paper_details):
                     "https://api.semanticscholar.org/graph/v1/author/batch",
                     headers=headers,
                     params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex,papers.title,papers.url,papers.influentialCitationCount'},
-                    json={'ids': author_ids}
+                    json={'ids': author_ids[0:100]}
                 )
 
                 authors = response.json()
@@ -270,29 +270,41 @@ def getAuthorDetailsBulk(self, paper_details_bulk, vertical_id, depth):
             author_ids = list(author_paper_mapping.keys())
 
             if len(author_ids) > 0:
-                response = requests.post(
-                    "https://api.semanticscholar.org/graph/v1/author/batch",
-                    headers=headers,
-                    params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex'},#,papers
-                    json={'ids': author_ids}
-                )
+                print("getAuthorDetailsBulk::len(author_ids): ", len(author_ids))
 
-                authors = response.json()
+                remaining_authors = len(author_ids)
+                start = 0
+                end = 1000
+                all_authors = []
+                while remaining_authors > 0:
+                    response = requests.post(
+                        "https://api.semanticscholar.org/graph/v1/author/batch",
+                        headers=headers,
+                        params={'fields': 'url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex'},#,papers
+                        json={'ids': author_ids[start:end]}
+                    )
 
-                if isinstance(authors, dict) and (authors.get("message", -1) != -1 or authors.get("error", -1) != -1):
-                    print("getAuthorDetailsBulk::authors: {}".format(authors))
-                    raise S2Error("Semantic Scholar API Error")
+                    authors = response.json()
 
-                authors = [author for author in authors if author != None]
+                    if isinstance(authors, dict) and (authors.get("message", -1) != -1 or authors.get("error", -1) != -1):
+                        print("getAuthorDetailsBulk::authors: {}".format(authors))
+                        raise S2Error("Semantic Scholar API Error")
 
-                for author in authors:
-                    # print("getAuthorDetailsBulk::author: {}".format(author))
-                    author['source_papers'] = author_paper_mapping[author['authorId']]
-                    author['verticalPaperCount'] = len(author_paper_mapping[author['authorId']])
-                    author["vertical_id"] = vertical_id
-                    author["depth"] = depth     
+                    authors = [author for author in authors if author != None]
 
-                return authors
+                    for author in authors:
+                        # print("getAuthorDetailsBulk::author: {}".format(author))
+                        author['source_papers'] = author_paper_mapping[author['authorId']]
+                        author['verticalPaperCount'] = len(author_paper_mapping[author['authorId']])
+                        author["vertical_id"] = vertical_id
+                        author["depth"] = depth     
+
+                    all_authors += authors
+                    remaining_authors = remaining_authors - 1000
+                    start = end
+                    end = end + 1000
+
+                return all_authors
             
         except (SoftTimeLimitExceeded, S2Error) as e:
             print("getAuthorDetailsBulk::SoftTimeLimitExceeded/S2Error")
