@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react"
 import Paper from "./Paper";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const PaperDetails = () => {
     console.log("PaperDetails rendered")
@@ -8,11 +10,13 @@ const PaperDetails = () => {
     console.log("PaperDetails::paper_id: ", paper_id)
     console.log("PaperDetails::vertical_id: ", vertical_id)
     const [paperDetails, setPaperDetails] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const getPaperDetails = async () => {
             const paperDetails = await fetchPaperDetails()
             setPaperDetails(paperDetails)
+            setLoading(false)
         }
         getPaperDetails()
     }, [paper_id]);
@@ -26,10 +30,12 @@ const PaperDetails = () => {
     }
 
     return (
-        paperDetails && 
+        paperDetails ?
         <div className="papers" style={{width: '75%'}}>
             <Paper paperDetails={paperDetails} index={0}/>
         </div>
+        :
+        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
     )
 }
 

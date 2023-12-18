@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Task from "./Task";
 import auth from "../firebase";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner} from '@fortawesome/free-solid-svg-icons'
+
 console.log("Tasks component initialized")
 
 const Tasks = () => {
@@ -10,6 +13,7 @@ const Tasks = () => {
     const [tasks, setTasks] = useState([])
     const [polling, setPolling] = useState([])
     const [admin, setAdmin] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         console.log("useEffect trigerred")
@@ -40,6 +44,7 @@ const Tasks = () => {
       console.log("fetchTasks::Tasks reversed: ", data)
       
       setTasks(data)
+      setLoading(false)
 
       setPolling(data.some(task => task.status === 'Pending'))
     }
@@ -62,14 +67,18 @@ const Tasks = () => {
     }, [polling])
 
   return (
-    <div className={admin ? "result-admin" : "result"}>
-        <h2>Query</h2>
-        {admin && <h2>Submitted By</h2>}
-        <h2>Submission Time</h2>
-        <h2>Status</h2>
-        <h2> </h2>
-        {tasks.map((task) => <Task key={task._id} task={task} admin={admin}/>)}
-    </div>
+    loading ?
+      <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+      :
+      <div className={admin ? "result-admin" : "result"}>
+          <h2>Query</h2>
+          {admin && <h2>Submitted By</h2>}
+          <h2>Submission Time</h2>
+          <h2>Status</h2>
+          <h2> </h2>
+          {tasks.map((task) => <Task key={task._id} task={task} admin={admin}/>)}
+      </div>
+      
   )
 }
 

@@ -1,5 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react"
+import { faSpinner} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Author = () => {
 
@@ -25,7 +27,7 @@ const Author = () => {
     }
 
     return (
-        authorDetails && 
+        authorDetails ?
         <div className='author-container' >
             <div className='author-card'>
                 <div className="background"></div>
@@ -104,6 +106,8 @@ const Author = () => {
                 }
             </div>
         </div>
+        :
+        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
     )
 }
 

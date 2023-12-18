@@ -3,6 +3,7 @@ import Button from "./Button"
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
 
 const TaskDetails = () => {
@@ -12,6 +13,7 @@ const TaskDetails = () => {
   const [taskDetails, setTaskDetails] = useState([])
   const [task, setTask] = useState({})
   const [change, setChange] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     console.log("useEffect triggered")
@@ -24,6 +26,8 @@ const TaskDetails = () => {
       console.log("useEffect::fetchTask")
       const taskFromServer = await fetchTask()
       setTask(taskFromServer)
+
+      setLoading(false)
     }
     getTaskDetails()
   }, [])
@@ -101,55 +105,39 @@ const TaskDetails = () => {
   }
 
   return (
-    <div style={{ width: '75%' }}>
-      <h1 style={{ textAlign: 'left' }}>Vertical: {task.query}</h1>
-      <hr></hr>
-      {/* {Object.entries(taskDetails).map(([key, value]) => (
-            (key !== 'id' && key !== 'query') &&
-            <div style={{textAlign: 'left'}}>
-                <p><strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>
-                    {task.status === 'Completed' &&
-                      <button className="editButton" onClick={() => editDetails(key)}>
-                        <FontAwesomeIcon icon={faPenToSquare}/>
-                      </button>
-                    }
-                </p>
-                <p id={key} tabIndex="-1">{value}</p>
-                <div id={key + 'buttons'} style={{textAlign: 'center', display: 'none'}}>
-                  <input type='submit' value="Save & Submit" onClick={() => saveEdits(key)} style={{width: '150px', marginRight: '20px'}}></input>
-                  <input type='submit' value="Cancel" onClick={() => cancelEdit(key, value)} style={{width: '75px', backgroundColor: 'grey'}}></input>
-                </div>
-            </div>
-          ))} */}
+    loading ? 
+      <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+      :
+      <div style={{ width: '75%' }}>
+        <h1 style={{ textAlign: 'left' }}>Vertical: {task.query}</h1>
+        <hr></hr>
 
-      <div className='papers'>
-        {taskDetails.map((paper, index) => (
-          <Paper key={paper._id} paperDetails={paper} index={index} />
-        ))}
+        <div className='papers'>
+          {taskDetails.map((paper, index) => (
+            <Paper key={paper._id} paperDetails={paper} index={index} />
+          ))}
+        </div>
+
+        {task.status === 'Completed' &&
+          <div>
+            <Button text={'Approve'} className={'btn approve'} onClick={() => updateStatus('Approve')} />
+            <Button text={'Reject'} className={'btn reject'} onClick={() => updateStatus('Reject')} />
+          </div>}
+
+        {task.status === 'Rejected' &&
+          <div >
+            <FontAwesomeIcon icon={faCircleXmark} style={{ height: '75px', color: '#e14141', paddingTop: '30px' }} />
+            <br />
+            <h3 style={{ color: "#e14141" }}>Rejected</h3>
+          </div>}
+
+        {task.status === 'Approved' &&
+          <div>
+            <FontAwesomeIcon icon={faCircleCheck} style={{ height: '75px', color: '#10a37f', paddingTop: '30px' }} />
+            <br />
+            <h3 style={{ color: "#10a37f" }}>Approved</h3>
+          </div>}
       </div>
-
-      {task.status === 'Completed' &&
-        <div>
-          <Button text={'Approve'} className={'btn approve'} onClick={() => updateStatus('Approve')} />
-          <Button text={'Reject'} className={'btn reject'} onClick={() => updateStatus('Reject')} />
-        </div>}
-
-      {task.status === 'Rejected' &&
-        <div >
-          <FontAwesomeIcon icon={faCircleXmark} style={{ height: '75px', color: '#e14141', paddingTop: '30px' }} />
-          <br />
-          <h3 style={{ color: "#e14141" }}>Rejected</h3>
-        </div>}
-
-      {task.status === 'Approved' &&
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} style={{ height: '75px', color: '#10a37f', paddingTop: '30px' }} />
-          <br />
-          <h3 style={{ color: "#10a37f" }}>Approved</h3>
-        </div>}
-
-
-    </div>
   )
 }
 

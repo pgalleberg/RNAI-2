@@ -11,6 +11,7 @@ const Form = () => {
     const [autoSuggest, setAutoSuggest] = useState(true)
     const [genericNames, setGenericNames] = useState([]) 
     const [loading, setLoading] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
 
     console.log("genericNames: ", genericNames)
 
@@ -66,6 +67,8 @@ const Form = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
+
+        setSubmitting(true)
          
         console.log("Submit clicked")
         const now = new Date();
@@ -97,6 +100,7 @@ const Form = () => {
         }
 
         await addTask(task)
+        setSubmitting(false)
         navigate('/dashboard')
     }
 
@@ -204,8 +208,14 @@ const Form = () => {
 
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input style={{cursor: loading && 'wait'}} type="submit" value="Submit" disabled={loading}/>
+              {
+                submitting ?
+                  <FontAwesomeIcon icon={faSpinner} style={{color: 'black'}} spin size="5x"></FontAwesomeIcon>
+                  : 
+                  <input style={{cursor: loading && 'wait'}} type="submit" value="Submit" disabled={loading}/>
+              }
             </div>
+
             <div className="grid-item">
             <div style={{ paddingTop: '10px' }}>
                 <label className="switch">
