@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import RNAILogo from '../RNAI_logo_II.png';
 import { useLocation } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 const Navbar = () => {
 
@@ -21,19 +23,37 @@ const Navbar = () => {
         });
     }
 
+    const goBack = () => {
+        navigate(-1);
+      };
+    
+
     return (
-        <div className="navbar" style={{paddingBottom: location.pathname === '/' && '0px', marginTop: location.pathname === '/' && '0px'}}>
-            {   location.pathname === '/' ? <div></div> :
-                <Link to="/">
-                    <img src={ RNAILogo } alt='RNAI logo' style={{height: '100px'}}/>
-                </Link>
-            }
-            <div>
-                <Link to="/">Home</Link>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="#" onClick={ handleLogout }>Sign Out</Link>
+        <>
+            <div className="navbar" style={{paddingBottom: location.pathname === '/' && '0px', marginTop: location.pathname === '/' && '0px'}}>
+                {   location.pathname === '/' ? <div></div> :
+                    <Link to="/">
+                        <img src={ RNAILogo } alt='RNAI logo' style={{height: '70px'}}/>
+                    </Link>
+                }
+                <div>
+                    <Link to="/">Home</Link>
+                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="#" onClick={ handleLogout }>Sign Out</Link>
+                </div>
             </div>
-        </div>
+            
+            {
+                (location.pathname === '/dashboard' || location.pathname.includes('/task/') || location.pathname.includes('/paper/') || location.pathname.includes('/author/')) && 
+                <div style={{display: 'flex', justifyContent: 'flex-end', width: '75%'}}>
+                    <Link onClick={goBack}>
+                        <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
+                        &nbsp;&nbsp;
+                        Back
+                    </Link>
+                </div>
+            }
+        </>
     )
 }
 
