@@ -220,8 +220,8 @@ pinecone.init(api_key=api_key, environment=env)
 INDEX_NAME = 'grants-gov'
 index = pinecone.Index(INDEX_NAME)
 
-# delete_and_create_index()
-# create_embeddings(grants)
+delete_and_create_index()
+create_embeddings(grants)
 
 # fetch_grants('methane removal from ambient air')
 
