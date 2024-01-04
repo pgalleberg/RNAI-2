@@ -12,10 +12,16 @@ import glob
 import html
 import time
 from dotenv import load_dotenv
+import logging
 load_dotenv()
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(funcName)s::%(message)s')
+logger = logging.getLogger(__name__)
+file_handler = logging.FileHandler('./logs/grants-gov.log')
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(logging.Formatter('%(asctime)s %(funcName)s::%(message)s'))
+logger.addHandler(file_handler)
 
-print("OPENAI_API_KEY: ", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(
     api_key = os.getenv("OPENAI_API_KEY")
 )
@@ -24,24 +30,24 @@ client = OpenAI(
 def fetch_data(file_name):
     url = 'https://prod-grants-gov-chatbot.s3.amazonaws.com/extracts/'
 
-    if not os.path.exists(file_name):
+    if not os.path.exists(directory + file_name):
         response = requests.get(url + file_name)
         if response.status_code == 200:
-            with open(file_name, 'wb') as file:
+            with open(directory + file_name, 'wb') as file:
                 file.write(response.content)
-                print("fetch_data::download completed")
-            with zipfile.ZipFile(file_name, 'r') as zip_ref:
-                zip_ref.extractall("./")
-                print("fetch_data:extraction completed.")
+                logger.info("download completed")
+            with zipfile.ZipFile(directory + file_name, 'r') as zip_ref:
+                zip_ref.extractall("./" + directory)
+                logger.info("extraction completed")
         else:
-            print("fetch_data::failed to retrieve the file")
+            logger.info("failed to retrieve the file")
     else:
-        print("fetch_data::file already exists")
+        logger.info("file already exists")
 
 
 def process_data(file_name):
     opportunities = []
-    tree = ET.parse(file_name)
+    tree = ET.parse(directory + file_name)
     root = tree.getroot()
     namespaces = {'ns': 'http://apply.grants.gov/system/OpportunityDetail-V1.0'}
     parent_tags = ['ns:OpportunitySynopsisDetail_1_0', 'ns:OpportunityForecastDetail_1_0']
@@ -53,7 +59,7 @@ def process_data(file_name):
                 opportunity[child.tag.split('}')[-1]] = child.text
             opportunities.append(opportunity)
 
-    print('process_data::# of opportunities: ', len(opportunities))
+    logger.info('# of opportunities: {}'.format(len(opportunities)))
 
     future_opportunities = []
     for opportunity in opportunities:
@@ -77,7 +83,7 @@ def process_data(file_name):
         # check for non digits in both archive date and close date. case in point opp_id = 90013, 350882
         # add checks on the UI - to handle cases of non digit dates etc. 
         
-    print('process_data::# of filtered opportunities: ', len(future_opportunities))
+    logger.info('# of filtered opportunities: {}'.format(len(future_opportunities)))
 
     for opportunity in future_opportunities:
         for key, value in opportunity.items():
@@ -133,20 +139,20 @@ def create_embeddings(grants):
                 grants_batch = []
                 grants_records = []
             else:
-                print("create_embeddings::empty grants_batch received")
+                logger.info("empty grants_batch received")
                 i+=1
                 num_tokens = 0
                 grants_batch = []
                 grants_records = []
 
     end_time = time.time()
-    print("create_embeddings::total time = " + str((end_time-start_time)/60) + 'mins')
+    logger.info("total time: {} mins".format((end_time-start_time)/60))
     create_batches(grants_to_insert)
 
 
 def create_batches(grants):
     UPSERT_LIMIT = 200
-    print("create_batches::number of total grants: ", len(grants))
+    logger.info("number of total grants: {}".format(len(grants)))
     for i in range(0, len(grants), UPSERT_LIMIT):
         insert_to_db(grants[i:i+UPSERT_LIMIT])
         
@@ -158,12 +164,12 @@ def insert_to_db(records):
     while attempts < max_attempts:
         try:
             index.upsert(vectors = records)
-            print("insert_to_db::batch inserted to database. # of records in batch: ", len(records))
+            logger.info("batch inserted to database. # of records in batch: {}".format(len(records)))
             break
         except Exception as e:
             attempts+=1
-            print("insert_to_db::attempt {} failed".format(attempts))
-            print("insert_to_db::Exception::e: ", e)
+            logger.info("attempt {} failed".format(attempts))
+            logger.info("Exception::e: {}".format(e))
 
 
 def fetch_grants(query):
@@ -174,35 +180,36 @@ def fetch_grants(query):
 
     embedding = response.data[0].embedding
     query_results = index.query(embedding, top_k=3, include_metadata=True)
-    print("fetch_grants::query_results:", query_results)
+    logger.info("query_results: {}".format(query_results))
 
 
 def delete_files():
-    patterns = ['./*.zip', './*.xml']
+    patterns = ['./data/*.zip', './data/*.xml']
 
     for pattern in patterns:
         for filename in glob.glob(pattern):
             os.remove(filename)
-            print(f"delete_files::deleted {filename}")
+            logger.info("deleted {}".format(filename))
 
 
 def delete_and_create_index():
     try:
         pinecone.delete_index(INDEX_NAME)
-        print("delete_and_create_index::deleted index")
+        logger.info("deleted index")
     except Exception as e:
-        print("delete_and_create_index::Exception::e: ", e)
+        logger.info("Exception::e: {}".format(e))
     finally:
         pinecone.create_index("grants-gov", dimension=1536, metric="cosine")
-        print("delete_and_create_index::created index")
+        logger.info("created index")
 
 
 current_date = datetime.now()
-one_day_before = current_date - timedelta(days=1)
-formatted_date = one_day_before.strftime("%Y%m%d")
-print("current_date in YYYYMMDD format:", formatted_date)
+# one_day_before = current_date - timedelta(days=1)
+formatted_date = current_date.strftime("%Y%m%d")
+logger.info("current_date in YYYYMMDD format: {}".format(formatted_date))
 file_name = 'GrantsDBExtract' + formatted_date + 'v2.zip'
-print('file_name: ', file_name)
+logger.info('file_name: {}'.format(file_name))
+directory = './data/'
 
 fetch_data(file_name)
 grants = process_data(file_name.replace('.zip', '.xml'))
@@ -213,8 +220,8 @@ pinecone.init(api_key=api_key, environment=env)
 INDEX_NAME = 'grants-gov'
 index = pinecone.Index(INDEX_NAME)
 
-delete_and_create_index()
-create_embeddings(grants)
+# delete_and_create_index()
+# create_embeddings(grants)
 
 # fetch_grants('methane removal from ambient air')
 
