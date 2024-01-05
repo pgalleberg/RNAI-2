@@ -174,3 +174,5 @@ dump.rdb
 serviceAccountKey.json
 
 .rnai-step-0.pem
+
+.gitkeep
