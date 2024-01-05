@@ -20,6 +20,7 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import PaperDetails from './components/PaperDetails';
 import Author from './components/Author';
+import GrantDetails from './components/GrantDetails';
 
 function App(){
 
@@ -86,6 +87,16 @@ function App(){
               <Protected>
                 <Navbar />
                 <Author />
+              </Protected>
+            </>
+        },
+        {
+          path:'/grant/:grant_id',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <GrantDetails />
               </Protected>
             </>
         }

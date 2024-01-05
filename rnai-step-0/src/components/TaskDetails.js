@@ -5,12 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
+import Grant from "./Grant"
 
 const TaskDetails = () => {
   console.log("TaskDetails rendered")
   const { id } = useParams();
   console.log("TaskDetails::id: ", id)
   const [taskDetails, setTaskDetails] = useState([])
+  const [fundingDetails, setFundingDetails] = useState([])
   const [task, setTask] = useState({})
   const [change, setChange] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -22,6 +24,10 @@ const TaskDetails = () => {
       const taskDetails = await fetchTaskDetails()
       console.log("useEffect::taskDetails: ", taskDetails)
       setTaskDetails(taskDetails)
+
+      console.log("useEffect::fetchFundingDetails")
+      const fundingDetails = await fetchFundingDetails()
+      setFundingDetails(fundingDetails)
 
       console.log("useEffect::fetchTask")
       const taskFromServer = await fetchTask()
@@ -35,6 +41,14 @@ const TaskDetails = () => {
 
   const fetchTaskDetails = async () => {
     const url = process.env.REACT_APP_FLASK_WEBSERVER + 'vertical_details?id=' + id
+    const res = await fetch(url)
+    const data = await res.json()
+
+    return data
+  }
+
+  const fetchFundingDetails = async () => {
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + 'funding_details?id=' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -113,6 +127,12 @@ const TaskDetails = () => {
         <hr></hr>
 
         <div className='papers'>
+          <h2>Funding Opportunities</h2>
+          {fundingDetails.map((grant) => (
+            <Grant key={grant._id} grantDetails={grant}/>
+          ))}
+       
+          <h2>Papers & Authors</h2>
           {taskDetails.map((paper, index) => (
             <Paper key={paper._id} paperDetails={paper} index={index} />
           ))}
@@ -125,18 +145,20 @@ const TaskDetails = () => {
           </div>}
 
         {task.status === 'Rejected' &&
-          <div >
+          <div>
             <FontAwesomeIcon icon={faCircleXmark} style={{ height: '75px', color: '#e14141', paddingTop: '30px' }} />
             <br />
             <h3 style={{ color: "#e14141" }}>Rejected</h3>
-          </div>}
+          </div>
+        }
 
         {task.status === 'Approved' &&
           <div>
             <FontAwesomeIcon icon={faCircleCheck} style={{ height: '75px', color: '#10a37f', paddingTop: '30px' }} />
             <br />
             <h3 style={{ color: "#10a37f" }}>Approved</h3>
-          </div>}
+          </div>
+        }
       </div>
   )
 }

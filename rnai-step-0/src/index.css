@@ -420,7 +420,7 @@ p:focus {
 
 .pdf a:hover {
   text-decoration: none;
-  border: 1px solid green;
+  border: 1px solid white;
 }
 
 .expand-citations,

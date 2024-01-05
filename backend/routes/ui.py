@@ -143,6 +143,27 @@ def getAuthorDetails():
     return jsonify(author), 200
 
 
+@ui.route('/funding_details', methods=["GET"])
+def getFundingDetails():
+    id = request.args.get('id')
+    print('getFundingDetails::id: ', id)
+    
+    collection = db['funding']
+    query = {
+        "vertical_id": id    
+    }
+
+    funding_details = collection.find(query)
+    funding_details = list(funding_details)
+    print("getFundingDetails::funding_details: ", funding_details)
+
+    for funding in funding_details:
+        funding['_id'] = str(funding['_id'])
+    print("getFundingDetails::funding_details: ", funding_details)
+
+    return jsonify(funding_details), 200
+
+
 @ui.route('/update_vertical', methods=['PATCH'])
 def updateVertical():
     body = request.json    

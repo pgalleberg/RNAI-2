@@ -12,13 +12,12 @@ from bson.objectid import ObjectId
 import os
 from celery.exceptions import SoftTimeLimitExceeded, MaxRetriesExceededError
 from S2Error import S2Error
+import pinecone
+import openai as openai
 
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
-print("os.getenv(\"REDIS_CONN_STRING\"): ", os.getenv("REDIS_CONN_STRING"))
-print("os.getenv(\"OPENAI_API_KEY\"): ", os.getenv("OPENAI_API_KEY"))
-
 app.config['CELERY_BROKER_URL'] = os.getenv("REDIS_CONN_STRING")
 app.config['CELERY_RESULT_BACKEND'] = os.getenv("REDIS_CONN_STRING")
 
@@ -38,6 +37,13 @@ s2_api_key = os.getenv("S2_API_KEY")
 headers = {
     'x-api-key': s2_api_key
 }
+
+pinecone_api_key = os.getenv("PINECONE_API_KEY")
+env = 'gcp-starter'
+pinecone.init(api_key=pinecone_api_key, environment=env)
+index_name = 'grants-gov'
+index = pinecone.Index(index_name)
+
 
 @celery.task(soft_time_limit=60, autoretry_for=(SoftTimeLimitExceeded,), max_retries=3, default_retry_delay=10) #name='__main__.tasks.getPapersFromS2'
 def getPapersFromS2(vertical_id, paper_titles):
@@ -399,6 +405,22 @@ def update_vertical(self, id, status):
         print("update_vertical::error_details: {}".format(traceback.format_exc()))
 
 
+@celery.task(soft_time_limit=60, autoretry_for=(SoftTimeLimitExceeded,), max_retries=3, default_retry_delay=10)
+def getPapersFromG2(vertical_id, query):
+    response = openai.Embedding.create(
+        input= query,
+        model="text-embedding-ada-002"
+    )
+
+    embedding = response.data[0].embedding
+    query_results = index.query(embedding, top_k=3, include_metadata=True)
+    query_results = query_results.to_dict()
+    for result in query_results['matches']:
+        result['vertical_id'] = vertical_id
+    print(query_results)
+    insertInDb.delay(query_results['matches'], 'funding')
+    
+
 @app.route('/tasks', methods=['POST'])
 def createVertical():
     print("creating vertical")
@@ -414,6 +436,7 @@ def createVertical():
 
         # Print the ID of the inserted record
         print(f"Record inserted with ID: {vertical_id}")
+        getPapersFromG2.delay(str(vertical_id), record['query'])
         getPapersFromS2.delay(str(vertical_id), record['papers'])
     
     except Exception as e:
@@ -430,3 +453,5 @@ if __name__ == "__main__":
 # New Directions: Atmospheric methane removal as a way to mitigate climate change?
 # Soft Robot Actuation Strategies for Locomotion in Granular Substrates
 # Atmospheric methane removal: a research agenda
+    
+# getPapersFromG2.delay('6557a45d503f29770fd5b5c8', 'methane removal from ambient air')
