@@ -73,11 +73,11 @@ def process_data(file_name):
             future_opportunities.append(opportunity)
         elif estimated_synopsis_close_date.isdigit() and datetime.strptime(estimated_synopsis_close_date, '%m%d%Y').date() >= datetime.now().date():
             future_opportunities.append(opportunity)
-        elif archive_date.isdigit() and datetime.strptime(archive_date, '%m%d%Y').date() >= datetime.now().date():
+        elif not close_date.isdigit() and not estimated_synopsis_close_date.isdigit() and archive_date.isdigit() and datetime.strptime(archive_date, '%m%d%Y').date() >= datetime.now().date():
             future_opportunities.append(opportunity)
-        elif post_date.isdigit() and datetime.strptime(post_date, '%m%d%Y').date() + timedelta(days=180) >= datetime.now().date():
+        elif not close_date.isdigit() and not estimated_synopsis_close_date.isdigit() and not archive_date.isdigit() and post_date.isdigit() and datetime.strptime(post_date, '%m%d%Y').date() + timedelta(days=180) >= datetime.now().date():
             future_opportunities.append(opportunity)
-        elif estimated_synopsis_post_date.isdigit() and datetime.strptime(estimated_synopsis_post_date, '%m%d%Y').date() + timedelta(days=180) >= datetime.now().date():
+        elif not estimated_synopsis_close_date.isdigit() and not archive_date.isdigit() and estimated_synopsis_post_date.isdigit() and datetime.strptime(estimated_synopsis_post_date, '%m%d%Y').date() + timedelta(days=180) >= datetime.now().date():
             future_opportunities.append(opportunity)
         
         # check for non digits in both archive date and close date. case in point opp_id = 90013, 350882
@@ -223,6 +223,6 @@ index = pinecone.Index(INDEX_NAME)
 delete_and_create_index()
 create_embeddings(grants)
 
-# fetch_grants('methane removal from ambient air')
+fetch_grants('methane removal from ambient air')
 
 delete_files()

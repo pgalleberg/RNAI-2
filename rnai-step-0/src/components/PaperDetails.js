@@ -10,13 +10,11 @@ const PaperDetails = () => {
     console.log("PaperDetails::paper_id: ", paper_id)
     console.log("PaperDetails::vertical_id: ", vertical_id)
     const [paperDetails, setPaperDetails] = useState(null)
-    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const getPaperDetails = async () => {
             const paperDetails = await fetchPaperDetails()
             setPaperDetails(paperDetails)
-            setLoading(false)
         }
         getPaperDetails()
     }, [paper_id]);

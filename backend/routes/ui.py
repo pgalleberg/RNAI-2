@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from config import db
 import os
-from pymongo import ReturnDocument
+from pymongo import ReturnDocument, DESCENDING
 
 ui = Blueprint("ui", __name__)
 webserver = os.getenv('WEBSERVER')
@@ -153,15 +153,38 @@ def getFundingDetails():
         "vertical_id": id    
     }
 
-    funding_details = collection.find(query)
+    funding_details = collection.find(query).sort('score', DESCENDING)
     funding_details = list(funding_details)
-    print("getFundingDetails::funding_details: ", funding_details)
+    funding_details_dict = {}
 
     for funding in funding_details:
         funding['_id'] = str(funding['_id'])
-    print("getFundingDetails::funding_details: ", funding_details)
+        if funding_details_dict.get(funding['search_term'], -1) != -1:
+            funding_details_dict[funding['search_term']].append(funding)
+        else:
+            funding_details_dict[funding['search_term']] = [funding]
 
-    return jsonify(funding_details), 200
+
+    print("getFundingDetails::funding_details_dict: ", funding_details_dict)
+
+    return jsonify(funding_details_dict), 200
+
+
+@ui.route('/grant_details', methods=["GET"])
+def getGrantDetails():
+    id = request.args.get('grant_id')
+    print('getGrantDetails::id: ', id)
+    
+    collection = db['funding']
+    query = {
+        "id": id    
+    }
+
+    grant_details = collection.find_one(query)
+    grant_details['_id'] = str(grant_details['_id'])
+    print("getGrantDetails::grant_details: ", grant_details)
+
+    return jsonify(grant_details), 200
 
 
 @ui.route('/update_vertical', methods=['PATCH'])

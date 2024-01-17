@@ -57,7 +57,7 @@ const Grant = ({ grantDetails }) => {
                 </>
 
                 <span className="text">Description</span>
-                <p style={{ display: 'inline', margin: 0 }}>{grantDetails.metadata.Description}</p>
+                <p style={{ display: 'inline-block', margin: 0, maxHeight: '410px', overflow: 'scroll', textOverflow: 'ellipsis' }}>{grantDetails.metadata.Description}</p>
 
                 <div className='pdf'>
                     <br></br>

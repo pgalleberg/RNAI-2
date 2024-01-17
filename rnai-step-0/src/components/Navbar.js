@@ -44,8 +44,8 @@ const Navbar = () => {
             </div>
             
             {
-                (location.pathname === '/dashboard' || location.pathname.includes('/task/') || location.pathname.includes('/paper/') || location.pathname.includes('/author/')) && 
-                <div style={{display: 'flex', justifyContent: 'flex-end', width: '75%'}}>
+                (location.pathname === '/dashboard' || location.pathname.includes('/task/') || location.pathname.includes('/paper/') || location.pathname.includes('/author/') || location.pathname.includes('/grant/')) && 
+                <div style={{display: 'flex', justifyContent: 'flex-end', width: location.pathname.includes('/grant/') ? '90%' : '75%'}}>
                     <Link onClick={goBack}>
                         <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
                         &nbsp;&nbsp;

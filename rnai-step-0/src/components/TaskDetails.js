@@ -27,6 +27,7 @@ const TaskDetails = () => {
 
       console.log("useEffect::fetchFundingDetails")
       const fundingDetails = await fetchFundingDetails()
+      console.log("useEffect::fundingDetails: ", fundingDetails)
       setFundingDetails(fundingDetails)
 
       console.log("useEffect::fetchTask")
@@ -128,9 +129,25 @@ const TaskDetails = () => {
 
         <div className='papers'>
           <h2>Funding Opportunities</h2>
-          {fundingDetails.map((grant) => (
-            <Grant key={grant._id} grantDetails={grant}/>
-          ))}
+
+          {/* <h4>{task.query}</h4> */}
+          {
+            fundingDetails[task.query].map((grant) => (
+              <Grant key={grant._id} grantDetails={grant}/>
+            ))
+          }
+
+          {
+            Object.entries(fundingDetails).map(([search_term, grants]) => 
+              search_term !== task.query &&
+              <>
+                <h4>{search_term}</h4>
+               { grants.map((grant) => (
+                  <Grant key={grant._id} grantDetails={grant}/>
+                ))}
+              </>
+            )
+          }
        
           <h2>Papers & Authors</h2>
           {taskDetails.map((paper, index) => (

@@ -1,11 +1,38 @@
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
+import { faClipboardCheck, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const GrantDetails = () => {
     const location = useLocation();
-    const data = location.state;
+    // const data = location.state;
+    const [data, setData] = useState(location.state)
+    const { grant_id } = useParams();
+
+    useEffect(() => {
+        console.log("useEffect triggered")
+        console.log("data: ", data)
+        
+        const getGrantDetails = async () => {
+            const grantDetails = await fetchGrantDetails()
+            setData(grantDetails.metadata)
+        }
+        
+        if (!data){
+            getGrantDetails()
+        }
+    }, [data]);
+
+    const fetchGrantDetails = async () => {
+        const url = process.env.REACT_APP_FLASK_WEBSERVER + 'grant_details?grant_id=' + grant_id
+        const res = await fetch(url)
+        const data = await res.json()
+
+        return data
+    }
+
 
     function formatDate(dateStr) {
         console.log('dateStr: ', dateStr)
@@ -143,21 +170,22 @@ const GrantDetails = () => {
     
 
     return (
+        data ?
         <div className="papers" style={{width: '90%'}}>
             <div className='author-container' style={{width: '100%'}}>
                 <div className='author-card'>
                     <div className="background"></div>
                     <div className="author-details">
                         <p><strong>Funding Amount</strong></p>
-                        
-                        <div className="author-stat">
-                            <p>Award Ceiling</p>
-                            <p style={{textAlign: 'right'}}><strong>${data.AwardCeiling}</strong></p>
-                        </div>
 
                         <div className="author-stat">
                             <p>Award Floor</p>
                             <p style={{textAlign: 'right'}}><strong>${data.AwardFloor}</strong></p>
+                        </div>
+                        
+                        <div className="author-stat">
+                            <p>Award Ceiling</p>
+                            <p style={{textAlign: 'right'}}><strong>${data.AwardCeiling}</strong></p>
                         </div>
 
                         <div className="author-stat">
@@ -358,6 +386,9 @@ const GrantDetails = () => {
                 </div>
             </div> 
         </div>
+        :
+        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+
     )
 }
 

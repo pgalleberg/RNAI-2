@@ -176,3 +176,7 @@ serviceAccountKey.json
 .rnai-step-0.pem
 
 .gitkeep
+
+grants-gov/analysis.py
+grants-gov/data/*
+grants-gov/unique_tags.py

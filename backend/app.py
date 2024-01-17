@@ -65,6 +65,7 @@ def getPapersFromS2(vertical_id, paper_titles):
 
     chord(task_chains)(update_vertical.si(vertical_id, 'Completed'))
 
+
 @celery.task(bind=True, rate_limit='1/s', soft_time_limit=60, max_retries=3, default_retry_delay=10)
 def getPaperId(self, title):
     print("getPaperId::getPaperId API called")
@@ -404,21 +405,48 @@ def update_vertical(self, id, status):
         print("update_vertical::e: {}".format(e))
         print("update_vertical::error_details: {}".format(traceback.format_exc()))
 
-
 @celery.task(soft_time_limit=60, autoretry_for=(SoftTimeLimitExceeded,), max_retries=3, default_retry_delay=10)
-def getPapersFromG2(vertical_id, query):
-    response = openai.Embedding.create(
-        input= query,
-        model="text-embedding-ada-002"
-    )
+def getGrantsFromG2(vertical_id, query, generic_names):
+    print('getGrantsFromG2::getGrantsFromG2 called')
+    queries = [query] + generic_names
 
-    embedding = response.data[0].embedding
-    query_results = index.query(embedding, top_k=3, include_metadata=True)
-    query_results = query_results.to_dict()
-    for result in query_results['matches']:
-        result['vertical_id'] = vertical_id
-    print(query_results)
-    insertInDb.delay(query_results['matches'], 'funding')
+    task_chains = [
+        chain(
+            getGrants.s(vertical_id, query),
+            insertInDb.s('funding')
+        ) for query in queries
+    ]
+
+    chord(task_chains)(update_vertical.si(vertical_id, 'Completed'))
+
+@celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def getGrants(self, vertical_id, query):
+    try:
+        response = openai.Embedding.create(
+            input= query,
+            model="text-embedding-ada-002"
+        )
+
+        embedding = response.data[0].embedding
+        query_results = index.query(embedding, top_k=3, include_metadata=True)
+        query_results = query_results.to_dict()
+        for result in query_results['matches']:
+            result['vertical_id'] = vertical_id
+            result['search_term'] = query
+        print("getGrants::query_results: {}".format(query_results))
+
+        return query_results['matches']
+
+    except Exception as e:
+        print("getGrants::e: {}".format(e))
+        print("getGrants::e::error_details: ", traceback.format_exc())
+
+        try: 
+            self.retry()
+
+        except MaxRetriesExceededError as e:
+            print("getGrants::MaxRetriesExceededError")
+            print("getGrants::e: {}".format(e))
     
 
 @app.route('/tasks', methods=['POST'])
@@ -436,8 +464,8 @@ def createVertical():
 
         # Print the ID of the inserted record
         print(f"Record inserted with ID: {vertical_id}")
-        getPapersFromG2.delay(str(vertical_id), record['query'])
-        getPapersFromS2.delay(str(vertical_id), record['papers'])
+        getGrantsFromG2.delay(str(vertical_id), record['query'], record['names'])
+        # getPapersFromS2.delay(str(vertical_id), record['papers'])
     
     except Exception as e:
         print("createVertical::e: ", e)
@@ -454,4 +482,4 @@ if __name__ == "__main__":
 # Soft Robot Actuation Strategies for Locomotion in Granular Substrates
 # Atmospheric methane removal: a research agenda
     
-# getPapersFromG2.delay('6557a45d503f29770fd5b5c8', 'methane removal from ambient air')
+# getGrantsFromG2.delay('6557a45d503f29770fd5b5c8', 'methane removal from ambient air', [])
