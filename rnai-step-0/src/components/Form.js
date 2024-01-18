@@ -226,11 +226,16 @@ const Form = () => {
             <div style={{ paddingTop: '10px' }}>
                 <label className="switch">
                 <input type="checkbox" id="autoSuggestCheckbox" 
-                checked={autoSuggest} onChange={(e) => setAutoSuggest(e.currentTarget.checked)} disabled={loading}
+                  checked={autoSuggest} 
+                  onChange={(e) => {
+                    setAutoSuggest(e.currentTarget.checked)
+                    !autoSuggest && document.getElementById('verticalName').value.length > 5 && fetchGenericNames(document.getElementById('verticalName').value)
+                  }}
+                  disabled={loading}
                 />
                 <span className="slider round"  style={{cursor: loading && 'wait'}}></span>
                 </label>
-                <p id="autoSuggestText">Auto Suggest: ON</p>
+                <p id="autoSuggestText">Auto Suggest: {autoSuggest ? 'ON' : 'OFF'}</p>
             </div>
             </div>
         </div>
