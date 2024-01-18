@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import auth from "../firebase";
 
 const Form = () => {
@@ -109,12 +109,18 @@ const Form = () => {
         <div className="grid-container">
 
             <div className="grid-item"></div>
-            <div className="grid-item" style={{ paddingBottom: '10px' }}>Relevant Papers</div>
+            <div className="grid-item" style={{ paddingBottom: '10px' }}>
+              Relevant Papers
+              &nbsp;
+              <FontAwesomeIcon 
+                icon={faTriangleExclamation} size="lg" color="rgb(255, 165, 0)"
+              />
+            </div>
             <div className="grid-item" style={{ paddingBottom: '10px' }}>Generic Vertical Names</div> 
 
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper1" placeholder="Title of First Paper" id="paper1" required />
+                <input type="text" name="paper1" placeholder="Title of First Paper" id="paper1" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
             </div>
             <div className="grid-item"> 
               <input id="name1" type="text" name="name1" placeholder="First Generic Name" 
@@ -131,7 +137,7 @@ const Form = () => {
             
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper2" placeholder="Title of Second Paper" id="paper2" /> {/* required */}
+                <input type="text" name="paper2" placeholder="Title of Second Paper" id="paper2" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name2" type="text" name="name2" placeholder="Second Generic Name" 
@@ -157,7 +163,7 @@ const Form = () => {
                 />
             </div>
             <div className="grid-item">
-                <input type="text" name="paper3" placeholder="Title of Third Paper" id="paper3" /> {/* required */}
+                <input type="text" name="paper3" placeholder="Title of Third Paper" id="paper3" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name3" type="text" name="name3" placeholder="Third Generic Name" 
@@ -174,7 +180,7 @@ const Form = () => {
             
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper4" placeholder="Title of Fourth Paper" id="paper4" /> {/* required */}
+                <input type="text" name="paper4" placeholder="Title of Fourth Paper" id="paper4" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name4" type="text" name="name4" placeholder="Fourth Generic Name" 
@@ -191,7 +197,7 @@ const Form = () => {
             
             <div className="grid-item"></div>
             <div className="grid-item">
-                <input type="text" name="paper5" placeholder="Title of Fifth Paper" id="paper5" /> {/* required */}
+                <input type="text" name="paper5" placeholder="Title of Fifth Paper" id="paper5" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
             </div>
             <div className="grid-item">
                 <input id="name5" type="text" name="name5" placeholder="Fifth Generic Name" 
