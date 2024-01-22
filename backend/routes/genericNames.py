@@ -44,4 +44,6 @@ def createPrompt(verticalName):
         Generic Topics:'''.format(verticalName)
       
 def parseResponse(response):
-    return response.split('\n')
+    parsedResponse = response.split('\n')
+    parsedResponse = [response.strip() for response in parsedResponse]
+    return parsedResponse

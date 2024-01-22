@@ -65,6 +65,20 @@ input[type="password"] {
   margin-bottom: 24px;
 }
 
+input[type="number"] {
+  margin-left: 10px;
+  margin-bottom: 10px;
+  width: 40px;
+  border: none;
+  border-bottom: 1px solid #10a37f;
+  text-align: center;
+  background-color: whitesmoke;
+}
+
+input[type="number"]:focus{
+  outline: none;
+}
+
 ::placeholder {
   color: #8e8ea0;
   opacity: 1;
@@ -152,9 +166,10 @@ input:checked+.slider:before {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 3fr;
   /* background-color: #2196F3;  */
   /* padding: 10px; */
+  align-items: start;
 }
 
 .grid-item {
@@ -162,7 +177,7 @@ input:checked+.slider:before {
   /* border: 1px solid rgba(0, 0, 0, 0.8); */
   padding: 0px 10px 0px 10px;
   font-size: 15px;
-  color: lightgray;
+  color: black;
   text-align: center;
 }
 

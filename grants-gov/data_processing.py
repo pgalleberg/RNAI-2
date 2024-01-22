@@ -55,6 +55,7 @@ def process_data(file_name):
     for tag in parent_tags:
         for opp in root.findall(tag, namespaces):
             opportunity = {}
+            opportunity['type'] = 'posted' if tag == 'ns:OpportunitySynopsisDetail_1_0' else 'forecasted'
             for child in opp:
                 opportunity[child.tag.split('}')[-1]] = child.text
             opportunities.append(opportunity)

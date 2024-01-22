@@ -141,7 +141,8 @@ const TaskDetails = () => {
             Object.entries(fundingDetails).map(([search_term, grants]) => 
               search_term !== task.query &&
               <>
-                <h4>{search_term}</h4>
+                <hr></hr>
+                <h2 style={{fontSize: '1.25em',}}><i>{search_term}</i></h2>
                { grants.map((grant) => (
                   <Grant key={grant._id} grantDetails={grant}/>
                 ))}
@@ -149,7 +150,7 @@ const TaskDetails = () => {
             )
           }
        
-          <h2>Papers & Authors</h2>
+          {/* <h2>Papers & Authors</h2> */}
           {taskDetails.map((paper, index) => (
             <Paper key={paper._id} paperDetails={paper} index={index} />
           ))}

@@ -406,29 +406,49 @@ def update_vertical(self, id, status):
         print("update_vertical::error_details: {}".format(traceback.format_exc()))
 
 @celery.task(soft_time_limit=60, autoretry_for=(SoftTimeLimitExceeded,), max_retries=3, default_retry_delay=10)
-def getGrantsFromG2(vertical_id, query, generic_names):
+def getGrantsFromG2(vertical_id, query, numberOfGrants, generic_names, numberOfGrantsPerGenericName, opportunity_types):
     print('getGrantsFromG2::getGrantsFromG2 called')
-    queries = [query] + generic_names
+    print('getGrantsFromG2:vertical_id: ', vertical_id)
+    print('getGrantsFromG2::query: ', query)
+    print('getGrantsFromG2::numberOfGrants: ', numberOfGrants)
+    print('getGrantsFromG2::generic_names: ', generic_names)
+    print('getGrantsFromG2::numberOfGrantsPerGenericName: ', numberOfGrantsPerGenericName)
+    print('getGrantsFromG2::opportunity_types: ', opportunity_types)
+    
+    queries = {
+        query: numberOfGrants
+    }
+    if numberOfGrantsPerGenericName > 0:
+        for name in generic_names:
+            queries[name] = numberOfGrantsPerGenericName
+
+    print('getGrantsFromG2::queries: ', queries)
 
     task_chains = [
         chain(
-            getGrants.s(vertical_id, query),
+            getGrants.s(vertical_id, query, num_results, opportunity_types),
             insertInDb.s('funding')
-        ) for query in queries
+        ) for query, num_results in queries.items()
     ]
 
     chord(task_chains)(update_vertical.si(vertical_id, 'Completed'))
 
 @celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
-def getGrants(self, vertical_id, query):
+def getGrants(self, vertical_id, query, num_results, opportunity_types):
     try:
+        print('getGrants::getGrants called')
+        print('getGrants:vertical_id: ', vertical_id)
+        print('getGrants::query: ', query)
+        print('getGrants::num_results: ', num_results)
+        print('getGrants::opportunity_types: ', opportunity_types)
+
         response = openai.Embedding.create(
             input= query,
             model="text-embedding-ada-002"
         )
 
         embedding = response.data[0].embedding
-        query_results = index.query(embedding, top_k=3, include_metadata=True)
+        query_results = index.query(embedding, top_k=num_results, include_metadata=True, filter={"type": {"$in":opportunity_types}})
         query_results = query_results.to_dict()
         for result in query_results['matches']:
             result['vertical_id'] = vertical_id
@@ -464,7 +484,7 @@ def createVertical():
 
         # Print the ID of the inserted record
         print(f"Record inserted with ID: {vertical_id}")
-        getGrantsFromG2.delay(str(vertical_id), record['query'], record['names'])
+        getGrantsFromG2.delay(str(vertical_id), record['query'], record['numberOfGrants'], record['names'], record['numberOfGrantsPerGenericName'], record['OpportunityStatus'])
         # getPapersFromS2.delay(str(vertical_id), record['papers'])
     
     except Exception as e:
