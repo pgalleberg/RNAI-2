@@ -112,191 +112,172 @@ const Form = () => {
     }
 
   return (
-    <form id="mainForm" className="grid-container" onSubmit={ onSubmit }>
-        <div style={{backgroundColor: 'whitesmoke', textAlign: 'left', paddingBottom: '20px', borderRadius: '10px'}}>
-            <div className="background" style={{borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}></div>
-            <div style={{paddingLeft: '10px'}}>
-              <p style={{fontSize: '20px'}}><strong> Configurations&nbsp;<FontAwesomeIcon icon={faGear} size="lg" color="black"/></strong></p>   
-              {/* <hr style={{marginRight: '120px'}}></hr> */}
-            <br></br>
-              <div>
-                <div>
-                  <label># of grants for vertical name:</label>
-                  <input id="numberOfGrants" type="number" defaultValue="5" max={10} min={1}></input><br></br>
-                </div>
-                <div>
-                  <label># of grants for generic names:</label>
-                  <input 
-                    id="numberOfGrantsPerGenericName" type="number" value={numberOfGrantsPerGenericName} max={5} min={0}
-                    onChange={(e) => {
-                      setNumberOfGrantsPerGenericName(e.target.value)
-                      autoSuggest && document.getElementById('verticalName').value.length > 5 && e.target.value > 0 && document.getElementById('name1').value.length === 0 &&
-                      fetchGenericNames(document.getElementById('verticalName').value)
-                    }}
-                  ></input><br></br>
-                </div>
-              </div>
-              <div >
-                <p style={{fontWeight: 'bolder'}}>Opportunity Status:</p>
-                <input type="checkbox" id="posted" defaultChecked></input>
-                <label>Posted</label><br></br>
-                <input type="checkbox" id="forecasted" defaultChecked></input>
-                <label>Forecasted</label><br></br>
-                <input type="checkbox" id="closed" disabled></input>
-                <label>Closed</label><br></br>
-              </div>
-
-              {/* <br></br>
-              <hr style={{marginRight: '20px', borderColor: 'lightgray', borderTopWidth: '0.1px'}}></hr>
-
-              <div>
-                <div className="">
-                  <label for="fname"># of relevant papers:</label>
-                  <input type="number" defaultValue="3" max={10} min={1}></input><br></br>
-                </div>
-                <div className="">
-                  <label for="fname"># of recommended papers:</label>
-                  <input type="number" defaultValue="3" max={10} min={1}></input><br></br>
-                </div>
-              </div> */}
+    <div className="grid-container" >
+      <div style={{backgroundColor: 'whitesmoke', textAlign: 'left', paddingBottom: '20px', borderRadius: '10px'}}>
+        <div className="background" style={{borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}></div>
+        <div style={{paddingLeft: '10px', paddingRight: '10px'}}>
+          <p style={{fontSize: '20px'}}><strong> Configurations&nbsp;<FontAwesomeIcon icon={faGear} size="lg" color="black"/></strong></p>   
+          {/* <hr style={{marginRight: '120px'}}></hr> */}
+          <br></br>
+          <div>
+            <div>
+              <label># of grants for vertical name:</label>
+              <input id="numberOfGrants" type="number" defaultValue="5" max={10} min={1}></input><br></br>
             </div>
-
-        </div>
-        <div className="inputs" style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
-            <div className="grid-item"></div>
-            <div className="grid-item" style={{ paddingBottom: '10px', width: '320px' }}>
-              Relevant Papers
-              &nbsp;
-              <FontAwesomeIcon 
-                icon={faTriangleExclamation} size="lg" color="rgb(255, 165, 0)"
-              />
-            </div>
-            <div className="grid-item" style={{ paddingBottom: '10px' }}>Generic Vertical Names</div> 
-            <div className="grid-item"></div>
-            <div className="grid-item">
-                <input type="text" name="paper1" placeholder="Title of First Paper" id="paper1" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
-            </div>
-            <div className="grid-item"> 
-              <input id="name1" type="text" name="name1" placeholder="First Generic Name" 
-                defaultValue={genericNames[0] !== undefined ? genericNames[0].genericName : ''} 
-                required={numberOfGrantsPerGenericName > 0}
-                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white'}}
-                disabled={autoSuggest ? true : false}
-                // onChange={(e) => changeGenericName(genericNames[0].id, e.target.value)}
-                />
-                <FontAwesomeIcon 
-                  icon={faSpinner} spin size="lg" color="black"
-                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
-                />
-            </div>  
-            <div className="grid-item"></div>
-            <div className="grid-item">
-                <input type="text" name="paper2" placeholder="Title of Second Paper" id="paper2" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
-            </div>
-            <div className="grid-item">
-                <input id="name2" type="text" name="name2" placeholder="Second Generic Name" 
-                defaultValue={genericNames[1] !== undefined ? genericNames[1].genericName: ''}
-                required={numberOfGrantsPerGenericName > 0}
-                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
-                disabled={autoSuggest ? true : false}
-                // onChange={(e) => changeGenericName(genericNames[1].id, e.target.value)}
-                />
-                <FontAwesomeIcon 
-                  icon={faSpinner} spin size="lg" color="black"
-                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
-                />
-            </div>  
-            <div className="grid-item">
-                <input id="verticalName" type="text" name="vertical" placeholder="Vertical Name" required 
-                onBlur = {(e) => {
-                  autoSuggest && e.target.value.length > 5 && numberOfGrantsPerGenericName > 0
-                      ? fetchGenericNames(e.target.value)
-                      : setGenericNames([])
+            <div>
+              <label># of grants for generic names:</label>
+              <input 
+                id="numberOfGrantsPerGenericName" type="number" value={numberOfGrantsPerGenericName} max={5} min={0}
+                onChange={(e) => {
+                  setNumberOfGrantsPerGenericName(e.target.value)
+                  autoSuggest && document.getElementById('verticalName').value.length > 5 && e.target.value > 0 && document.getElementById('name1').value.length === 0 &&
+                  fetchGenericNames(document.getElementById('verticalName').value)
                 }}
-                />
+              ></input><br></br>
             </div>
-            <div className="grid-item">
-                <input type="text" name="paper3" placeholder="Title of Third Paper" id="paper3" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
+            <div>
+              <input type="checkbox" id="autoSuggestCheckbox"
+                checked={autoSuggest} 
+                onChange={(e) => {
+                  setAutoSuggest(e.currentTarget.checked)
+                  document.getElementById('verticalName').value.length > 5 && numberOfGrantsPerGenericName > 0 &&  document.getElementById('name1').value.length == 0 &&
+                  fetchGenericNames(document.getElementById('verticalName').value)
+                }}
+                disabled={loading}
+              ></input>
+              <label>Auto Suggest Generic Names</label><br></br>
             </div>
-            <div className="grid-item">
-                <input id="name3" type="text" name="name3" placeholder="Third Generic Name" 
-                defaultValue={genericNames[2] !== undefined ? genericNames[2].genericName: ''}
-                required={numberOfGrantsPerGenericName > 0}
-                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
-                disabled={autoSuggest ? true : false}
-                // onChange={(e) => changeGenericName(genericNames[2].id, e.target.value)}
-                />
-                <FontAwesomeIcon 
-                  icon={faSpinner} spin size="lg" color="black"
-                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
-                />
-            </div>  
-            
-            <div className="grid-item"></div>
-            <div className="grid-item">
-                <input type="text" name="paper4" placeholder="Title of Fourth Paper" id="paper4" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
-            </div>
-            <div className="grid-item">
-                <input id="name4" type="text" name="name4" placeholder="Fourth Generic Name" 
-                defaultValue={genericNames[3] !== undefined ? genericNames[3].genericName: ''}
-                required={numberOfGrantsPerGenericName > 0}
-                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
-                disabled={autoSuggest ? true : false} 
-                // onChange={(e) => changeGenericName(genericNames[3].id, e.target.value)}
-                />
-                <FontAwesomeIcon 
-                  icon={faSpinner} spin size="lg" color="black"
-                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
-                />
-            </div> 
-            
-            <div className="grid-item"></div>
-            <div className="grid-item">
-                <input type="text" name="paper5" placeholder="Title of Fifth Paper" id="paper5" disabled style={{backgroundColor: 'lightgray'}}/> {/* required */}
-            </div>
-            <div className="grid-item">
-                <input id="name5" type="text" name="name5" placeholder="Fifth Generic Name" 
-                defaultValue={genericNames[4] !== undefined ? genericNames[4].genericName: ''}
-                required={numberOfGrantsPerGenericName > 0}
-                style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white' }}
-                disabled={autoSuggest ? true : false}
-                // onChange={(e) => changeGenericName(genericNames[4].id, e.target.value)}
-                />
-                <FontAwesomeIcon 
-                  icon={faSpinner} spin size="lg" color="black"
-                  style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
-                />
-            </div>   
+          </div>
+          <div >
+            <p style={{fontWeight: 'bolder'}}>Opportunity Status:</p>
+            <input type="checkbox" id="posted" defaultChecked></input>
+            <label>Posted</label><br></br>
+            <input type="checkbox" id="forecasted" defaultChecked></input>
+            <label>Forecasted</label><br></br>
+            <input type="checkbox" id="closed" disabled></input>
+            <label>Closed</label><br></br>
+          </div>
 
-            <div className="grid-item"></div>
-            <div className="grid-item">
-              {
-                submitting ?
-                  <FontAwesomeIcon icon={faSpinner} style={{color: 'black'}} spin size="5x"></FontAwesomeIcon>
-                  : 
-                  <input style={{cursor: loading && 'wait'}} type="submit" value="Submit" disabled={loading}/>
-              }
-            </div>
+          <hr style={{ borderColor: 'lightgray', borderTopWidth: '0.1px', margin: '20px'}}></hr>
 
-            <div className="grid-item">
-            <div style={{ paddingTop: '10px' }}>
-                <label className="switch">
-                <input type="checkbox" id="autoSuggestCheckbox" 
-                  checked={autoSuggest} 
-                  onChange={(e) => {
-                    setAutoSuggest(e.currentTarget.checked)
-                    document.getElementById('verticalName').value.length > 5 && numberOfGrantsPerGenericName > 0 &&  document.getElementById('name1').value.length == 0 &&
-                    fetchGenericNames(document.getElementById('verticalName').value)
-                  }}
-                  disabled={loading}
-                />
-                <span className="slider round"  style={{cursor: loading && 'wait'}}></span>
-                </label>
-                <p id="autoSuggestText">Auto Suggest: {autoSuggest ? 'ON' : 'OFF'}</p>
+          <div >
+            {/* <input type="checkbox" id="relevant" checked></input>
+            <label>Relevant Papers</label><br></br>
+            <input type="checkbox" id="recommended"></input>
+            <label>Recommended Papers</label><br></br>
+            <input type="checkbox" id="referenced" disabled></input>
+            <label>Referenced Papers</label><br></br>
+            <input type="checkbox" id="recommended" disabled></input>
+            <label>Cited Papers</label><br></br> */}
+          </div>
+
+          <div>
+            <div className="">
+              <label for="fname"># of relevant papers:</label>
+              <input type="number" defaultValue="25" max={50} min={1}></input><br></br>
             </div>
-            </div>
+            {/* <div className="">
+              <label for="fname"># of recommended papers:</label>
+              <input type="number" defaultValue="3" max={10} min={1}></input><br></br>
+            </div> */}
+          </div>
         </div>
-    </form>
+      </div>
+
+      <form onSubmit={ onSubmit }>
+          <div className="inputs" style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
+              <div className="grid-item"></div>
+              <div className="grid-item"> 
+                <input id="name1" type="text" name="name1" placeholder="First Generic Name" 
+                  defaultValue={genericNames[0] !== undefined ? genericNames[0].genericName : ''} 
+                  required={numberOfGrantsPerGenericName > 0}
+                  style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white', width: '60%'}}
+                  disabled={autoSuggest ? true : false}
+                  // onChange={(e) => changeGenericName(genericNames[0].id, e.target.value)}
+                  />
+                  <FontAwesomeIcon 
+                    icon={faSpinner} spin size="lg" color="black"
+                    style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                  />
+              </div>  
+              <div className="grid-item"></div>
+              <div className="grid-item">
+                  <input id="name2" type="text" name="name2" placeholder="Second Generic Name" 
+                  defaultValue={genericNames[1] !== undefined ? genericNames[1].genericName: ''}
+                  required={numberOfGrantsPerGenericName > 0}
+                  style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white', width: '60%'}}
+                  disabled={autoSuggest ? true : false}
+                  // onChange={(e) => changeGenericName(genericNames[1].id, e.target.value)}
+                  />
+                  <FontAwesomeIcon 
+                    icon={faSpinner} spin size="lg" color="black"
+                    style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                  />
+              </div>  
+              <div className="grid-item">
+                  <input id="verticalName" style={{width: '60%'}} type="text" name="vertical" placeholder="Vertical Name" required 
+                  onBlur = {(e) => {
+                    autoSuggest && e.target.value.length > 5 && numberOfGrantsPerGenericName > 0
+                        ? fetchGenericNames(e.target.value)
+                        : setGenericNames([])
+                  }}
+                  />
+              </div>
+              <div className="grid-item">
+                  <input id="name3" type="text" name="name3" placeholder="Third Generic Name" 
+                  defaultValue={genericNames[2] !== undefined ? genericNames[2].genericName: ''}
+                  required={numberOfGrantsPerGenericName > 0}
+                  style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white', width: '60%'}}
+                  disabled={autoSuggest ? true : false}
+                  // onChange={(e) => changeGenericName(genericNames[2].id, e.target.value)}
+                  />
+                  <FontAwesomeIcon 
+                    icon={faSpinner} spin size="lg" color="black"
+                    style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                  />
+              </div>  
+              
+              <div className="grid-item"></div>
+              <div className="grid-item">
+                  <input id="name4" type="text" name="name4" placeholder="Fourth Generic Name" 
+                  defaultValue={genericNames[3] !== undefined ? genericNames[3].genericName: ''}
+                  required={numberOfGrantsPerGenericName > 0}
+                  style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white', width: '60%'}}
+                  disabled={autoSuggest ? true : false} 
+                  // onChange={(e) => changeGenericName(genericNames[3].id, e.target.value)}
+                  />
+                  <FontAwesomeIcon 
+                    icon={faSpinner} spin size="lg" color="black"
+                    style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                  />
+              </div> 
+              
+              <div className="grid-item"></div>
+              <div className="grid-item">
+                  <input id="name5" type="text" name="name5" placeholder="Fifth Generic Name" 
+                  defaultValue={genericNames[4] !== undefined ? genericNames[4].genericName: ''}
+                  required={numberOfGrantsPerGenericName > 0}
+                  style={{ backgroundColor: autoSuggest ? 'lightyellow' : 'white', width: '60%'}}
+                  disabled={autoSuggest ? true : false}
+                  // onChange={(e) => changeGenericName(genericNames[4].id, e.target.value)}
+                  />
+                  <FontAwesomeIcon 
+                    icon={faSpinner} spin size="lg" color="black"
+                    style={{marginLeft: '10px', visibility: !loading && 'hidden'}} 
+                  />
+              </div>   
+          </div>
+          <br></br>
+          <div>
+            {
+              submitting ?
+                <FontAwesomeIcon icon={faSpinner} style={{color: 'black'}} spin size="5x"></FontAwesomeIcon>
+                : 
+                <input style={{cursor: loading && 'wait'}} type="submit" value="Submit" disabled={loading}/>
+            }
+          </div>
+      </form>
+    </div>
   )}
 
 export default Form

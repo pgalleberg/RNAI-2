@@ -128,32 +128,42 @@ const TaskDetails = () => {
         <hr></hr>
 
         <div className='papers'>
-          <h2>Funding Opportunities</h2>
 
-          {/* <h4>{task.query}</h4> */}
-          {
-            fundingDetails[task.query].map((grant) => (
-              <Grant key={grant._id} grantDetails={grant}/>
-            ))
-          }
+          {Object.keys(fundingDetails).length > 0 &&
+            <div>
+              <h2>Funding Opportunities</h2>
 
-          {
-            Object.entries(fundingDetails).map(([search_term, grants]) => 
-              search_term !== task.query &&
-              <>
-                <hr></hr>
-                <h2 style={{fontSize: '1.25em',}}><i>{search_term}</i></h2>
-               { grants.map((grant) => (
+              {/* <h4>{task.query}</h4> */}
+              {
+                fundingDetails[task.query].map((grant) => (
                   <Grant key={grant._id} grantDetails={grant}/>
-                ))}
-              </>
-            )
+                ))
+              }
+
+              {
+                Object.entries(fundingDetails).map(([search_term, grants]) => 
+                  search_term !== task.query &&
+                  <>
+                    <hr></hr>
+                    <h2 style={{fontSize: '1.25em',}}><i>{search_term}</i></h2>
+                  { grants.map((grant) => (
+                      <Grant key={grant._id} grantDetails={grant}/>
+                    ))}
+                  </>
+                )
+              }
+            </div>
           }
-       
-          {/* <h2>Papers & Authors</h2> */}
-          {taskDetails.map((paper, index) => (
-            <Paper key={paper._id} paperDetails={paper} index={index} />
-          ))}
+          
+          {taskDetails.length > 0 &&
+            <div>
+              <h2>Papers & Authors</h2>
+              {taskDetails.map((paper, index) => (
+                <Paper key={paper._id} paperDetails={paper} index={index} />
+              ))}
+            </div>
+          }
+
         </div>
 
         {task.status === 'Completed' &&
