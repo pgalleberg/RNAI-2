@@ -15,6 +15,8 @@ const Tasks = () => {
     const [admin, setAdmin] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    sessionStorage.removeItem('currentTab');
+
     useEffect(() => {
         console.log("useEffect trigerred")
 
@@ -68,7 +70,9 @@ const Tasks = () => {
 
   return (
     loading ?
-      <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+      <div className="container">
+        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+      </div>
       :
       <div className={admin ? "result-admin" : "result"}>
           <h2>Query</h2>

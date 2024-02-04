@@ -8,6 +8,8 @@ const Author = () => {
     const { author_id, vertical_id } = useParams();
     const [authorDetails, setAuthorDetails] = useState(null)
 
+    sessionStorage.setItem('currentTab', 'literature');
+
     useEffect(() => {
         console.log("Author.js::useEffect() trigerred")
         const getAuthorDetails = async () => {
@@ -107,7 +109,9 @@ const Author = () => {
             </div>
         </div>
         :
-        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+        <div className="container">
+            <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+        </div>
     )
 }
 

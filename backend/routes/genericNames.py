@@ -39,7 +39,7 @@ def createPrompt(verticalName):
         
         I am looking for funding in the area of {}. However, I am having trouble finding funding specifically for this area. Please give me five generic topics that would help me find funding for my area of interest. 
         
-        List each topic on a new line without any bullet points. 
+        List each topic on a new line without any bullet points or numbering. 
         
         Generic Topics:'''.format(verticalName)
       

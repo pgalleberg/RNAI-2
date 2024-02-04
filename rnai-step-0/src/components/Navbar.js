@@ -30,7 +30,7 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="navbar" style={{paddingBottom: location.pathname === '/' && '0px', marginTop: location.pathname === '/' && '0px'}}>
+            <div className="navbar" style={{paddingBottom: location.pathname === '/dashboard' && '100px'}}>
                 {   location.pathname === '/' ? <div></div> :
                     <Link to="/">
                         <img src={ RNAILogo } alt='RNAI logo' style={{height: '70px'}}/>
@@ -44,8 +44,8 @@ const Navbar = () => {
             </div>
             
             {
-                (location.pathname === '/dashboard' || location.pathname.includes('/task/') || location.pathname.includes('/paper/') || location.pathname.includes('/author/') || location.pathname.includes('/grant/')) && 
-                <div style={{display: 'flex', justifyContent: 'flex-end', width: location.pathname.includes('/grant/') ? '90%' : '75%'}}>
+                (location.pathname.includes('/grant') || location.pathname.includes('/paper/') || location.pathname.includes('/author/')) && 
+                <div style={{textAlign: 'left', width: location.pathname.includes('/paper/') ? '75%' : '90%'}}>
                     <Link onClick={goBack}>
                         <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
                         &nbsp;&nbsp;

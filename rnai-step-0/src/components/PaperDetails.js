@@ -11,6 +11,8 @@ const PaperDetails = () => {
     console.log("PaperDetails::vertical_id: ", vertical_id)
     const [paperDetails, setPaperDetails] = useState(null)
 
+    sessionStorage.setItem('currentTab', 'literature');
+
     useEffect(() => {
         const getPaperDetails = async () => {
             const paperDetails = await fetchPaperDetails()
@@ -33,7 +35,9 @@ const PaperDetails = () => {
             <Paper paperDetails={paperDetails} index={0}/>
         </div>
         :
-        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+        <div className="container">
+            <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+        </div>
     )
 }
 

@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 
 const GrantDetails = () => {
     const location = useLocation();
-    // const data = location.state;
     const [data, setData] = useState(location.state)
     const { grant_id } = useParams();
+
+    sessionStorage.setItem('currentTab', 'funding');
 
     useEffect(() => {
         console.log("useEffect triggered")
@@ -35,7 +36,6 @@ const GrantDetails = () => {
 
 
     function formatDate(dateStr) {
-        console.log('dateStr: ', dateStr)
         if (dateStr.length !== 8)
             return dateStr; // or handle error as you prefer
     
@@ -336,8 +336,8 @@ const GrantDetails = () => {
                     <br></br><br></br>
 
                     <span className="text">Description</span>
-                    <p style={{ display: 'inline-block', margin: '5px', textAlign: 'justify' }}>{data.Description}</p>
-                    <br></br><br></br>
+                    <p style={{ display: 'block', margin: '5px', textAlign: 'justify' }}>{data.Description}</p>
+                    <br></br>
 
                     <span className="text">Link To Additional Information</span>
                     <p style={{ display: 'inline-block', margin: '5px', textAlign: 'justify' }}>{data.AdditionalInformationURL}</p>
@@ -387,7 +387,9 @@ const GrantDetails = () => {
             </div> 
         </div>
         :
-        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+        <div className="container">
+            <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+        </div>
 
     )
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Button from "./Button"
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleXmark, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
 import Grant from "./Grant"
@@ -16,6 +16,12 @@ const TaskDetails = () => {
   const [task, setTask] = useState({})
   const [change, setChange] = useState(false)
   const [loading, setLoading] = useState(true)
+
+  let currentTab = sessionStorage.getItem('currentTab');
+  if (!currentTab) {
+    currentTab = 'funding'
+  }
+  const [activeTab, setActiveTab] = useState(currentTab)
 
   useEffect(() => {
     console.log("useEffect triggered")
@@ -121,49 +127,65 @@ const TaskDetails = () => {
 
   return (
     loading ? 
-      <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+      <div className="container">
+        <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+      </div>
       :
       <div style={{ width: '75%' }}>
         <h1 style={{ textAlign: 'left' }}>Vertical: {task.query}</h1>
-        <hr></hr>
+        {/* <hr></hr> */}
+
+        <div className="tab">
+          <button className={activeTab == 'funding' ? 'active' : ''} onClick={() => setActiveTab('funding')}>Funding</button>
+          <button className={activeTab == 'literature' ? 'active' : ''} onClick={() => setActiveTab('literature')}>Literature</button>
+        </div>
 
         <div className='papers'>
 
-          {Object.keys(fundingDetails).length > 0 &&
-            <div>
-              <h2>Funding Opportunities</h2>
+          {activeTab == 'funding' ?
+            Object.keys(fundingDetails).length > 0 ? 
+              <div>
+                <h2>Funding Opportunities</h2>
 
-              {/* <h4>{task.query}</h4> */}
-              {
-                fundingDetails[task.query].map((grant) => (
-                  <Grant key={grant._id} grantDetails={grant}/>
-                ))
-              }
+                {/* <h4>{task.query}</h4> */}
+                {
+                  fundingDetails[task.query].map((grant) => (
+                    <Grant key={grant._id} grantDetails={grant}/>
+                  ))
+                }
 
-              {
-                Object.entries(fundingDetails).map(([search_term, grants]) => 
-                  search_term !== task.query &&
-                  <>
-                    <hr></hr>
-                    <h2 style={{fontSize: '1.25em',}}><i>{search_term}</i></h2>
-                  { grants.map((grant) => (
-                      <Grant key={grant._id} grantDetails={grant}/>
-                    ))}
-                  </>
-                )
-              }
+                {
+                  Object.entries(fundingDetails).map(([search_term, grants]) => 
+                    search_term !== task.query &&
+                    <>
+                      <hr></hr>
+                      <h2 style={{fontSize: '1.25em',}}><i>{search_term}</i></h2>
+                    { grants.map((grant) => (
+                        <Grant key={grant._id} grantDetails={grant}/>
+                      ))}
+                    </>
+                  )
+                }
+              </div>
+            :
+            <div className="container" style={{display: 'block'}}>
+              <p style={{paddingTop: '25vh'}}>Error 404</p>
+              <p><i>No contents to display</i></p>
             </div>
+          :
+            taskDetails.length > 0 ?
+              <div>
+                <h2>Papers & Authors</h2>
+                {taskDetails.map((paper, index) => (
+                  <Paper key={paper.paperId} paperDetails={paper} index={index} />
+                ))}
+              </div>
+            :
+              <div className="container" style={{display: 'block'}}>
+                <p style={{paddingTop: '25vh'}}>Error 404</p>
+                <p><i>No contents to display</i></p>
+              </div> 
           }
-          
-          {taskDetails.length > 0 &&
-            <div>
-              <h2>Papers & Authors</h2>
-              {taskDetails.map((paper, index) => (
-                <Paper key={paper._id} paperDetails={paper} index={index} />
-              ))}
-            </div>
-          }
-
         </div>
 
         {task.status === 'Completed' &&

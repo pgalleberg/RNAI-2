@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from config import db
 import os
-from pymongo import ReturnDocument, DESCENDING
+from pymongo import ReturnDocument, DESCENDING, ASCENDING
 
 ui = Blueprint("ui", __name__)
 webserver = os.getenv('WEBSERVER')
@@ -58,10 +58,10 @@ def getVerticalDetails():
     # id = ObjectId(id)
     query = {
         "vertical_id": id,
-        "depth": 0
+        # "depth": 0
     }
 
-    result_set = list(collection.find(query))
+    result_set = list(collection.find(query).sort('rank', ASCENDING))
     
     for paper in result_set:
         paper['_id'] = str(paper['_id'])
@@ -82,14 +82,14 @@ def getPaperDetails():
     query = {
         "paperId": paper_id,
         "vertical_id": vertical_id,
-        "depth": 0
+        # "depth": 0
     }
    
     paper_details = collection.find_one(query)
 
-    if paper_details == None:
-        query["depth"] = query["depth"] + 1
-        paper_details = collection.find_one(query)
+    # if paper_details == None:
+    #     query["depth"] = query["depth"] + 1
+    #     paper_details = collection.find_one(query)
 
     paper_details['_id'] = str(paper_details['_id'])
     print("getPaperDetails::paper_details: ", paper_details)
@@ -110,7 +110,7 @@ def getAuthorDetails():
     query = {
         "authorId": author_id,
         "vertical_id": vertical_id,
-        "depth": 0
+        # "depth": 0
     }
 
     author_details_depth_0 = collection.find(query)
@@ -118,12 +118,12 @@ def getAuthorDetails():
     print("getAuthorDetails::author_details_depth_0: ", author_details_depth_0)
 
     # find author at depth 1 
-    query["depth"] = 1
-    author_details_depth_1 = collection.find(query)
-    author_details_depth_1 = list(author_details_depth_1)
+    # query["depth"] = 1
+    # author_details_depth_1 = collection.find(query)
+    # author_details_depth_1 = list(author_details_depth_1)
     
     # combine source papers
-    author_details = author_details_depth_0 + author_details_depth_1
+    author_details = author_details_depth_0 #+ author_details_depth_1
     source_papers = {}
     for record in author_details:
         for source_paper in record['source_papers']:

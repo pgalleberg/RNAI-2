@@ -8,7 +8,7 @@ const Form = () => {
     console.log("Form rendered")
     const user = auth.currentUser;
     console.log("user: ", user)
-    const [autoSuggest, setAutoSuggest] = useState(true)
+    const [autoSuggest, setAutoSuggest] = useState(false)
     const [genericNames, setGenericNames] = useState([]) 
     const [loading, setLoading] = useState(false)
     const [submitting, setSubmitting] = useState(false)
@@ -81,14 +81,6 @@ const Form = () => {
             },
             "status": "Pending",
             "time": now.toLocaleString(),
-            "papers": [
-                document.getElementById("paper1").value,
-                document.getElementById("paper2").value,
-                document.getElementById("paper3").value,
-                document.getElementById("paper4").value,
-                document.getElementById("paper5").value
-            ]
-            , 
             "names": [
                 document.getElementById("name1").value,
                 document.getElementById("name2").value,
@@ -104,6 +96,7 @@ const Form = () => {
               document.getElementById("forecasted").checked === true && 'forecasted',
               document.getElementById("closed").checked === true && 'closed'
             ].filter(Boolean),
+            "numberOfRelevantPapers": parseInt(document.getElementById("numberOfRelevantPapers").value, 10)
         }
 
         await addTask(task)
@@ -173,8 +166,8 @@ const Form = () => {
 
           <div>
             <div className="">
-              <label for="fname"># of relevant papers:</label>
-              <input type="number" defaultValue="25" max={50} min={1}></input><br></br>
+              <label># of relevant papers:</label>
+              <input id="numberOfRelevantPapers" type="number" defaultValue="25" max={50} min={1}></input><br></br>
             </div>
             {/* <div className="">
               <label for="fname"># of recommended papers:</label>

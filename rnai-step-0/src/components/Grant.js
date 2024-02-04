@@ -7,7 +7,6 @@ const Grant = ({ grantDetails }) => {
     console.log("Grant::grantDetails: ", grantDetails)
 
     function formatDate(dateStr) {
-        console.log('dateStr: ', dateStr)
         if (dateStr.length !== 8)
             return dateStr; // or handle error as you prefer
     
@@ -20,7 +19,7 @@ const Grant = ({ grantDetails }) => {
     
     return (
         <>
-            <div>
+            <div style={{backgroundColor: 'whitesmoke', padding: '10px 10px', paddingRight: '20px', marginBottom: '10px', borderRadius: '10px'}}>
                 <Link to={`/grant/${grantDetails.metadata.OpportunityID}`} state={grantDetails.metadata}><h2 style={{marginBottom: '0px'}}>{grantDetails.metadata.OpportunityTitle}</h2></Link>
                 <>
                     <span className="detail">{grantDetails.metadata.AgencyName}</span>
@@ -57,7 +56,7 @@ const Grant = ({ grantDetails }) => {
                 </>
 
                 <span className="text">Description</span>
-                <p style={{ display: 'inline-block', margin: 0, maxHeight: '410px', overflow: 'scroll', textOverflow: 'ellipsis' }}>{grantDetails.metadata.Description}</p>
+                <p style={{ display: 'block', margin: 0, maxHeight: '410px', overflow: 'scroll', textOverflow: 'ellipsis', textAlign: 'justify' }}>{grantDetails.metadata.Description}</p>
 
                 <div className='pdf'>
                     <br></br>

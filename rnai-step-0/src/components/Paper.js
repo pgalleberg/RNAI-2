@@ -56,7 +56,7 @@ const Paper = ({ paperDetails, index }) => {
             {paperDetails.tldr &&
                 <>
                     <span className="text">TLDR</span>
-                    <p style={{ display: 'inline', margin: 0 }}>{paperDetails.tldr.text}</p>
+                    <p style={{margin: 0, textAlign: 'justify'}}>{paperDetails.tldr.text}</p>
                     <br></br>
                 </>
             }
@@ -64,7 +64,7 @@ const Paper = ({ paperDetails, index }) => {
             {paperDetails.abstract &&
                 <>
                     <span className="text">Abstract</span>
-                    <p style={{ display: 'inline', margin: 0 }}>{paperDetails.abstract}</p>
+                    <p style={{margin: 0, textAlign: 'justify'}}>{paperDetails.abstract}</p>
                     <br></br>
                 </>
             }
@@ -117,7 +117,6 @@ const Paper = ({ paperDetails, index }) => {
                     </>
                 }
             </>
-
         </div>
     )
 }
