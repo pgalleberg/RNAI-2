@@ -7,7 +7,7 @@ from pymongo import ReturnDocument, DESCENDING, ASCENDING
 ui = Blueprint("ui", __name__)
 webserver = os.getenv('WEBSERVER')
 
-@ui.route('/tasks', methods=['GET'])
+@ui.route('/api/tasks', methods=['GET'])
 def getTasks():
     uid = request.args.get('uid')
     print('getTasks::uid: ', uid)
@@ -34,7 +34,7 @@ def getTasks():
 
     return jsonify(result_set), 200
 
-@ui.route('/task', methods=['GET'])
+@ui.route('/api/task', methods=['GET'])
 def getTask():
     id = request.args.get('id')
     print('getTask::id: ', id)
@@ -47,7 +47,7 @@ def getTask():
     return jsonify(result), 200
 
 
-@ui.route('/vertical_details', methods=['GET'])
+@ui.route('/api/vertical_details', methods=['GET'])
 def getVerticalDetails():
     id = request.args.get('id')
 
@@ -70,7 +70,7 @@ def getVerticalDetails():
 
     return jsonify(result_set), 200
 
-@ui.route('/paper_details', methods=['GET'])
+@ui.route('/api/paper_details', methods=['GET'])
 def getPaperDetails():
     paper_id = request.args.get('paper_id')
     vertical_id = request.args.get('vertical_id')
@@ -97,7 +97,7 @@ def getPaperDetails():
     return jsonify(paper_details), 200
 
 
-@ui.route('/author_details', methods=['GET'])
+@ui.route('/api/author_details', methods=['GET'])
 def getAuthorDetails():
     author_id = request.args.get('author_id')
     vertical_id = request.args.get('vertical_id')
@@ -143,7 +143,7 @@ def getAuthorDetails():
     return jsonify(author), 200
 
 
-@ui.route('/funding_details', methods=["GET"])
+@ui.route('/api/funding_details', methods=["GET"])
 def getFundingDetails():
     id = request.args.get('id')
     print('getFundingDetails::id: ', id)
@@ -170,7 +170,7 @@ def getFundingDetails():
     return jsonify(funding_details_dict), 200
 
 
-@ui.route('/grant_details', methods=["GET"])
+@ui.route('/api/grant_details', methods=["GET"])
 def getGrantDetails():
     id = request.args.get('grant_id')
     print('getGrantDetails::id: ', id)
@@ -187,7 +187,7 @@ def getGrantDetails():
     return jsonify(grant_details), 200
 
 
-@ui.route('/update_vertical', methods=['PATCH'])
+@ui.route('/api/update_vertical', methods=['PATCH'])
 def updateVertical():
     body = request.json    
     print("updateVertical::body: ", body)

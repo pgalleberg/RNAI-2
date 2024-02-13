@@ -5,7 +5,7 @@ import os
 genericNames = Blueprint("genericNames", __name__)
 genericNames.api_key = os.getenv("OPENAI_API_KEY")
 
-@genericNames.route('/getGenericNames', methods=['GET'])
+@genericNames.route('/api/getGenericNames', methods=['GET'])
 def getGenericNames():
     verticalName = request.args.get('verticalName')
     print("verticalName: ", verticalName)

@@ -291,7 +291,7 @@ def getGrants(self, vertical_id, query, num_results, opportunity_types):
             print("getGrants::e: {}".format(e))
 
 
-@app.route('/tasks', methods=['POST'])
+@app.route('/api/tasks', methods=['POST'])
 def createVertical():
     print("creating vertical")
     print(request.json)
