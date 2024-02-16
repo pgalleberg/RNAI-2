@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from firebase_admin import auth, credentials, initialize_app
-from flask_cors import cross_origin
 import os
 
 admin = Blueprint("admin", __name__)
@@ -8,8 +7,7 @@ admin = Blueprint("admin", __name__)
 cred = credentials.Certificate("serviceAccountKey.json")
 initialize_app(cred)
 
-origin = os.getenv("ORIGIN")
-print("origin: ", origin)
+api_key = os.getenv("API_KEY")
 
 @admin.route('/api/createAdmin', methods=['PATCH'])
 def createAdmin():
@@ -40,11 +38,14 @@ def verifyAdmin():
     return jsonify({"admin": isAdmin}), 200
 
 
-@cross_origin(origins=origin)  # Allow only requests from www.example.com
 @admin.route('/api/approveUser', methods=['PATCH'])
 def approveUser():
 
     try:
+        api_key_request = request.headers.get('X-API-KEY')
+        if (api_key_request != api_key):
+            return jsonify({"message": "Invalid API Key"}), 403
+
         email = request.args.get('email')
         user = auth.get_user_by_email(email)
         print("user: ", user)
