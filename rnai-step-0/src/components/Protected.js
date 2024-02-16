@@ -4,10 +4,15 @@ import { Navigate } from "react-router-dom";
 
 export function Protected({ children }){
     const { user } = useContext(Context);
+    console.log("Protected.js::user: ", user)
 
-    if(!user){
-        return <Navigate  to='/login' />
-    } else {
+    if (user == "Approved"){
         return children
     }
+    else if (user == "Created"){
+        return <Navigate  to='/login?status=created' />
+    }
+    else {
+        return <Navigate  to='/login' />
+    } 
 }

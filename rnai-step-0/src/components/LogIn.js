@@ -1,15 +1,19 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase";
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { FaTimes } from 'react-icons/fa'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTriangleExclamation, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const LogIn = ({ setEmail_ }) => {
 
   let location = useLocation();
   let searchParams = new URLSearchParams(location.search);
   let emailId = searchParams.get('emailId')
+  let userStatus = searchParams.get('status')
   console.log("emailId: ", emailId)
+  console.log("userStatus: ", userStatus)
 
   const [email, setEmail] = useState(emailId)
   const [password, setPassword] = useState('')
@@ -17,11 +21,17 @@ const LogIn = ({ setEmail_ }) => {
   const [correctEmail, setCorrectEmail] = useState('true')
   const [correctPwd, setCorrectPwd] = useState('true')
 
+  const [status, setStatus] = useState(userStatus)
+  const [submitting, setSubmitting] = useState(false)
+
   const navigate = useNavigate()
 
   const onSubmit = async (e) => {
 
     e.preventDefault()
+
+    setSubmitting(true)
+
     console.log("auth: ", auth)
     console.log("email: ", email)
     console.log("password: ", password)
@@ -32,10 +42,12 @@ const LogIn = ({ setEmail_ }) => {
       // Signed in 
       const user = userCredential.user;
       // ...
-      console.log("User Created: ", user)
+      console.log("User: ", user)
       navigate("/")
     })
     .catch((error) => {
+      setSubmitting(false)
+
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log("User Not Created\n", errorCode, ":", errorMessage)
@@ -43,12 +55,12 @@ const LogIn = ({ setEmail_ }) => {
       if (errorCode === "auth/user-not-found"){
         console.log("User Not Found")
         setCorrectEmail(false)
+        setCorrectPwd(true)
       } else if (errorCode === "auth/wrong-password"){
         console.log("Wrong Password")
         setCorrectPwd(false)
         setCorrectEmail(true)
       }
-
     });
   }
 
@@ -75,7 +87,7 @@ const LogIn = ({ setEmail_ }) => {
 
           {!correctEmail && <p style={{color: 'red', fontSize: '12px', textAlign: 'left'}}>
             <FaTimes style={{color: 'red', verticalAlign: 'middle'}} />
-            &nbsp;&nbsp;Wrong email
+            &nbsp;&nbsp;User not found
           </p> }
 
           {!correctPwd && <p style={{color: 'red', fontSize: '12px', textAlign: 'left'}}>
@@ -83,16 +95,28 @@ const LogIn = ({ setEmail_ }) => {
             &nbsp;&nbsp;Wrong password
           </p> }
 
+          {correctEmail && correctPwd && status == "created" && <p style={{color: 'red', fontSize: '12px', textAlign: 'left'}}>
+            {/* <faTriangleExclamation style={{color: 'red', verticalAlign: 'middle'}} /> */}
+            <FontAwesomeIcon icon={faTriangleExclamation} color="red"/>
+            &nbsp;&nbsp;Contact administrator for access. 
+          </p> }
+
           <div style={{textAlign: 'left', fontSize: '12px', paddingBottom: '10px'}}>
-            <a href='#' onClick={forgotPassword}>Forgot Password?</a>
+            <Link to='#' onClick={forgotPassword}>Forgot Password?</Link>
           </div>
 
           <div>
-              <input type="submit" value="Log In"/>
+            {
+              submitting ?
+                <FontAwesomeIcon icon={faSpinner} style={{color: 'black'}} spin size="3x"></FontAwesomeIcon>
+                : 
+                <input type="submit" value="Log In"/>
+            }
           </div>
+
       </form>
       
-      <p>Don't have an account? <a href="/signup"> Sign Up</a></p> 
+      <p>Don't have an account? <Link to="/signup"> Sign Up</Link></p> 
     </div>
   )
 }

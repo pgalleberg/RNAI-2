@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext } from "react";
 import auth from "./firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export const Context = createContext()
 
@@ -11,10 +11,22 @@ export function AuthContext({ children }){
     useEffect(() => {
         let unsubscribe;
         unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log("setting loading to false")
             setLoading(false);
-            if (currentUser) setUser(true)
-            else setUser(null)
+            if (currentUser) {
+                currentUser.getIdTokenResult().then((idTokenResult) => {
+                    if (idTokenResult.claims.approved == true){
+                        setUser("Approved")
+                    } else {
+                        setUser("Created")
+                        signOut(auth).then(() => {
+                            console.log('User created and signed out');
+                        });
+                    }
+                })
+            }
+            else {
+                setUser("SignedOut")
+            }
         });
 
         return () => {

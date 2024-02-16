@@ -21,10 +21,9 @@ import ResetPassword from './components/ResetPassword';
 import PaperDetails from './components/PaperDetails';
 import Author from './components/Author';
 import GrantDetails from './components/GrantDetails';
+import ApprovalPending from './components/ApprovalPending';
 
 function App(){
-
-  // const email = "syedhass@usc.edu"
 
   const [email, setEmail] = useState('')
   
@@ -108,7 +107,7 @@ function App(){
         <>
         <Header />
         <div className="form">
-          <SignUpEmail />
+          <SignUpEmail setEmail_={setEmail}/>
           <Line />
           <SignUpGoogle />
         </div>
@@ -140,6 +139,14 @@ function App(){
         <>
           <Header />
           <ResetPassword email={email}/>
+        </>
+    },
+    {
+      path: '/approval-pending',
+      element: 
+        <>
+          <Header />
+          <ApprovalPending />
         </>
     }
   ]);
