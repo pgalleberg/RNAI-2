@@ -43,6 +43,7 @@ pip install -r requirements.txt
 ```
 cd backend
 source env/bin/activate
+flask run
 ```
 
 ### Step 6 - Run celery
