@@ -9,6 +9,14 @@ The steps below assume that:
 5. Node.js and npm is installed
 6. You are using MacOS
 
+### Step 0 - Set up .env file
+
+```
+cd rnai-step-0
+cp .example-env .env
+nano .env #populate the API keys
+```
+
 ### Step 1 - Run the react application
 
 ```
@@ -17,20 +25,31 @@ npm install
 npm run start
 ```
 
-### Step 2 - Start redis
+### Step 2 - Set up the backend .env file and serviceAccountKey.json
+
+```
+cd backend
+cp .example-env .env
+nano .env #populate the API keys
+
+cp .example-serviceAccountKey.json .serviceAccountKey.json
+nano .serviceAccountKey.json
+```
+
+### Step 3 - Start redis
 
 ```
 redis-server
 ```
 
-### Step 3 - Create a python virtual environment (first time only)
+### Step 4 - Create a python virtual environment (first time only)
 
 ```
 cd backend
 virtualenv env
 ```
 
-### Step 4 - Install python dependencies
+### Step 5 - Install python dependencies
 
 ```
 cd backend
@@ -38,7 +57,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-### Step 5 - Run the flask application
+### Step 6 - Run the flask application
 
 ```
 cd backend
@@ -46,7 +65,7 @@ source env/bin/activate
 flask run
 ```
 
-### Step 6 - Run celery
+### Step 7 - Run celery
 
 ```
 cd backend
@@ -54,7 +73,7 @@ source env/bin/activate
 celery -A app:celery worker --loglevel=INFO > ../logs/celery.log 2>&1
 ```
 
-## Step 7 - Run flower (optional)
+## Step 8 - Run flower (optional)
 
 ```
 cd backend
