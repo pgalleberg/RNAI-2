@@ -78,8 +78,14 @@ def getData(vertical_id, record):
             )
         )
     ]
+    patentsChain = [
+        chain(
+            getPatents.s(vertical_id, query, record['numberOfPatents']),
+            insertInDb.s("patents")
+        ) for query, _ in queries.items()
+    ]
 
-    workflow = group(grantsChain + papersChain)
+    workflow = group(grantsChain + papersChain + patentsChain)
     chord(workflow)(update_vertical.si(vertical_id, 'Completed'))
 
 
@@ -179,6 +185,33 @@ def getAuthorDetails(self, paper_details, index):
                 print("getAuthorDetails::response: {}".format(response))
             
             #TODO: No return statement here. Should there be?
+
+@celery.task(bind=True, rate_limit="100/s", soft_time_limit=100, max_retries=3, default_retry_delay=30)
+def getPatents(self, vertical_id, query, min_relevant_patents):
+    print("getRelevantPatents::getRelevantPatents API called")
+    serp_api_key = os.getenv("SERP_API_KEY")
+    try:
+        url = f"https://serpapi.com/search.json?engine=google_patents&q={query}&num={min_relevant_patents}&api_key={serp_api_key}"
+
+        response = requests.get(url)
+        print("resp", response)
+        response = response.json()
+        data = response["organic_results"]
+        for index, entity in enumerate(data):
+            entity["vertical_id"] = vertical_id
+        
+        return data
+
+    except (SoftTimeLimitExceeded, S2Error) as e:
+        print("getRelevantPatents::e: {}".format(e))
+        try: 
+            self.retry()
+
+        except MaxRetriesExceededError as e:
+            print("getRelevantPatents::MaxRetriesExceededError")
+            print("getRelevantPatents::e: {}".format(e))
+
+            return -1
             
 
 @celery.task(bind=True, soft_time_limit=180, max_retries=3, default_retry_delay=30)

@@ -207,3 +207,16 @@ def updateVertical():
 
     return updated_document, 200
 
+@ui.route('/api/patent_details', methods=['GET'])
+def getPatentDetails():
+    id = request.args.get('id')
+    collection = db['patents']
+    query = {
+        "vertical_id": id
+    }
+    result_get = list(collection.find(query).sort('rank', ASCENDING))
+    
+    for patent in result_get:
+        patent['_id'] = str(patent['_id'])
+    
+    return jsonify(result_get)
