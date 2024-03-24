@@ -180,3 +180,4 @@ serviceAccountKey.json
 grants-gov/analysis.py
 grants-gov/data/*
 grants-gov/unique_tags.py
+.serviceAccountKey.json
