@@ -186,7 +186,7 @@ def getAuthorDetails(self, paper_details, index):
             
             #TODO: No return statement here. Should there be?
 
-@celery.task(bind=True, rate_limit="100/s", soft_time_limit=100, max_retries=3, default_retry_delay=30)
+@celery.task(bind=True, rate_limit="1/s", soft_time_limit=100, max_retries=3, default_retry_delay=30)
 def getPatents(self, vertical_id, query, min_relevant_patents):
     print("getRelevantPatents::getRelevantPatents API called")
     serp_api_key = os.getenv("SERP_API_KEY")
