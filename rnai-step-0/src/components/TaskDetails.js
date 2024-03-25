@@ -11,7 +11,7 @@ import {
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Paper from "./Paper";
 import Grant from "./Grant";
-import PatentDetails from "./PatentDetail";
+import PatentDetails from "./Patent";
 
 const TaskDetails = () => {
   console.log("TaskDetails rendered");

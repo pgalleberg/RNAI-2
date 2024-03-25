@@ -34,7 +34,7 @@ app.register_blueprint(ui, url_prefix='')
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 s2_api_key = os.getenv("S2_API_KEY")
-
+serp_api_key = os.getenv("SERP_API_KEY")
 headers = {
     'x-api-key': s2_api_key
 }
@@ -80,9 +80,9 @@ def getData(vertical_id, record):
     ]
     patentsChain = [
         chain(
-            getPatents.s(vertical_id, query, record['numberOfPatents']),
+            getPatents.s(vertical_id, record["query"], record['numberOfPatents']),
             insertInDb.s("patents")
-        ) for query, _ in queries.items()
+        )
     ]
 
     workflow = group(grantsChain + papersChain + patentsChain)
@@ -186,10 +186,10 @@ def getAuthorDetails(self, paper_details, index):
             
             #TODO: No return statement here. Should there be?
 
-@celery.task(bind=True, rate_limit="1/s", soft_time_limit=100, max_retries=3, default_retry_delay=30)
+@celery.task(bind=True, soft_time_limit=100, max_retries=3, default_retry_delay=30)
 def getPatents(self, vertical_id, query, min_relevant_patents):
-    print("getRelevantPatents::getRelevantPatents API called")
-    serp_api_key = os.getenv("SERP_API_KEY")
+    print("getPatents::getPatents API called")
+    
     try:
         url = f"https://serpapi.com/search.json?engine=google_patents&q={query}&num={min_relevant_patents}&api_key={serp_api_key}"
 
@@ -197,21 +197,14 @@ def getPatents(self, vertical_id, query, min_relevant_patents):
         print("resp", response)
         response = response.json()
         data = response["organic_results"]
-        for index, entity in enumerate(data):
+        for _, entity in enumerate(data):
             entity["vertical_id"] = vertical_id
         
         return data
 
-    except (SoftTimeLimitExceeded, S2Error) as e:
-        print("getRelevantPatents::e: {}".format(e))
-        try: 
-            self.retry()
-
-        except MaxRetriesExceededError as e:
-            print("getRelevantPatents::MaxRetriesExceededError")
-            print("getRelevantPatents::e: {}".format(e))
-
-            return -1
+    except Exception as e:
+        print("getPatents::e: {}".format(e))
+        return -1
             
 
 @celery.task(bind=True, soft_time_limit=180, max_retries=3, default_retry_delay=30)
