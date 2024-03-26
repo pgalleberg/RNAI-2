@@ -10,12 +10,15 @@ const Patent = ({ patent }) => {
         marginBottom: "20px",
         backgroundColor: "whitesmoke",
         padding: "10px",
+        borderRadius: "10px",
       }}
     >
-      <Link to={`/patents/${patent.vertical_id}`}>
-        <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
-      </Link>
+      <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
       <p className="author">{patent.inventor}</p>
+      <div>
+        <p className="author">{patent.assignee}</p>
+        <p className="author">{patent.publication_number}</p>
+      </div>
       <p style={{ margin: "0px" }}>
         <span className="detail">Granted: {patent.grant_date}</span>
         <span className="detail">Filled: {patent.filing_date}</span>
@@ -23,16 +26,19 @@ const Patent = ({ patent }) => {
         <span className="detail">Published: {patent.publication_date}</span>
       </p>
       {patent.snippet && (
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-          {patent.thumbnail && (
-            <img
-              src={patent.thumbnail}
-              alt={patent.title}
-              style={{ marginRight: "10px" }}
-            />
-          )}
-          <p style={{ margin: 0, textAlign: "justify" }}>{patent.snippet}</p>
-        </div>
+        <>
+          <span className="text">Abstract</span>
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            {patent.thumbnail && (
+              <img
+                src={patent.thumbnail}
+                alt={patent.title}
+                style={{ marginRight: "10px" }}
+              />
+            )}
+            <p style={{ margin: 0, textAlign: "justify" }}>{patent.snippet}</p>
+          </div>
+        </>
       )}
       <div className="pdf">
         <br></br>
