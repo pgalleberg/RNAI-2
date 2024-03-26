@@ -14,10 +14,16 @@ const Patent = ({ patent }) => {
       }}
     >
       <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
-      <p className="author">{patent.inventor}</p>
+      <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
+        {patent.inventor}
+      </p>
       <div>
-        <p className="author">{patent.assignee}</p>
-        <p className="author">{patent.publication_number}</p>
+        <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
+          {patent.assignee}
+        </p>
+        <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
+          {patent.publication_number}
+        </p>
       </div>
       <p style={{ margin: "0px" }}>
         <span className="detail">Granted: {patent.grant_date}</span>
