@@ -8,6 +8,7 @@ The steps below assume that:
 4. redis is installed
 5. Node.js and npm is installed
 6. You are using MacOS
+7. Or use Linux
 
 ### Step 0 - Set up .env file
 
