@@ -75,8 +75,15 @@ const PatentDetailInner = ({ patentDetail }) => {
                   src={i}
                   style={{
                     border: "2px solid #e5e5e5",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    height: "150px",
+                    marginRight: "10px",
+                    /* Additional styles for images */
+                    display: "inline-block",
+                    verticalAlign: "middle",
                   }}
-                  width={100}
+                  width="contains"
                 />
               ))}
             </div>
