@@ -81,12 +81,34 @@ def getData(vertical_id, record):
     patentsChain = [
         chain(
             getPatents.s(vertical_id, record["query"], record['numberOfPatents']),
-            insertInDb.s("patents")
+            group(
+                [insertInDb.s("patents")] + 
+                [chain(
+                    getPatentDetail.s(vertical_id),
+                    insertInDb.s("patentDetails")
+                )]
+            )
+            
         )
     ]
 
     workflow = group(grantsChain + papersChain + patentsChain)
     chord(workflow)(update_vertical.si(vertical_id, 'Completed'))
+
+@celery.task(bind=True, max_retries=3, defauly_retry_delay=10)
+def getPatentDetail(self, patents, vertical_id):
+    print("getPatentDetails::getPatentDEtails API called")
+    patentDetails = []
+    for patent in patents:
+        try:
+            response = requests.get(patent["serpapi_link"]+f"&api_key={serp_api_key}").json()
+            if response["search_metadata"]["status"] == "Error":
+                raise response["search_metadata"]["error"]
+            response["vertical_id"] = vertical_id
+            patentDetails.append(response)
+        except Exception as e:
+            print("getPatentDetail::e: {}".format(e))
+    return patentDetails
 
 
 @celery.task(bind=True, rate_limit='1/s', soft_time_limit=120, max_retries=3, default_retry_delay=10)
@@ -196,6 +218,8 @@ def getPatents(self, vertical_id, query, min_relevant_patents):
         response = requests.get(url)
         print("resp", response)
         response = response.json()
+        if response["search_metadata"]["status"] == "Error":
+            raise response["search_metadata"]["error"]
         data = response["organic_results"]
         for _, entity in enumerate(data):
             entity["vertical_id"] = vertical_id

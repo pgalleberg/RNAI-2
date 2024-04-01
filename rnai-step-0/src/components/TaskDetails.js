@@ -66,8 +66,7 @@ const TaskDetails = () => {
   };
 
   const fetchPatentDetails = async () => {
-    const url =
-      process.env.REACT_APP_FLASK_WEBSERVER + "patent_details?id=" + id;
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + "patents?id=" + id;
     const res = await fetch(url);
     const data = await res.json();
 
