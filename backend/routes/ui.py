@@ -207,16 +207,48 @@ def updateVertical():
 
     return updated_document, 200
 
-@ui.route('/api/patent_details', methods=['GET'])
-def getPatentDetails():
+@ui.route('/api/patents', methods=['GET'])
+def getPatent():
     id = request.args.get('id')
-    collection = db['patents']
+    collection = db['patentDetails']
     query = {
         "vertical_id": id
     }
     result_get = list(collection.find(query).sort('rank', ASCENDING))
-    
+    results = []
     for patent in result_get:
-        patent['_id'] = str(patent['_id'])
+        data = {}
+        data["id"] = str(patent['_id'])
+        # data["inventor"] = patent["inventor"]
+        data["title"] = patent["title"]
+        data["publication_date"] = patent["publication_date"]
+        data["priority_date"] = patent["priority_date"]
+        data["pdf"] = patent["pdf"]
+        data["abstract"] = patent["abstract"]
+        data["filing_date"] = patent["filing_date"]
+        data["assignee"] = patent["assignees"][0]
+        data["publication_number"] = patent["publication_number"]
+        data["vertical_id"] = patent["vertical_id"]
+        results.append(data)
     
-    return jsonify(result_get)
+    return jsonify(results)
+
+@ui.route("/api/patent-detail", methods=['GET'])
+def getPatentDetail():
+    from bson import ObjectId
+    patent_id = request.args.get("patent_id")
+    vertical_id = request.args.get("vertical_id")
+    print("patentid:", patent_id)
+    print("vertical_id", vertical_id)
+    query = {
+        "vertical_id": vertical_id,
+        "_id": ObjectId(patent_id)
+    }
+    collection = db["patentDetails"]
+
+    patent_details = collection.find_one(query)
+    if patent_details:
+        patent_details["_id"] = str(patent_details["_id"])
+        return jsonify(patent_details), 200
+    else:
+        return {}, 404

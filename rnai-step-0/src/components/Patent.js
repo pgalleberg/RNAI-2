@@ -13,10 +13,9 @@ const Patent = ({ patent }) => {
         borderRadius: "10px",
       }}
     >
-      <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
-      <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
-        {patent.inventor}
-      </p>
+      <Link to={`/patent-detail/${patent.id}/${patent.vertical_id}`}>
+        <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
+      </Link>
       <div>
         <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
           {patent.assignee}
@@ -31,7 +30,7 @@ const Patent = ({ patent }) => {
         <span className="detail">Priority: {patent.priority_date}</span>
         <span className="detail">Published: {patent.publication_date}</span>
       </p>
-      {patent.snippet && (
+      {patent.abstract && (
         <>
           <span className="text">Abstract</span>
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>
@@ -42,7 +41,7 @@ const Patent = ({ patent }) => {
                 style={{ marginRight: "10px" }}
               />
             )}
-            <p style={{ margin: 0, textAlign: "justify" }}>{patent.snippet}</p>
+            <p style={{ margin: 0, textAlign: "justify" }}>{patent.abstract}</p>
           </div>
         </>
       )}
