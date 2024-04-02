@@ -220,15 +220,17 @@ def getPatent():
         data = {}
         data["id"] = str(patent['_id'])
         # data["inventor"] = patent["inventor"]
-        data["title"] = patent["title"]
-        data["publication_date"] = patent["publication_date"]
-        data["priority_date"] = patent["priority_date"]
-        data["pdf"] = patent["pdf"]
-        data["abstract"] = patent["abstract"]
-        data["filing_date"] = patent["filing_date"]
-        data["assignee"] = patent["assignees"][0]
-        data["publication_number"] = patent["publication_number"]
-        data["vertical_id"] = patent["vertical_id"]
+        data["title"] = patent.get("title", None)
+        data["publication_date"] = patent.get("publication_date", None)
+        data["priority_date"] = patent.get("priority_date", None)
+        data["pdf"] = patent.get("pdf", None)
+        data["abstract"] = patent.get("abstract", None)
+        data["filing_date"] = patent.get("filing_date", None)
+        if patent.get("assignees", None) and len(patent["assignees"]) > 0:
+            data["assignee"] = patent["assignees"][0]
+
+        data["publication_number"] = patent.get("publication_number", None)
+        data["vertical_id"] = patent.get("vertical_id", None)
         results.append(data)
     
     return jsonify(results)
