@@ -59,9 +59,13 @@ const PatentDetailInner = ({ patentDetail }) => {
             </p>
             <p>{patentDetail.abstract}</p>
           </div>
-          <div>
+          <div
+            style={{
+              display: patentDetail.images ? "block" : "none",
+            }}
+          >
             <p>
-              <strong>Images ({patentDetail.images.length})</strong>
+              <strong>Images ({patentDetail.images?.length})</strong>
             </p>
             <div
               style={{
@@ -70,7 +74,7 @@ const PatentDetailInner = ({ patentDetail }) => {
                 overflowX: "scroll",
               }}
             >
-              {patentDetail.images.map((i) => (
+              {patentDetail.images?.map((i) => (
                 <img
                   src={i}
                   style={{
@@ -91,7 +95,11 @@ const PatentDetailInner = ({ patentDetail }) => {
         </div>
         <PatentCard patentDetail={patentDetail} />
       </div>
-      <div>
+      <div
+        style={{
+          display: patentDetail.classifications ? "block" : "none",
+        }}
+      >
         <p>
           <strong>Classifications</strong>
         </p>
@@ -169,7 +177,12 @@ const PatentCard = ({ patentDetail }) => {
           Download PDF
         </a>
       </div>
-      <div style={{ borderBottom: "1px solid #e5e5e5" }}>
+      <div
+        style={{
+          borderBottom: "1px solid #e5e5e5",
+          display: patentDetail.inventors ? "block" : "none",
+        }}
+      >
         <p
           style={{
             margin: 0,
