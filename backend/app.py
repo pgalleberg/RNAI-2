@@ -228,7 +228,7 @@ def getPatents(self, vertical_id, query, min_relevant_patents):
 
     except Exception as e:
         print("getPatents::e: {}".format(e))
-        return -1
+        []
             
 
 @celery.task(bind=True, soft_time_limit=180, max_retries=3, default_retry_delay=30)
