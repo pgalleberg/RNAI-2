@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faFilePdf } from "@fortawesome/free-solid-svg-icons";
@@ -37,20 +38,26 @@ const PatentDetail = () => {
     </div>
   ) : (
     <div
+      className="papers"
       style={{
-        maxWidth: "1440px",
-        margin: "auto",
+        width: "75%",
       }}
     >
-      <PatentDetailInner patentDetail={patentDetails} />
+      <PatentDetailInner
+        patentDetail={patentDetails}
+        patent_id={patent_id}
+        vertical_id={vertical_id}
+      />
     </div>
   );
 };
 
-const PatentDetailInner = ({ patentDetail }) => {
+const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
   return (
     <div style={{ textAlign: "left" }}>
-      <h3>{patentDetail.title}</h3>
+      <Link to={`/patent-detail/${patent_id}/${vertical_id}`}>
+        <h2>{patentDetail.title}</h2>
+      </Link>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ width: "48%" }}>
           <div>
@@ -59,41 +66,40 @@ const PatentDetailInner = ({ patentDetail }) => {
             </p>
             <p>{patentDetail.abstract}</p>
           </div>
-          <div
-            style={{
-              display: patentDetail.images ? "block" : "none",
-            }}
-          >
-            <p>
-              <strong>Images ({patentDetail.images?.length})</strong>
-            </p>
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                overflowX: "scroll",
-              }}
-            >
-              {patentDetail.images?.map((i) => (
-                <img
-                  src={i}
-                  style={{
-                    border: "2px solid #e5e5e5",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    height: "150px",
-                    marginRight: "10px",
-                    /* Additional styles for images */
-                    display: "inline-block",
-                    verticalAlign: "middle",
-                  }}
-                  width="contains"
-                />
-              ))}
-            </div>
-          </div>
         </div>
         <PatentCard patentDetail={patentDetail} />
+      </div>
+      <div
+        style={{
+          display: patentDetail.images ? "block" : "none",
+        }}
+      >
+        <p>
+          <strong>Images ({patentDetail.images?.length})</strong>
+        </p>
+        <div
+          style={{
+            display: "flex",
+            width: "50%",
+            overflowX: "scroll",
+          }}
+        >
+          {patentDetail.images?.map((i) => (
+            <img
+              src={i}
+              style={{
+                border: "2px solid #e5e5e5",
+                maxWidth: "100%",
+                maxHeight: "100%",
+                height: "150px",
+                marginRight: "10px",
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+              width="contains"
+            />
+          ))}
+        </div>
       </div>
       <div
         style={{
@@ -109,17 +115,19 @@ const PatentDetailInner = ({ patentDetail }) => {
           }}
         >
           {patentDetail.classifications.map((i) => (
-            <p
+            <div
               style={{
                 paddingLeft: "15px",
                 fontSize: "13px",
+                display: "flex",
+                // justifyContent: "space-around",
               }}
             >
-              <span style={{ paddingRight: "10px" }}>
+              <span style={{ paddingRight: "10px", width: "100px" }}>
                 {i.code} {"  "}
               </span>
-              {i.description}
-            </p>
+              <span>{i.description}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -192,7 +200,9 @@ const PatentCard = ({ patentDetail }) => {
           }}
         >
           <strong>Inventors</strong>:{" "}
-          {patentDetail.inventors.map((inventor) => inventor.name).join(", ")}
+          {patentDetail.inventors.map((inventor) => (
+            <a>{inventor.name} </a>
+          ))}
         </p>
         <p
           style={{
@@ -247,7 +257,7 @@ const PatentCard = ({ patentDetail }) => {
                 textAlign: "left",
               }}
             >
-              <span style={{ paddingRight: "20px" }}>
+              <span style={{ paddingRight: "20px", width: "100px" }}>
                 <strong>{event.date}</strong>
               </span>
               <span>{event.title}</span>

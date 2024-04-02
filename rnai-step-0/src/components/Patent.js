@@ -25,10 +25,30 @@ const Patent = ({ patent }) => {
         </p>
       </div>
       <p style={{ margin: "0px" }}>
-        <span className="detail">Granted: {patent.grant_date}</span>
-        <span className="detail">Filled: {patent.filing_date}</span>
-        <span className="detail">Priority: {patent.priority_date}</span>
-        <span className="detail">Published: {patent.publication_date}</span>
+        <span
+          className="detail"
+          style={{ display: patent.grant_date ? "inherit" : "none" }}
+        >
+          Granted: {patent.grant_date}
+        </span>
+        <span
+          className="detail"
+          style={{ display: patent.grant_date ? "inherit" : "none" }}
+        >
+          Filled: {patent.filing_date}
+        </span>
+        <span
+          className="detail"
+          style={{ display: patent.grant_date ? "inherit" : "none" }}
+        >
+          Priority: {patent.priority_date}
+        </span>
+        <span
+          className="detail"
+          style={{ display: patent.grant_date ? "inherit" : "none" }}
+        >
+          Published: {patent.publication_date}
+        </span>
       </p>
       {patent.abstract && (
         <>
