@@ -50,7 +50,7 @@ const PatentDetail = () => {
 const PatentDetailInner = ({ patentDetail }) => {
   return (
     <div style={{ textAlign: "left" }}>
-      <h4>{patentDetail.title}</h4>
+      <h3>{patentDetail.title}</h3>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ width: "48%" }}>
           <div>
@@ -90,6 +90,30 @@ const PatentDetailInner = ({ patentDetail }) => {
           </div>
         </div>
         <PatentCard patentDetail={patentDetail} />
+      </div>
+      <div>
+        <p>
+          <strong>Classifications</strong>
+        </p>
+        <div
+          style={{
+            border: "1px solid #eaeaea",
+          }}
+        >
+          {patentDetail.classifications.map((i) => (
+            <p
+              style={{
+                paddingLeft: "15px",
+                fontSize: "13px",
+              }}
+            >
+              <span style={{ paddingRight: "10px" }}>
+                {i.code} {"  "}
+              </span>
+              {i.description}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
