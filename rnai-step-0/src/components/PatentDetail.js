@@ -131,6 +131,48 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
           ))}
         </div>
       </div>
+      <div
+        style={{
+          display: patentDetail.claims ? "block" : "none",
+          padding: "10px",
+        }}
+      >
+        {patentDetail.claims?.map((i) => (
+          <p
+            style={{
+              margin: 0,
+              fontSize: "13px",
+            }}
+          >
+            {i}
+          </p>
+        ))}
+      </div>
+      <div
+        style={{
+          display: patentDetail.cited_by?.original ? "block" : "none",
+          padding: "10px",
+        }}
+      >
+        <table>
+          <tr>
+            <th>Publication number</th>
+            <th>Priority date</th>
+            <th>Publication date</th>
+            <th>Assignee</th>
+            <th>Title</th>
+          </tr>
+          {patentDetail.cited_by?.original.map((i) => (
+            <tr>
+              <td>{i.publication_number}</td>
+              <td>{i.priority_date}</td>
+              <td>{i.publication_date}</td>
+              <td>{i.assignee_original}</td>
+              <td>{i.title}</td>
+            </tr>
+          ))}
+        </table>
+      </div>
     </div>
   );
 };
@@ -262,6 +304,27 @@ const PatentCard = ({ patentDetail }) => {
               </span>
               <span>{event.title}</span>
             </p>
+          ))}
+        </p>
+      </div>
+      <div
+        style={{
+          borderBottom: "1px solid #e5e5e5",
+          padding: "10px",
+          display: patentDetail.external_links ? "inherit" : "none",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontSize: "13px",
+          }}
+        >
+          <strong>External: </strong>
+          {patentDetail.external_links?.map((i) => (
+            <a href={i.link} target="_blank">
+              {i.text}{" "}
+            </a>
           ))}
         </p>
       </div>
