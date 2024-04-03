@@ -228,6 +228,7 @@ def getPatents(self, vertical_id, query, min_relevant_patents):
 
     except Exception as e:
         print("getPatents::e: {}".format(e))
+        print("getPatents::e: {}".format("API has been consumed completely."))
         return []
             
 
