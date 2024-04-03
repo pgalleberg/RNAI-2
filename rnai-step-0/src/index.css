@@ -550,3 +550,24 @@ p:focus {
   align-items: center;
   height: 60vh;
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  border: 1px solid #eaeaea;
+}
+
+th {
+  background-color: #fafafa;
+  color: #757575;
+  white-space: nowrap;
+  text-align: left;
+  padding: 10px
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #eaeaea;
+
+}
