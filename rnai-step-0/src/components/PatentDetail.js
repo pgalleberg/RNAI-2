@@ -161,6 +161,7 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
           padding: "10px",
         }}
       >
+        <h4>Citations ({patentDetail.cited_by?.original?.length})</h4>
         <table>
           <tr>
             <th>Publication number</th>
