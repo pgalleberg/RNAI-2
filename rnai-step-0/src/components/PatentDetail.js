@@ -123,7 +123,14 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
                 // justifyContent: "space-around",
               }}
             >
-              <span style={{ paddingRight: "10px", width: "100px" }}>
+              <span
+                style={{
+                  paddingRight: "10px",
+                  width: "100px",
+                  paddingTop: "5px",
+                  paddingBottom: "5px",
+                }}
+              >
                 {i.code} {"  "}
               </span>
               <span>{i.description}</span>
