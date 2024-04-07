@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-const fetchInventorDetail = async (vertical_id, inventor_name) => {
+const fetchInventorDetail = async (vertical_id, publication_number) => {
   const url =
     process.env.REACT_APP_FLASK_WEBSERVER +
     "inventor-detail?" +
-    "vertical_id=" +
+    "publication_number=" +
+    publication_number +
+    "&vertical_id=" +
     vertical_id;
   const res = await fetch(url);
   const data = await res.json();
@@ -17,12 +19,13 @@ const fetchInventorDetail = async (vertical_id, inventor_name) => {
 };
 
 const InvenorDetail = () => {
-  const { vertical_id, inventor_name } = useParams();
+  const { vertical_id, publication_number } = useParams();
+  console.log(useParams());
   const [isLoading, setIsLoading] = useState(true);
   const [inventorInfo, setInventorInfo] = useState({});
   useEffect(() => {
     setIsLoading(true);
-    fetchInventorDetail(vertical_id, inventor_name)
+    fetchInventorDetail(vertical_id, publication_number)
       .then((res) => {
         setIsLoading(false);
         setInventorInfo(res);

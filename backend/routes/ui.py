@@ -258,8 +258,10 @@ def getPatentDetail():
 @ui.route("/api/inventor-detail", methods=["GET"])
 def getInventorDetail():
     vertical_id = request.args.get("vertical_id")
+    publication_number = request.args.get("publication_number")
     query = {
-        "vertical_id": vertical_id
+        "vertical_id": vertical_id,
+        "publication_number": publication_number
     }
     collection = db["inventorDetails"]
     inventor_detail = collection.find_one(query)
