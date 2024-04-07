@@ -23,6 +23,7 @@ import Author from "./components/Author";
 import GrantDetails from "./components/GrantDetails";
 import ApprovalPending from "./components/ApprovalPending";
 import PatentDetails from "./components/PatentDetail";
+import InvenorDetail from "./components/InventorDetail";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -83,12 +84,23 @@ function App() {
           ),
         },
         {
-          path: "/patent-detail/:patent_id/:vertical_id",
+          path: "/patent-detail/:publication_number/:vertical_id",
           element: (
             <>
               <Protected>
                 <Navbar />
                 <PatentDetails />
+              </Protected>
+            </>
+          ),
+        },
+        {
+          path: "/inventor-detail/:publication_number/:vertical_id",
+          element: (
+            <>
+              <Protected>
+                <Navbar />
+                <InvenorDetail />
               </Protected>
             </>
           ),

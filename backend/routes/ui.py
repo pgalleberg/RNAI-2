@@ -238,13 +238,13 @@ def getPatent():
 @ui.route("/api/patent-detail", methods=['GET'])
 def getPatentDetail():
     from bson import ObjectId
-    patent_id = request.args.get("patent_id")
+    publication_number = request.args.get("publication_number")
     vertical_id = request.args.get("vertical_id")
-    print("patentid:", patent_id)
+    print("publication_number:", publication_number)
     print("vertical_id", vertical_id)
     query = {
         "vertical_id": vertical_id,
-        "_id": ObjectId(patent_id)
+        "publication_number": publication_number
     }
     collection = db["patentDetails"]
 
@@ -254,3 +254,18 @@ def getPatentDetail():
         return jsonify(patent_details), 200
     else:
         return {}, 404
+
+@ui.route("/api/inventor-detail", methods=["GET"])
+def getInventorDetail():
+    vertical_id = request.args.get("vertical_id")
+    query = {
+        "vertical_id": vertical_id
+    }
+    collection = db["inventorDetails"]
+    inventor_detail = collection.find_one(query)
+    if inventor_detail:
+        inventor_detail["_id"] = str(inventor_detail)
+        return jsonify(inventor_detail), 200
+    else:
+        return {}, 404
+

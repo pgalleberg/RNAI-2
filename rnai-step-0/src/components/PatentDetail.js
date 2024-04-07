@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
 const PatentDetail = () => {
-  const { patent_id, vertical_id } = useParams();
+  const { publication_number, vertical_id } = useParams();
   const [patentDetails, setPatentDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -18,13 +18,13 @@ const PatentDetail = () => {
       setIsLoading(false);
     };
     getPatentDetail();
-  }, [patent_id]);
+  }, [publication_number]);
 
   const fetchPatentDetails = async () => {
     const url =
       process.env.REACT_APP_FLASK_WEBSERVER +
-      "patent-detail?patent_id=" +
-      patent_id +
+      "patent-detail?publication_number=" +
+      publication_number +
       "&vertical_id=" +
       vertical_id;
     const res = await fetch(url);
@@ -45,17 +45,21 @@ const PatentDetail = () => {
     >
       <PatentDetailInner
         patentDetail={patentDetails}
-        patent_id={patent_id}
+        publication_number={publication_number}
         vertical_id={vertical_id}
       />
     </div>
   );
 };
 
-const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
+const PatentDetailInner = ({
+  patentDetail,
+  publication_number,
+  vertical_id,
+}) => {
   return (
     <div style={{ textAlign: "left" }}>
-      <Link to={`/patent-detail/${patent_id}/${vertical_id}`}>
+      <Link to={`/patent-detail/${publication_number}/${vertical_id}`}>
         <h2>{patentDetail.title}</h2>
       </Link>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -101,86 +105,111 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
           ))}
         </div>
       </div>
-      <div
-        style={{
-          display: patentDetail.classifications ? "block" : "none",
-        }}
-      >
-        <p>
-          <strong>Classifications</strong>
-        </p>
-        <div
-          style={{
-            border: "1px solid #eaeaea",
-          }}
-        >
-          {patentDetail.classifications.map((i) => (
-            <div
-              style={{
-                paddingLeft: "15px",
-                fontSize: "13px",
-                display: "flex",
-                // justifyContent: "space-around",
-              }}
-            >
-              <span
+      {patentDetail.classifications && (
+        <div>
+          <p>
+            <strong>Classifications</strong>
+          </p>
+          <table>
+            {patentDetail.classifications.map((i) => (
+              <tr
                 style={{
-                  paddingRight: "10px",
-                  width: "100px",
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
+                  paddingLeft: "15px",
+                  fontSize: "13px",
                 }}
               >
-                {i.code} {"  "}
-              </span>
-              <span>{i.description}</span>
-            </div>
-          ))}
+                <td
+                  style={{
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                  }}
+                >
+                  {i.code} {"  "}
+                </td>
+                <td
+                  style={{
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                  }}
+                >
+                  {i.description}
+                </td>
+              </tr>
+            ))}
+          </table>
         </div>
-      </div>
+      )}
       <div
         style={{
-          display: patentDetail.claims ? "block" : "none",
-          padding: "10px",
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
         }}
       >
-        {patentDetail.claims?.map((i) => (
+        <div
+          style={{
+            width: "50%",
+          }}
+        >
+          <h4>Description</h4>
           <p
             style={{
               margin: 0,
               fontSize: "13px",
             }}
           >
-            {i}
+            {patentDetail.description}
           </p>
-        ))}
+        </div>
+        <div>
+          {patentDetail.claims && (
+            <div
+              style={{
+                padding: "10px",
+              }}
+            >
+              <h4>Claims</h4>
+              {patentDetail.claims?.map((i) => (
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "13px",
+                  }}
+                >
+                  {i}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-      <div
-        style={{
-          display: patentDetail.cited_by?.original ? "block" : "none",
-          padding: "10px",
-        }}
-      >
-        <h4>Citations ({patentDetail.cited_by?.original?.length})</h4>
-        <table>
-          <tr>
-            <th>Publication number</th>
-            <th>Priority date</th>
-            <th>Publication date</th>
-            <th>Assignee</th>
-            <th>Title</th>
-          </tr>
-          {patentDetail.cited_by?.original.map((i) => (
+      {patentDetail?.cited_by?.original && (
+        <div
+          style={{
+            padding: "10px",
+          }}
+        >
+          <h4>Citations ({patentDetail?.cited_by?.original?.length})</h4>
+          <table>
             <tr>
-              <td>{i.publication_number}</td>
-              <td>{i.priority_date}</td>
-              <td>{i.publication_date}</td>
-              <td>{i.assignee_original}</td>
-              <td>{i.title}</td>
+              <th>Publication number</th>
+              <th>Priority date</th>
+              <th>Publication date</th>
+              <th>Assignee</th>
+              <th>Title</th>
             </tr>
-          ))}
-        </table>
-      </div>
+            {patentDetail?.cited_by?.original.map((i) => (
+              <tr>
+                <td>{i.publication_number}</td>
+                <td>{i.priority_date}</td>
+                <td>{i.publication_date}</td>
+                <td>{i.assignee_original}</td>
+                <td>{i.title}</td>
+              </tr>
+            ))}
+          </table>
+        </div>
+      )}
     </div>
   );
 };
@@ -238,22 +267,32 @@ const PatentCard = ({ patentDetail }) => {
       <div
         style={{
           borderBottom: "1px solid #e5e5e5",
-          display: patentDetail.inventors ? "block" : "none",
         }}
       >
-        <p
-          style={{
-            margin: 0,
-            paddingLeft: "10px",
-            paddingTop: "10px",
-            fontSize: "13px",
-          }}
-        >
-          <strong>Inventors</strong>:{" "}
-          {patentDetail.inventors.map((inventor) => (
-            <a>{inventor.name} </a>
-          ))}
-        </p>
+        {patentDetail.inventors && (
+          <p
+            style={{
+              margin: 0,
+              paddingLeft: "10px",
+              paddingTop: "10px",
+              fontSize: "13px",
+            }}
+          >
+            <strong>Inventors</strong>:{" "}
+            {patentDetail.inventors.map((inventor) => (
+              <a
+                href={
+                  "/inventor-detail/" +
+                  patentDetail.publication_number +
+                  "/" +
+                  patentDetail.vertical_id
+                }
+              >
+                {inventor.name}{" "}
+              </a>
+            ))}
+          </p>
+        )}
         <p
           style={{
             margin: 0,

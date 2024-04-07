@@ -84,8 +84,14 @@ def getData(vertical_id, record):
                 [insertInDb.s("patents")] + 
                 [chain(
                     getPatentDetail.s(vertical_id),
-                    insertInDb.s("patentDetails")
-                )]
+                    group(
+                        insertInDb.s("patentDetails"),
+                        chain(
+                            getInventorDetail.s(vertical_id),
+                            insertInDb.s("inventorDetails")
+                        )
+                    )
+                )] 
             )
             
         )
@@ -97,6 +103,7 @@ def getData(vertical_id, record):
 @celery.task(bind=True, max_retries=3, defauly_retry_delay=10)
 def getPatentDetail(self, patents, vertical_id):
     print("getPatentDetails::getPatentDEtails API called")
+    from bs4 import BeautifulSoup
     patentDetails = []
     for patent in patents:
         try:
@@ -104,6 +111,12 @@ def getPatentDetail(self, patents, vertical_id):
             if response["search_metadata"]["status"] == "Error":
                 raise response["search_metadata"]["error"]
             response["vertical_id"] = vertical_id
+            if response.get("description_link", None):
+                description = requests.get(response["description_link"])
+                soup = BeautifulSoup(description.content, "html.parser")
+                body_content = soup.find('body')
+                if body_content:
+                    response["description"] = body_content.text
             patentDetails.append(response)
         except Exception as e:
             print("getPatentDetail::e: {}".format(e))
@@ -150,7 +163,29 @@ def getRelevantPapers(self, vertical_id, query, num_relevant_papers):
             print("getRelevantPapers::response: {}".format(response))
         
         return -1 #TODO:what happens if I dont return anything?? What exactly happens if you return something or you don't?
-        
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=10)
+def getInventorDetail(self, patent_details, vertical_id):
+    print("getInventorDetail::getInventordetail api called.")
+    data = []
+    for patent_detail in patent_details:
+        for inventor in patent_detail["inventors"]:
+            try:
+                response = requests.get(inventor["serpapi_link"]+f"&api_key={serp_api_key}").json()
+                if response["search_metadata"]["status"] == "Error":
+                    raise response["search_metadata"]["error"]
+                if response.get("organic_results", None):
+                    inventor_data = {}
+                    inventor_data["name"] = inventor 
+                    inventor_data["patents"] = response["organic_results"]
+                    inventor_data["vertical_id"] = vertical_id
+                    inventor_data["publication_number"] = patent_detail["publication_number"]
+                    inventor_data["source_patent"] = patent_detail
+                    data.append(inventor_data)
+            except Exception as e:
+                print("getinventordetail::e::{}".format(e))
+    print("getInventorDetail::exiting")
+    return data
 
 @celery.task(bind=True, rate_limit='10/s', soft_time_limit=60, max_retries=3, default_retry_delay=10)
 def getAuthorDetails(self, paper_details, index):
