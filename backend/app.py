@@ -81,7 +81,6 @@ def getData(vertical_id, record):
         chain(
             getPatents.s(vertical_id, record["query"], record['numberOfPatents']),
             group(
-                [insertInDb.s("patents")] + 
                 [chain(
                     getPatentDetail.s(vertical_id),
                     group(

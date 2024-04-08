@@ -6,15 +6,23 @@ import { faSpinner, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
 const PatentDetail = () => {
   const { publication_number, vertical_id } = useParams();
-  const [patentDetails, setPatentDetails] = useState({});
+  const [patentDetails, setPatentDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setisError] = useState(false);
 
   sessionStorage.setItem("currentTab", "patents");
 
   useEffect(() => {
     const getPatentDetail = async () => {
-      const patentDetail = await fetchPatentDetails();
-      setPatentDetails(patentDetail);
+      setisError(false);
+      try {
+        const patentDetail = await fetchPatentDetails();
+        setPatentDetails(patentDetail);
+      } catch (error) {
+        console.log("PatentDetail", error);
+        setPatentDetails(null);
+        setisError(true);
+      }
       setIsLoading(false);
     };
     getPatentDetail();
@@ -36,7 +44,7 @@ const PatentDetail = () => {
     <div className="container">
       <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
     </div>
-  ) : (
+  ) : !!isError ? (
     <div
       className="papers"
       style={{
@@ -49,6 +57,8 @@ const PatentDetail = () => {
         vertical_id={vertical_id}
       />
     </div>
+  ) : (
+    <div>Not found</div>
   );
 };
 
@@ -161,27 +171,26 @@ const PatentDetailInner = ({
             {patentDetail.description}
           </p>
         </div>
-        <div>
-          {patentDetail.claims && (
-            <div
-              style={{
-                padding: "10px",
-              }}
-            >
-              <h4>Claims</h4>
-              {patentDetail.claims?.map((i) => (
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "13px",
-                  }}
-                >
-                  {i}
-                </p>
-              ))}
-            </div>
-          )}
-        </div>
+        {patentDetail.claims && (
+          <div
+            style={{
+              padding: "10px",
+              width: "50%",
+            }}
+          >
+            <h4>Claims</h4>
+            {patentDetail.claims?.map((i) => (
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "13px",
+                }}
+              >
+                {i}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
       {patentDetail?.cited_by?.original && (
         <div
@@ -317,46 +326,50 @@ const PatentCard = ({ patentDetail }) => {
         >
           <strong>Worldwide applications</strong>
         </p>
-        <p
-          style={{
-            fontSize: "13px",
-            margin: 0,
-          }}
-        >
-          {Object.entries(patentDetail.worldwide_applications)
-            .map(
-              ([year, countries]) =>
-                `${year} ${countries.map((i) => i.country_code).join(" ")}`
-            )
-            .join(", ")}
-        </p>
+        {patentDetail?.worldwide_applications && (
+          <p
+            style={{
+              fontSize: "13px",
+              margin: 0,
+            }}
+          >
+            {Object.entries(patentDetail.worldwide_applications)
+              .map(
+                ([year, countries]) =>
+                  `${year} ${countries.map((i) => i.country_code).join(" ")}`
+              )
+              .join(", ")}
+          </p>
+        )}
       </div>
-      <div style={{ borderBottom: "1px solid #e5e5e5", padding: "10px" }}>
-        <p
-          style={{
-            fontSize: "13px",
-            margin: 0,
-          }}
-        >
-          <strong>Application {patentDetail.application_number}</strong>
-          {patentDetail.events.map((event) => (
-            <p
-              style={{
-                fontSize: "13px",
-                margin: 0,
-                display: "flex",
-                width: "100%",
-                textAlign: "left",
-              }}
-            >
-              <span style={{ paddingRight: "20px", width: "100px" }}>
-                <strong>{event.date}</strong>
-              </span>
-              <span>{event.title}</span>
-            </p>
-          ))}
-        </p>
-      </div>
+      {patentDetail.application_number && (
+        <div style={{ borderBottom: "1px solid #e5e5e5", padding: "10px" }}>
+          <p
+            style={{
+              fontSize: "13px",
+              margin: 0,
+            }}
+          >
+            <strong>Application {patentDetail.application_number}</strong>
+            {patentDetail.events.map((event) => (
+              <p
+                style={{
+                  fontSize: "13px",
+                  margin: 0,
+                  display: "flex",
+                  width: "100%",
+                  textAlign: "left",
+                }}
+              >
+                <span style={{ paddingRight: "20px", width: "100px" }}>
+                  <strong>{event.date}</strong>
+                </span>
+                <span>{event.title}</span>
+              </p>
+            ))}
+          </p>
+        </div>
+      )}
       <div
         style={{
           borderBottom: "1px solid #e5e5e5",
