@@ -49,14 +49,14 @@ const InvenorDetail = () => {
             <div className="background"></div>
             <div className="author-details">
               <p style={{ fontSize: "24px", paddingBottom: "0px" }}>
-                <strong>{inventorInfo?.name?.name}</strong>
+                <strong>{inventorInfo?.name?.name || ""}</strong>
               </p>
 
               {inventorInfo.patents && (
                 <div className="author-stat">
                   <p>Highly Influential Citations</p>
                   <p>
-                    <strong>{inventorInfo.patents?.length}</strong>
+                    <strong>{inventorInfo.patents?.length || 0}</strong>
                   </p>
                 </div>
               )}
