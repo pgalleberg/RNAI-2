@@ -4,14 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-const fetchInventorDetail = async (vertical_id, publication_number) => {
+const fetchInventorDetail = async (vertical_id, patent_id, name) => {
   const url =
     process.env.REACT_APP_FLASK_WEBSERVER +
     "inventor-detail?" +
-    "publication_number=" +
-    publication_number +
+    "patent_id=" +
+    patent_id +
     "&vertical_id=" +
-    vertical_id;
+    vertical_id +
+    "&name=" +
+    name;
   const res = await fetch(url);
   const data = await res.json();
 
@@ -19,13 +21,13 @@ const fetchInventorDetail = async (vertical_id, publication_number) => {
 };
 
 const InvenorDetail = () => {
-  const { vertical_id, publication_number } = useParams();
+  const { vertical_id, patent_id, name } = useParams();
   console.log(useParams());
   const [isLoading, setIsLoading] = useState(true);
   const [inventorInfo, setInventorInfo] = useState({});
   useEffect(() => {
     setIsLoading(true);
-    fetchInventorDetail(vertical_id, publication_number)
+    fetchInventorDetail(vertical_id, patent_id, name)
       .then((res) => {
         setIsLoading(false);
         setInventorInfo(res);
@@ -70,7 +72,7 @@ const InvenorDetail = () => {
             </p>
             {
               <Link
-                to={`/patent-detail/${inventorInfo.source_patent?.publication_number}/${inventorInfo.vertical_id}`}
+                to={`/patent-detail/${inventorInfo.source_patent?.patent_id}/${inventorInfo.vertical_id}`}
               >
                 {inventorInfo.source_patent?.title}
               </Link>

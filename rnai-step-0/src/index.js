@@ -84,7 +84,7 @@ function App() {
           ),
         },
         {
-          path: "/patent-detail/:publication_number/:vertical_id",
+          path: "/patent-detail/:patent_id/:vertical_id",
           element: (
             <>
               <Protected>
@@ -95,7 +95,7 @@ function App() {
           ),
         },
         {
-          path: "/inventor-detail/:publication_number/:vertical_id",
+          path: "/inventor-detail/:patent_id/:vertical_id/:name",
           element: (
             <>
               <Protected>

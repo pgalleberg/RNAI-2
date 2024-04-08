@@ -103,6 +103,9 @@ def getData(vertical_id, record):
 def getPatentDetail(self, patents, vertical_id):
     print("getPatentDetails::getPatentDEtails API called")
     from bs4 import BeautifulSoup
+    from uuid import uuid4
+    if not patents:
+        return []
     patentDetails = []
     for patent in patents:
         try:
@@ -116,6 +119,7 @@ def getPatentDetail(self, patents, vertical_id):
                 body_content = soup.find('body')
                 if body_content:
                     response["description"] = body_content.text
+            response["patent_id"] = str(uuid4())
             patentDetails.append(response)
         except Exception as e:
             print("getPatentDetail::e: {}".format(e))
@@ -165,6 +169,8 @@ def getRelevantPapers(self, vertical_id, query, num_relevant_papers):
 
 @celery.task(bind=True, max_retries=3, default_retry_delay=10)
 def getInventorDetail(self, patent_details, vertical_id):
+    if not patent_details:
+        return []
     print("getInventorDetail::getInventordetail api called.")
     data = []
     for patent_detail in patent_details:
@@ -178,8 +184,8 @@ def getInventorDetail(self, patent_details, vertical_id):
                     inventor_data["name"] = inventor 
                     inventor_data["patents"] = response["organic_results"]
                     inventor_data["vertical_id"] = vertical_id
-                    inventor_data["publication_number"] = patent_detail["publication_number"]
                     inventor_data["source_patent"] = patent_detail
+                    inventor_data["patent_id"] = patent_detail["patent_id"]
                     data.append(inventor_data)
             except Exception as e:
                 print("getinventordetail::e::{}".format(e))
