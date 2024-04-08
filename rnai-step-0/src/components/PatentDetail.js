@@ -293,17 +293,20 @@ const PatentCard = ({ patentDetail }) => {
             ))}
           </p>
         )}
-        <p
-          style={{
-            margin: 0,
-            paddingLeft: "10px",
-            paddingTop: "10px",
-            paddingBottom: "10px",
-            fontSize: "13px",
-          }}
-        >
-          <strong>Current Assignee</strong>: {patentDetail.assignees.join(", ")}
-        </p>
+        {patentDetail.assignees && patentDetail.assignees.length && (
+          <p
+            style={{
+              margin: 0,
+              paddingLeft: "10px",
+              paddingTop: "10px",
+              paddingBottom: "10px",
+              fontSize: "13px",
+            }}
+          >
+            <strong>Current Assignee</strong>:{" "}
+            {patentDetail.assignees.join(", ")}
+          </p>
+        )}
       </div>
       <div style={{ borderBottom: "1px solid #e5e5e5", padding: "10px" }}>
         <p
