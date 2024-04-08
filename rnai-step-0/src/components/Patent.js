@@ -13,9 +13,7 @@ const Patent = ({ patent }) => {
         borderRadius: "10px",
       }}
     >
-      <Link
-        to={`/patent-detail/${patent.publication_number}/${patent.vertical_id}`}
-      >
+      <Link to={`/patent-detail/${patent.patent_id}/${patent.vertical_id}`}>
         <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
       </Link>
       <div>

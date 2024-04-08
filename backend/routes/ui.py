@@ -231,20 +231,20 @@ def getPatent():
 
         data["publication_number"] = patent.get("publication_number", None)
         data["vertical_id"] = patent.get("vertical_id", None)
+        data["patent_id"] = patent["patent_id"]
         results.append(data)
     
     return jsonify(results)
 
 @ui.route("/api/patent-detail", methods=['GET'])
 def getPatentDetail():
-    from bson import ObjectId
-    publication_number = request.args.get("publication_number")
+    patent_id = request.args.get("patent_id")
     vertical_id = request.args.get("vertical_id")
-    print("publication_number:", publication_number)
+    print("patent_id:", patent_id)
     print("vertical_id", vertical_id)
     query = {
         "vertical_id": vertical_id,
-        "publication_number": publication_number
+        "patent_id": patent_id
     }
     collection = db["patentDetails"]
 
@@ -258,10 +258,12 @@ def getPatentDetail():
 @ui.route("/api/inventor-detail", methods=["GET"])
 def getInventorDetail():
     vertical_id = request.args.get("vertical_id")
-    publication_number = request.args.get("publication_number")
+    patent_id = request.args.get("patent_id")
+    name = request.args.get("name")
     query = {
+        "patent_id": patent_id,
         "vertical_id": vertical_id,
-        "publication_number": publication_number
+        "name.name": name
     }
     collection = db["inventorDetails"]
     inventor_detail = collection.find_one(query)
