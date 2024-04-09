@@ -219,7 +219,7 @@ def getPatent():
     for patent in result_get:
         data = {}
         data["id"] = str(patent['_id'])
-        # data["inventor"] = patent["inventor"]
+        data["inventors"] = patent.get("inventors")
         data["title"] = patent.get("title", None)
         data["publication_date"] = patent.get("publication_date", None)
         data["priority_date"] = patent.get("priority_date", None)
@@ -231,7 +231,7 @@ def getPatent():
 
         data["publication_number"] = patent.get("publication_number", None)
         data["vertical_id"] = patent.get("vertical_id", None)
-        data["patent_id"] = patent["patent_id"]
+        data["patent_id"] = patent.get("patent_id")
         results.append(data)
     
     return jsonify(results)

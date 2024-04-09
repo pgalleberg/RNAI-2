@@ -14,15 +14,19 @@ const fetchInventorDetail = async (vertical_id, patent_id, name) => {
     vertical_id +
     "&name=" +
     name;
-  const res = await fetch(url);
-  const data = await res.json();
+  try {
+    const res = await fetch(url);
+    const data = res.json();
 
-  return data;
+    return data;
+  } catch (error) {
+    console.log("yo err", error);
+    return null;
+  }
 };
 
 const InvenorDetail = () => {
   const { vertical_id, patent_id, name } = useParams();
-  console.log(useParams());
   const [isLoading, setIsLoading] = useState(true);
   const [inventorInfo, setInventorInfo] = useState({});
   useEffect(() => {
@@ -31,7 +35,6 @@ const InvenorDetail = () => {
       .then((res) => {
         setIsLoading(false);
         setInventorInfo(res);
-        console.log(res);
       })
       .catch((err) => {
         setIsLoading(false);
