@@ -17,6 +17,15 @@ const Patent = ({ patent }) => {
         <h2 style={{ marginBottom: "0px" }}>{patent.title}</h2>
       </Link>
       <div>
+        {patent?.inventors &&
+          patent?.inventors?.length &&
+          patent.inventors.map((i) => (
+            <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
+              {i.name}
+            </p>
+          ))}
+      </div>
+      <div>
         <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
           {patent.assignee}
         </p>

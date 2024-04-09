@@ -79,38 +79,36 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
         </div>
         <PatentCard patentDetail={patentDetail} />
       </div>
-      <div
-        style={{
-          display: patentDetail.images ? "block" : "none",
-        }}
-      >
-        <p>
-          <strong>Images ({patentDetail.images?.length})</strong>
-        </p>
-        <div
-          style={{
-            display: "flex",
-            width: "50%",
-            overflowX: "scroll",
-          }}
-        >
-          {patentDetail.images?.map((i) => (
-            <img
-              src={i}
-              style={{
-                border: "2px solid #e5e5e5",
-                maxWidth: "100%",
-                maxHeight: "100%",
-                height: "150px",
-                marginRight: "10px",
-                display: "inline-block",
-                verticalAlign: "middle",
-              }}
-              width="contains"
-            />
-          ))}
+      {patentDetail?.images && patentDetail?.images?.length && (
+        <div>
+          <p>
+            <strong>Images ({patentDetail.images?.length})</strong>
+          </p>
+          <div
+            style={{
+              display: "flex",
+              width: "50%",
+              overflowX: "scroll",
+            }}
+          >
+            {patentDetail.images?.map((i) => (
+              <img
+                src={i}
+                style={{
+                  border: "2px solid #e5e5e5",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  height: "150px",
+                  marginRight: "10px",
+                  display: "inline-block",
+                  verticalAlign: "middle",
+                }}
+                width="contains"
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       {patentDetail.classifications && (
         <div>
           <p>
@@ -258,6 +256,34 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
           </table>
         </div>
       )}
+
+      {patentDetail?.similar_documents &&
+        patentDetail?.similar_documents?.length && (
+          <div
+            style={{
+              padding: "10px",
+            }}
+          >
+            <h4>
+              Similar Documents ({patentDetail?.similar_documents?.length || 0})
+            </h4>
+            <table>
+              <tr>
+                <th>Publication</th>
+                <th>Publication date</th>
+                <th>Title</th>
+              </tr>
+
+              {patentDetail?.similar_documents?.map((i) => (
+                <tr>
+                  <td>{i.publication_number}</td>
+                  <td>{i.publication_date}</td>
+                  <td>{i.title}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        )}
     </div>
   );
 };
