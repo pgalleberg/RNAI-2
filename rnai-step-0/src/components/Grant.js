@@ -20,9 +20,16 @@ const Grant = ({ grantDetails }) => {
     return (
         <>
             <div style={{backgroundColor: 'whitesmoke', padding: '10px 10px', paddingRight: '20px', marginBottom: '10px', borderRadius: '10px'}}>
-                <Link to={`/grant/${grantDetails.metadata.OpportunityID}`} state={grantDetails.metadata}><h2 style={{marginBottom: '0px'}}>{grantDetails.metadata.OpportunityTitle}</h2></Link>
+                <Link to={`/grant/${grantDetails.id}`} state={grantDetails.metadata}><h2 style={{marginBottom: '0px'}}>{grantDetails.metadata.OpportunityTitle}</h2></Link>
                 <>
-                    <span className="detail">{grantDetails.metadata.AgencyName}</span>
+                    {
+                        grantDetails.metadata.AgencyName &&
+                        <span className="detail">
+                            {grantDetails.metadata.AgencyName}
+                        </span>
+
+                    }
+
                     {
                         grantDetails.metadata.AwardFloor && grantDetails.metadata.AwardCeiling &&
                             <span className="detail">
@@ -41,16 +48,22 @@ const Grant = ({ grantDetails }) => {
                             ${grantDetails.metadata.AwardCeiling}
                         </span>
                     }
-                    <span className="detail">
-                        {
-                            grantDetails.metadata.CloseDate &&
-                                formatDate(grantDetails.metadata.CloseDate)
-                        }
-                    </span>
+                    
+                    {
+                        grantDetails.metadata.CloseDate &&
+                        <span className="detail">
+                            Deadline {formatDate(grantDetails.metadata.CloseDate)}
+                        </span>
 
-                    <span className="detail">
-                        {grantDetails.metadata.GrantorContactEmail}
-                    </span>
+                    }
+
+                    {
+                        grantDetails.metadata.GrantorContactEmail && 
+                        <span className="detail">
+                            {grantDetails.metadata.GrantorContactEmail}
+                        </span>
+                    }
+                    
 
                     <br></br>
                 </>
@@ -61,9 +74,14 @@ const Grant = ({ grantDetails }) => {
                 <div className='pdf'>
                     <br></br>
                     <FontAwesomeIcon icon={faClipboardCheck} style={{ marginRight: '10px' }} />
-                    <a href={'https://grants.gov/search-results-detail/' + grantDetails.metadata.OpportunityID} target="_blank">Apply</a>
+                    {
+                        grantDetails.metadata.OpportunityID ? 
+                            <a href={'https://grants.gov/search-results-detail/' + grantDetails.metadata.OpportunityID} target="_blank">Apply</a>
+                        :
+                        <a href={grantDetails.metadata.grant_source_url} target="_blank">Apply</a>
+                    }
                 </div>
-
+                <p style={{color: 'gray', display: 'flex', justifyContent: 'flex-end', padding: 0, margin: 0}}>{grantDetails.metadata.source}</p>
             </div>
         </>
     )

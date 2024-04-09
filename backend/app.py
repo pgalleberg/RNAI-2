@@ -14,6 +14,7 @@ from celery.exceptions import SoftTimeLimitExceeded, MaxRetriesExceededError
 from S2Error import S2Error
 import pinecone
 import openai as openai
+from datetime import date
 
 app = Flask(__name__)
 
@@ -41,7 +42,7 @@ headers = {
 pinecone_api_key = os.getenv("PINECONE_API_KEY")
 env = 'gcp-starter'
 pinecone.init(api_key=pinecone_api_key, environment=env)
-index_name = 'grants-gov'
+index_name = 'grants'
 index = pinecone.Index(index_name)
 
 
@@ -266,15 +267,26 @@ def getGrants(self, vertical_id, query, num_results, opportunity_types):
 
         response = openai.Embedding.create(
             input= query,
-            model="text-embedding-ada-002"
+            model="text-embedding-3-small"
         )
 
         embedding = response.data[0].embedding
-        query_results = index.query(embedding, top_k=num_results, include_metadata=True, filter={"type": {"$in":opportunity_types}})
+        query_results = index.query(embedding, top_k=num_results, include_metadata=True) #, filter={"type": {"$in":opportunity_types}}
+        print("getGrants::query_results initial: {}".format(query_results))
         query_results = query_results.to_dict()
         for result in query_results['matches']:
             result['vertical_id'] = vertical_id
             result['search_term'] = query
+
+            if type(result['metadata']['CloseDate']) is date:  
+                result['metadata']['CloseDate'] = result['metadata']['CloseDate'].strftime('%Y-%m-%d')
+            
+            if type(result['metadata']['PostDate']) is date:  
+                result['metadata']['PostDate'] = result['metadata']['PostDate'].strftime('%Y-%m-%d')
+            
+            if type(result['metadata']['LastUpdatedDate']) is date:  
+                result['metadata']['LastUpdatedDate'] = result['metadata']['LastUpdatedDate'].strftime('%Y-%m-%d')
+
         print("getGrants::query_results: {}".format(query_results))
 
         return query_results['matches']

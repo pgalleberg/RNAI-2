@@ -177,6 +177,8 @@ serviceAccountKey.json
 
 .gitkeep
 
-grants-gov/analysis.py
-grants-gov/data/*
-grants-gov/unique_tags.py
+.vscode
+
+grants/data/*
+grants/logs/*
+grants/env_grants
