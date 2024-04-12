@@ -78,12 +78,13 @@ def getData(vertical_id, record):
             )
         )
     ]
+
     patentsChain = [
         chain(
             getPatents.s(vertical_id, record["query"], record['numberOfPatents']),
             group(
-                [chain(
-                    getPatentDetail.s(vertical_id),
+                chain(
+                    getPatentDetail.s(index=i) |
                     group(
                         insertInDb.s("patentDetails"),
                         chain(
@@ -91,40 +92,40 @@ def getData(vertical_id, record):
                             insertInDb.s("inventorDetails")
                         )
                     )
-                )] 
-            )
-            
+                ) for i in range(record["numberOfPatents"])
+            ) 
         )
     ]
 
     workflow = group(grantsChain + papersChain + patentsChain)
     chord(workflow)(update_vertical.si(vertical_id, 'Completed'))
 
-@celery.task(bind=True, max_retries=3, defauly_retry_delay=10)
-def getPatentDetail(self, patents, vertical_id):
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=30)
+def getPatentDetail(self, patents, index):
     print("getPatentDetails::getPatentDEtails API called")
     from bs4 import BeautifulSoup
     from uuid import uuid4
     if not patents:
         return []
-    patentDetails = []
-    for patent in patents:
-        try:
-            response = requests.get(patent["serpapi_link"]+f"&api_key={serp_api_key}").json()
-            if response["search_metadata"]["status"] == "Error":
-                raise response["search_metadata"]["error"]
-            response["vertical_id"] = vertical_id
-            if response.get("description_link", None):
-                description = requests.get(response["description_link"])
-                soup = BeautifulSoup(description.content, "html.parser")
-                body_content = soup.find('body')
-                if body_content:
-                    response["description"] = body_content.text
-            response["patent_id"] = str(uuid4())
-            patentDetails.append(response)
-        except Exception as e:
-            print("getPatentDetail::e: {}".format(e))
-    return patentDetails
+    if len(patents) < index:
+        return {}
+    patent = patents[index]
+    try:
+        response = requests.get(patent["serpapi_link"]+f"&api_key={serp_api_key}").json()
+        if response["search_metadata"]["status"] == "Error":
+            raise response["search_metadata"]["error"]
+        if response.get("description_link", None):
+            description = requests.get(response["description_link"])
+            soup = BeautifulSoup(description.content, "html.parser")
+            body_content = soup.find('body')
+            if body_content:
+                response["description"] = body_content.text
+        response["vertical_id"] = patent["vertical_id"]
+        response["patent_id"] = str(uuid4())
+        return response
+    except Exception as e:
+        print("getPatentDetail::e: {}".format(e))
 
 
 @celery.task(bind=True, rate_limit='1/s', soft_time_limit=120, max_retries=3, default_retry_delay=10)
@@ -169,27 +170,26 @@ def getRelevantPapers(self, vertical_id, query, num_relevant_papers):
         return -1 #TODO:what happens if I dont return anything?? What exactly happens if you return something or you don't?
 
 @celery.task(bind=True, max_retries=3, default_retry_delay=10)
-def getInventorDetail(self, patent_details, vertical_id):
-    if not patent_details:
+def getInventorDetail(self, patent_detail, vertical_id):
+    if not patent_detail:
         return []
     print("getInventorDetail::getInventordetail api called.")
     data = []
-    for patent_detail in patent_details:
-        for inventor in patent_detail["inventors"]:
-            try:
-                response = requests.get(inventor["serpapi_link"]+f"&api_key={serp_api_key}").json()
-                if response["search_metadata"]["status"] == "Error":
-                    raise response["search_metadata"]["error"]
-                if response.get("organic_results", None):
-                    inventor_data = {}
-                    inventor_data["name"] = inventor 
-                    inventor_data["patents"] = response["organic_results"]
-                    inventor_data["vertical_id"] = vertical_id
-                    inventor_data["source_patent"] = patent_detail
-                    inventor_data["patent_id"] = patent_detail["patent_id"]
-                    data.append(inventor_data)
-            except Exception as e:
-                print("getinventordetail::e::{}".format(e))
+    for inventor in patent_detail["inventors"]:
+        try:
+            response = requests.get(inventor["serpapi_link"]+f"&api_key={serp_api_key}").json()
+            if response["search_metadata"]["status"] == "Error":
+                raise response["search_metadata"]["error"]
+            if response.get("organic_results", None):
+                inventor_data = {}
+                inventor_data["name"] = inventor 
+                inventor_data["patents"] = response["organic_results"]
+                inventor_data["vertical_id"] = vertical_id
+                inventor_data["source_patent"] = patent_detail
+                inventor_data["patent_id"] = patent_detail["patent_id"]
+                data.append(inventor_data)
+        except Exception as e:
+            print("getinventordetail::e::{}".format(e))
     print("getInventorDetail::exiting")
     return data
 
@@ -248,7 +248,7 @@ def getAuthorDetails(self, paper_details, index):
             
             #TODO: No return statement here. Should there be?
 
-@celery.task(bind=True, soft_time_limit=100, max_retries=3, default_retry_delay=30)
+@celery.task(bind=True, max_retries=3, default_retry_delay=30)
 def getPatents(self, vertical_id, query, min_relevant_patents):
     print("getPatents::getPatents API called")
     
