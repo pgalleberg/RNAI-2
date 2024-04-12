@@ -237,7 +237,7 @@ def getPatent():
     return jsonify(results)
 
 @ui.route("/api/patent-detail", methods=['GET'])
-def getPatentDetail():
+def getPatentDetails():
     patent_id = request.args.get("patent_id")
     vertical_id = request.args.get("vertical_id")
     print("patent_id:", patent_id)
