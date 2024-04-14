@@ -21,7 +21,11 @@ const Patent = ({ patent }) => {
           patent?.inventors?.length &&
           patent.inventors.map((i) => (
             <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
-              {i.name}
+              <a
+                href={`/inventor-detail/${patent.patent_id}/${patent.vertical_id}/${i.name}`}
+              >
+                {i.name}
+              </a>
             </p>
           ))}
       </div>

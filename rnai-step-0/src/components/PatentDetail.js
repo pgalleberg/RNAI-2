@@ -207,7 +207,14 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
 
             {patentDetail?.cited_by?.family_to_family?.map((i) => (
               <tr>
-                <td>{i.publication_number}</td>
+                <td>
+                  <a
+                    href={`https://patents.google.com/patent/${i.publication_number}/en`}
+                    target="_blank"
+                  >
+                    {i.publication_number}
+                  </a>
+                </td>
                 <td>{i.priority_date}</td>
                 <td>{i.publication_date}</td>
                 <td>{i.assignee_original}</td>
@@ -246,7 +253,14 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
             )}
             {patentDetail?.cited_by?.original?.map((i) => (
               <tr>
-                <td>{i.publication_number}</td>
+                <td>
+                  <a
+                    href={`https://patents.google.com/patent/${i.publication_number}/en`}
+                    target="_blank"
+                  >
+                    {i.publication_number}
+                  </a>
+                </td>
                 <td>{i.priority_date}</td>
                 <td>{i.publication_date}</td>
                 <td>{i.assignee_original}</td>
@@ -276,7 +290,14 @@ const PatentDetailInner = ({ patentDetail, patent_id, vertical_id }) => {
 
               {patentDetail?.similar_documents?.map((i) => (
                 <tr>
-                  <td>{i.publication_number}</td>
+                  <td>
+                    <a
+                      href={`https://patents.google.com/patent/${i.publication_number}/en`}
+                      target="_blank"
+                    >
+                      {i.publication_number}
+                    </a>
+                  </td>
                   <td>{i.publication_date}</td>
                   <td>{i.title}</td>
                 </tr>
@@ -352,19 +373,22 @@ const PatentCard = ({ patentDetail }) => {
             }}
           >
             <strong>Inventors</strong>:{" "}
-            {patentDetail.inventors.map((inventor) => (
-              <a
-                href={
-                  "/inventor-detail/" +
-                  patentDetail.patent_id +
-                  "/" +
-                  patentDetail.vertical_id +
-                  "/" +
-                  inventor.name
-                }
-              >
-                {inventor.name}{" "}
-              </a>
+            {patentDetail.inventors.map((inventor, index) => (
+              <>
+                <a
+                  href={
+                    "/inventor-detail/" +
+                    patentDetail.patent_id +
+                    "/" +
+                    patentDetail.vertical_id +
+                    "/" +
+                    inventor.name
+                  }
+                >
+                  {inventor.name}{" "}
+                </a>
+                {index !== patentDetail?.inventors?.length - 1 ? ", " : ""}
+              </>
             ))}
           </p>
         )}
