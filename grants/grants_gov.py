@@ -139,8 +139,8 @@ def create_embeddings(grants):
 
 def get_grants_grants_gov():
     current_date = datetime.now()
-    one_day_before = current_date - timedelta(days=1)
-    formatted_date = one_day_before.strftime("%Y%m%d")
+    # one_day_before = current_date - timedelta(days=1)
+    formatted_date = current_date.strftime("%Y%m%d")
     logger.info("current_date in YYYYMMDD format: {}".format(formatted_date))
     file_name = 'GrantsDBExtract' + formatted_date + 'v2.zip'
     logger.info('file_name: {}'.format(file_name))
