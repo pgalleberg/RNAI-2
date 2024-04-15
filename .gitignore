@@ -178,8 +178,6 @@ serviceAccountKey.json
 
 .gitkeep
 
-.vscode/
-
 grants/data/*
 grants/logs/*
 grants/env_grants
