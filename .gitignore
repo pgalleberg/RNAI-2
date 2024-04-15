@@ -178,7 +178,7 @@ serviceAccountKey.json
 
 .gitkeep
 
-.vscode
+.vscode/
 
 grants/data/*
 grants/logs/*
