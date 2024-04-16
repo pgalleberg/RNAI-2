@@ -188,10 +188,13 @@ const GrantDetails = () => {
                             <p style={{textAlign: 'right'}}><strong>${data.AwardCeiling}</strong></p>
                         </div>
 
-                        <div className="author-stat">
-                            <p>Estimated Total Program Funding</p>
-                            <p style={{textAlign: 'right'}}><strong>${data.EstimatedTotalProgramFunding}</strong></p>
-                        </div>
+                        {
+                            data.EstimatedTotalProgramFunding &&
+                                <div className="author-stat">
+                                    <p>Estimated Total Program Funding</p>
+                                    <p style={{textAlign: 'right'}}><strong>${data.EstimatedTotalProgramFunding}</strong></p>
+                                </div>
+                        }
 
                         <div className="author-stat">
                             <p>Expected Number Of Awards</p>
@@ -258,61 +261,92 @@ const GrantDetails = () => {
                             </div>
                         }
 
-                        <hr></hr>
+                        {
+                            (data.CFDANumbers || data.CategoryOfFundingActivity || data.CostSharingOrMatchingRequirement || data.FundingInstrumentType || data.OpportunityCategory || data.OpportunityNumber || data.Version) &&
+                                <>
+                                    <hr></hr>
+                                    <p><strong>General Information</strong></p>
+                                </>
+                        }
 
-                        <p><strong>General Information</strong></p>
+                        {
+                            data.CFDANumbers &&
+                                <div className="author-stat">
+                                    <p>CFDA Numbers</p>
+                                    <p style={{textAlign: 'right'}}><strong>{data.CFDANumbers}</strong></p>
+                                </div>
+                        }
 
-                        <div className="author-stat">
-                            <p>CFDA Numbers</p>
-                            <p style={{textAlign: 'right'}}><strong>{data.CFDANumbers}</strong></p>
-                        </div>
-
-                        <div className="author-stat">
-                            <p>Category Of Funding Activity</p>
-                            <p style={{textAlign: 'right'}}><strong>{formatCategoryOfFundingActivity(data.CategoryOfFundingActivity)}</strong></p>
-                        </div>
+                        {
+                            data.CategoryOfFundingActivity &&
+                                <div className="author-stat">
+                                    <p>Category Of Funding Activity</p>
+                                    <p style={{textAlign: 'right'}}><strong>{formatCategoryOfFundingActivity(data.CategoryOfFundingActivity)}</strong></p>
+                                </div>
+                        }
 
                         {/* <div className="author-stat">
                             <p>Category Explanation</p>
                             <p style={{textAlign: 'right'}}><strong>{data.CategoryExplanation}</strong></p>
                         </div> */}
 
-                        <div className="author-stat">
-                            <p>Cost Sharing Or Matching Requirement</p>
-                            <p style={{textAlign: 'right'}}><strong>{data.CostSharingOrMatchingRequirement}</strong></p>
-                        </div>
+                        {
+                            data.CostSharingOrMatchingRequirement &&
+                                <div className="author-stat">
+                                    <p>Cost Sharing Or Matching Requirement</p>
+                                    <p style={{textAlign: 'right'}}><strong>{data.CostSharingOrMatchingRequirement}</strong></p>
+                                </div>
+                        }
 
-                        <div className="author-stat">
-                            <p>Funding Instrument Type</p>
-                            <p style={{textAlign: 'right'}}><strong>{formatFundingInstrumentType(data.FundingInstrumentType)}</strong></p>
-                        </div>
+                        {
+                            data.FundingInstrumentType &&
+                                <div className="author-stat">
+                                    <p>Funding Instrument Type</p>
+                                    <p style={{textAlign: 'right'}}><strong>{formatFundingInstrumentType(data.FundingInstrumentType)}</strong></p>
+                                </div>
+                        }
 
-                        <div className="author-stat">
-                            <p>Opportunity Category</p>
-                            <p style={{textAlign: 'right'}}><strong>{formatOpportunityCategory(data.OpportunityCategory)}</strong></p>
-                        </div>
+                        {
+                            data.OpportunityCategory && 
+                                <div className="author-stat">
+                                    <p>Opportunity Category</p>
+                                    <p style={{textAlign: 'right'}}><strong>{formatOpportunityCategory(data.OpportunityCategory)}</strong></p>
+                                </div>
+                        }
 
-                        <div className="author-stat">
-                            <p>Opportunity Number</p>
-                            <p style={{textAlign: 'right'}}><strong>{(data.OpportunityNumber)}</strong></p>
-                        </div>
+                        {
+                            data.OpportunityNumber &&
+                                <div className="author-stat">
+                                    <p>Opportunity Number</p>
+                                    <p style={{textAlign: 'right'}}><strong>{(data.OpportunityNumber)}</strong></p>
+                                </div>
+                        }
 
-                        <div className="author-stat">
-                            <p>Version</p>
-                            <p style={{textAlign: 'right'}}><strong>{(data.Version)}</strong></p>
-                        </div>
+                        {
+                            data.Version &&
+                                <div className="author-stat">
+                                    <p>Version</p>
+                                    <p style={{textAlign: 'right'}}><strong>{(data.Version)}</strong></p>
+                                </div>
+                        }
                     </div>
                 </div>
                 <div style={{marginLeft: '30px'}}>
-                    {data.Version.includes('Forecast') &&
+                    {data.Version && data.Version.includes('Forecast') &&
                         <p><i>NOTE: This is a Forecasted Opportunity.</i></p>
                     }
-                    <Link to={`/grant/${data.OpportunityID}`} state={data}><h2 style={{marginBottom: '0px'}}>{data.OpportunityTitle}</h2></Link>
+                    <h2 style={{marginBottom: '0px'}}>{data.OpportunityTitle}</h2>
 
                     <div className='pdf' style={{marginBottom: '20px'}}>
                         <br></br>
                         <FontAwesomeIcon icon={faClipboardCheck} size='2x' style={{ marginRight: '10px'}} />
-                        <a href={'https://grants.gov/search-results-detail/' + data.OpportunityID} target="_blank" style={{fontSize: '18px'}}>Apply Online</a>
+                        {/* <a href={'https://grants.gov/search-results-detail/' + data.OpportunityID} target="_blank" style={{fontSize: '18px'}}>Apply Online</a> */}
+                        {
+                            data.OpportunityID ? 
+                                <a href={'https://grants.gov/search-results-detail/' + data.OpportunityID} target="_blank" style={{fontSize: '18px'}}>Apply Online</a>
+                            :
+                            <a href={data.grant_source_url} target="_blank" style={{fontSize: '18px'}}>Apply Online</a>
+                        }
                     </div>
                     
 
@@ -332,25 +366,34 @@ const GrantDetails = () => {
                     <br></br><br></br>
 
                     <span className="text">Agency Name</span>
-                    <p style={{ display: 'inline', margin: '5px' }}>{data.AgencyName}&nbsp;({data.AgencyCode})</p>
+                    <p style={{ display: 'inline', margin: '5px' }}>
+                        {data.AgencyName}
+                        &nbsp;
+                        {   data.AgencyCode &&
+                                <>
+                                    ({data.AgencyCode})
+                                </>
+                        }
+                    </p>
                     <br></br><br></br>
 
                     <span className="text">Description</span>
                     <p style={{ display: 'block', margin: '5px', textAlign: 'justify' }}>{data.Description}</p>
                     <br></br>
 
-                    <span className="text">Link To Additional Information</span>
-                    <p style={{ display: 'inline-block', margin: '5px', textAlign: 'justify' }}>{data.AdditionalInformationURL}</p>
-                    <br></br><br></br>
+                    {   
+                        data.AdditionalInformationURL &&
+                            <>
+                                <span className="text">Link To Additional Information</span>
+                                <p style={{ display: 'inline-block', margin: '5px', textAlign: 'justify' }}>{data.AdditionalInformationURL}</p>
+                                <br></br><br></br>
+                            </>
+                    }
 
-                    <span className="text">Grantor Contact Email</span>
-                    <p style={{ display: 'inline', margin: '5px' }}>{data.GrantorContactEmail}</p>
-                    <br></br><br></br>
-
-                    {data.GrantorContactText &&
+                    {data.GrantorContactEmail &&
                         <>
-                            <span className="text">Grantor Contact Text</span>
-                            <p style={{ display: 'inline', margin: '5px' }}>{data.GrantorContactText}</p>
+                            <span className="text">Grantor Contact Email</span>
+                            <p style={{ display: 'inline', margin: '5px' }}>{data.GrantorContactEmail}</p>
                             <br></br><br></br>
                         </>
                     }
@@ -371,13 +414,42 @@ const GrantDetails = () => {
                         </>
                     }
 
+                    {data.GrantorContactFax &&
+                        <>
+                            <span className="text">Grantor Contact Fax</span>
+                            <p style={{ display: 'inline', margin: '5px' }}>{data.GrantorContactFax}</p>
+                            <br></br><br></br>
+                        </>
+                    }
+
+                    {data.GrantorContactOffice &&
+                        <>
+                            <span className="text">Grantor Contact Office</span>
+                            <p style={{ display: 'inline', margin: '5px' }}>{data.GrantorContactOffice}</p>
+                            <br></br><br></br>
+                        </>
+                    }
+
+                    {data.GrantorContactText && data.source === 'grants.gov' &&
+                        <>
+                            <span className="text">Grantor Contact Text</span>
+                            <p style={{ display: 'inline', margin: '5px' }}>{data.GrantorContactText}</p>
+                            <br></br><br></br>
+                        </>
+                    }
+
                     <hr></hr>
 
                     <h3 style={{fontSize: '24px', marginBottom: '10px'}}>Eligibility</h3>
 
-                    <span className="text">Eligible Applicants</span>
-                    <p style={{ display: 'inline', margin: '5px' }}>{formatEligibleApplicants(data.EligibleApplicants)}</p>
-                    <br></br><br></br>
+                    {
+                        data.EligibleApplicants &&
+                            <>
+                                <span className="text">Eligible Applicants</span>
+                                <p style={{ display: 'inline', margin: '5px' }}>{formatEligibleApplicants(data.EligibleApplicants)}</p>
+                                <br></br><br></br>
+                            </>
+                    }
 
                     <span className="text">Additional Information On Eligibility</span>
                     <p style={{ display: 'inline', margin: '5px' }}>{data.AdditionalInformationOnEligibility}</p>

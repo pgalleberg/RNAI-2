@@ -171,13 +171,13 @@ extra/
 dump.rdb
 
 # serviceAccountKey.json - config file for Google Firebase
+.serviceAccountKey.json
 serviceAccountKey.json
 
 .rnai-step-0.pem
 
 .gitkeep
 
-grants-gov/analysis.py
-grants-gov/data/*
-grants-gov/unique_tags.py
-.serviceAccountKey.json
+grants/data/*
+grants/logs/*
+grants/env_grants

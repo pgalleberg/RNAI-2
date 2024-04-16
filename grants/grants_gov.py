@@ -1,33 +1,23 @@
-
-import requests
+import os
+from openai import OpenAI
 from datetime import datetime, timedelta
 import zipfile
-import xml.etree.ElementTree as ET
-import pandas as pd
-import tiktoken
-from openai import OpenAI
-import pinecone
-import os
-import glob
+import requests
 import html
+import xml.etree.ElementTree as ET
 import time
 from dotenv import load_dotenv
-import logging
 load_dotenv()
+from utils import create_batches, num_tokens_from_string, delete_and_create_index, delete_files, fetch_grants
+from logger_config import configure_logger
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(funcName)s::%(message)s')
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('./logs/grants-gov.log')
-file_handler.setLevel(logging.DEBUG)
-file_handler.setFormatter(logging.Formatter('%(asctime)s %(funcName)s::%(message)s'))
-logger.addHandler(file_handler)
+logger = configure_logger(__name__)
 
 client = OpenAI(
     api_key = os.getenv("OPENAI_API_KEY")
 )
 
-
-def fetch_data(file_name):
+def fetch_data(directory, file_name):
     url = 'https://prod-grants-gov-chatbot.s3.amazonaws.com/extracts/'
 
     if not os.path.exists(directory + file_name):
@@ -45,7 +35,7 @@ def fetch_data(file_name):
         logger.info("file already exists")
 
 
-def process_data(file_name):
+def process_data(directory, file_name):
     opportunities = []
     tree = ET.parse(directory + file_name)
     root = tree.getroot()
@@ -95,11 +85,6 @@ def process_data(file_name):
     return future_opportunities
 
 
-def num_tokens_from_string(string: str, encoding_name: str):
-    encoding = tiktoken.get_encoding(encoding_name)
-    num_tokens = len(encoding.encode(string))
-    return num_tokens
-
 
 def create_embeddings(grants):
     start_time = time.time()
@@ -116,6 +101,7 @@ def create_embeddings(grants):
         
         if num_tokens <= 8192:
             grants_batch.append(grant_formatted)
+            grants[i]['source'] = "grants.gov"
             grants_records.append({
                 'id': grants[i]['OpportunityID'],
                 'metadata': grants[i]
@@ -126,15 +112,15 @@ def create_embeddings(grants):
             if grants_batch != []: 
                 response = client.embeddings.create(
                     input=grants_batch,
-                    model="text-embedding-ada-002"
+                    model="text-embedding-3-small"
                 )
 
                 for index, object in enumerate(response.data):
                     grants_records[index]['values'] = object.embedding
                 
                 # insert_to_db(grants_records)
-                grants_to_insert+=grants_records
-                
+                # grants_to_insert+=grants_records
+                create_batches(grants_records)
                 # i-=1 # so that we process the current item which caused us to go above 8192 again. 
                 num_tokens = 0
                 grants_batch = []
@@ -146,84 +132,23 @@ def create_embeddings(grants):
                 grants_batch = []
                 grants_records = []
 
+    # create_batches(grants_to_insert)
     end_time = time.time()
     logger.info("total time: {} mins".format((end_time-start_time)/60))
-    create_batches(grants_to_insert)
 
 
-def create_batches(grants):
-    UPSERT_LIMIT = 200
-    logger.info("number of total grants: {}".format(len(grants)))
-    for i in range(0, len(grants), UPSERT_LIMIT):
-        insert_to_db(grants[i:i+UPSERT_LIMIT])
-        
+def get_grants_grants_gov():
+    current_date = datetime.now()
+    # one_day_before = current_date - timedelta(days=1)
+    formatted_date = current_date.strftime("%Y%m%d")
+    logger.info("current_date in YYYYMMDD format: {}".format(formatted_date))
+    file_name = 'GrantsDBExtract' + formatted_date + 'v2.zip'
+    logger.info('file_name: {}'.format(file_name))
+    directory = './data/'
 
-def insert_to_db(records):
-    max_attempts = 3
-    attempts = 0
-
-    while attempts < max_attempts:
-        try:
-            index.upsert(vectors = records)
-            logger.info("batch inserted to database. # of records in batch: {}".format(len(records)))
-            break
-        except Exception as e:
-            attempts+=1
-            logger.info("attempt {} failed".format(attempts))
-            logger.info("Exception::e: {}".format(e))
-
-
-def fetch_grants(query):
-    response = client.embeddings.create(
-        input= query,
-        model="text-embedding-ada-002"
-    )
-
-    embedding = response.data[0].embedding
-    query_results = index.query(embedding, top_k=3, include_metadata=True)
-    logger.info("query_results: {}".format(query_results))
-
-
-def delete_files():
-    patterns = ['./data/*.zip', './data/*.xml']
-
-    for pattern in patterns:
-        for filename in glob.glob(pattern):
-            os.remove(filename)
-            logger.info("deleted {}".format(filename))
-
-
-def delete_and_create_index():
-    try:
-        pinecone.delete_index(INDEX_NAME)
-        logger.info("deleted index")
-    except Exception as e:
-        logger.info("Exception::e: {}".format(e))
-    finally:
-        pinecone.create_index("grants-gov", dimension=1536, metric="cosine")
-        logger.info("created index")
-
-
-current_date = datetime.now()
-# one_day_before = current_date - timedelta(days=1)
-formatted_date = current_date.strftime("%Y%m%d")
-logger.info("current_date in YYYYMMDD format: {}".format(formatted_date))
-file_name = 'GrantsDBExtract' + formatted_date + 'v2.zip'
-logger.info('file_name: {}'.format(file_name))
-directory = './data/'
-
-fetch_data(file_name)
-grants = process_data(file_name.replace('.zip', '.xml'))
-
-api_key = os.getenv("PINECONE_API_KEY")
-env = 'gcp-starter'
-pinecone.init(api_key=api_key, environment=env)
-INDEX_NAME = 'grants-gov'
-index = pinecone.Index(INDEX_NAME)
-
-delete_and_create_index()
-create_embeddings(grants)
-
-fetch_grants('methane removal from ambient air')
-
-delete_files()
+    fetch_data(directory, file_name)
+    grants = process_data(directory, file_name.replace('.zip', '.xml'))
+    # delete_and_create_index()
+    create_embeddings(grants)
+    # fetch_grants('methane removal from ambient air')
+    # delete_files()
