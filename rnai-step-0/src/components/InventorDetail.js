@@ -59,13 +59,12 @@ const InvenorDetail = () => {
 
               {inventorInfo.patents && (
                 <div className="author-stat">
-                  <p>Highly Influential Citations</p>
+                  <p>Number of Patents</p>
                   <p>
                     <strong>{inventorInfo.patents?.length || 0}</strong>
                   </p>
                 </div>
               )}
-              <hr></hr>
             </div>
           </div>
           <div className="author-papers references">

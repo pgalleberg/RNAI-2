@@ -30,10 +30,10 @@ const Patent = ({ patent }) => {
           ))}
       </div>
       <div>
-        <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
+        <p className="inventor" style={{ backgroundColor: "#E5E5E5" }}>
           {patent.assignee}
         </p>
-        <p className="author" style={{ backgroundColor: "#E5E5E5" }}>
+        <p className="inventor" style={{ backgroundColor: "#E5E5E5" }}>
           {patent.publication_number}
         </p>
       </div>

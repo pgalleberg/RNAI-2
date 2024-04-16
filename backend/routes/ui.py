@@ -226,6 +226,7 @@ def getPatent():
         data["pdf"] = patent.get("pdf", None)
         data["abstract"] = patent.get("abstract", None)
         data["filing_date"] = patent.get("filing_date", None)
+        data["rank"] = patent.get("rank", 1)
         if patent.get("assignees", None) and len(patent["assignees"]) > 0:
             data["assignee"] = patent["assignees"][0]
 
@@ -233,6 +234,8 @@ def getPatent():
         data["vertical_id"] = patent.get("vertical_id", None)
         data["patent_id"] = patent.get("patent_id")
         results.append(data)
+
+    results = sorted(results, key=lambda x: x['rank'])
     
     return jsonify(results)
 

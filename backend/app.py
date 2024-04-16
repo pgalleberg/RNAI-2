@@ -122,6 +122,7 @@ def getPatentDetail(self, patents, index):
                 response["description"] = body_content.text
         response["vertical_id"] = patent["vertical_id"]
         response["patent_id"] = str(uuid4())
+        response["rank"] = patent["rank"]
         return response
     except Exception as e:
         print("getPatentDetail::e: {}".format(e))

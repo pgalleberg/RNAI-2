@@ -405,6 +405,16 @@ p:focus {
   margin: 3px;
 }
 
+.inventor {
+  background-color: whitesmoke;
+  color: black;
+  font-size: 13px;
+  padding: 3px;
+  white-space: nowrap;
+  display: inline-block;
+  margin: 3px;
+}
+
 .author:hover {
   color: #1857B6;
 }
@@ -443,6 +453,8 @@ p:focus {
   color: #1857B6;
   cursor: pointer;
 }
+
+
 
 .citations a,
 .references a {
