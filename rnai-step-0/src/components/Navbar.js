@@ -53,6 +53,7 @@ const Navbar = () => {
       {(location.pathname.includes("/grant") ||
         location.pathname.includes("/paper/") ||
         location.pathname.includes("/author/") ||
+        location.pathname.includes("/inventor-detail") ||
         location.pathname.includes("/patent-detail/")) && (
         <div
           style={{
