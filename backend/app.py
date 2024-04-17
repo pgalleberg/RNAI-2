@@ -278,13 +278,13 @@ def getGrants(self, vertical_id, query, num_results, opportunity_types):
             result['vertical_id'] = vertical_id
             result['search_term'] = query
 
-            if type(result['metadata']['CloseDate']) is date:  
+            if 'CloseDate' in result['metadata'] and type(result['metadata']['CloseDate']) is date:   
                 result['metadata']['CloseDate'] = result['metadata']['CloseDate'].strftime('%Y-%m-%d')
             
-            if type(result['metadata']['PostDate']) is date:  
+            if 'PostDate' in result['metadata'] and type(result['metadata']['PostDate']) is date:   
                 result['metadata']['PostDate'] = result['metadata']['PostDate'].strftime('%Y-%m-%d')
             
-            if type(result['metadata']['LastUpdatedDate']) is date:  
+            if 'LastUpdatedDate' in result['metadata'] and type(result['metadata']['LastUpdatedDate']) is date:   
                 result['metadata']['LastUpdatedDate'] = result['metadata']['LastUpdatedDate'].strftime('%Y-%m-%d')
 
         print("getGrants::query_results: {}".format(query_results))
