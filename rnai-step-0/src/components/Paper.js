@@ -33,7 +33,7 @@ const Paper = ({ paperDetails, index }) => {
         <div>
             <Link to={`/paper/${paperDetails.paperId}/${paperDetails.vertical_id}`}><h2>{paperDetails.title}</h2></Link>
 
-            <div className="authors">
+            <div>
                 {paperDetails.authors.map((author) => (
                     <>
                         <Link to={`/author/${author.authorId}/${paperDetails.vertical_id}`}><span className='author'>{author.name}</span></Link>

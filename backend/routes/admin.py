@@ -4,7 +4,7 @@ import os
 
 admin = Blueprint("admin", __name__)
 
-cred = credentials.Certificate("serviceAccountKey.json")
+cred = credentials.Certificate(".serviceAccountKey.json")
 initialize_app(cred)
 
 api_key = os.getenv("API_KEY")

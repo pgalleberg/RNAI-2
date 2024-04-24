@@ -187,6 +187,83 @@ def getGrantDetails():
     return jsonify(grant_details), 200
 
 
+@ui.route('/api/patent_details', methods=["GET"])
+def getPatentDetails():
+    id = request.args.get('id')
+    print('getPatentDetails::id: ', id)
+    collection = db['patents']
+    query = {
+        "vertical_id": id    
+    }
+
+    patent_details = collection.find(query).sort('rank', ASCENDING)
+    patent_details = list(patent_details)
+
+    for patent in patent_details:
+        patent['_id'] = str(patent['_id'])
+
+    print("getPatentDetails::patent_details: ", patent_details)
+
+    return jsonify(patent_details), 200
+
+
+@ui.route('/api/individual_patent_details', methods=["GET"])
+def getIndividualPatentDetails():
+    vertical_id = request.args.get('vertical_id')
+    print('getIndividualPatentDetails::vertical_id: ', vertical_id)
+    patent_id = request.args.get('patent_id')
+    print('getIndividualPatentDetails::patent_id: ', patent_id)
+    collection = db['patents']
+    query = {
+        "vertical_id": vertical_id,
+        "patent_id": 'patent/' + patent_id + '/en'
+    }
+
+    patent_details = collection.find_one(query)
+    patent_details['_id'] = str(patent_details['_id'])
+
+    print("getIndividualPatentDetails::patent_details: ", patent_details)
+
+    return jsonify(patent_details), 200
+
+
+@ui.route('/api/inventor_details', methods=['GET'])
+def getInventorDetails():
+    inventor_name = request.args.get('inventor_name')
+    vertical_id = request.args.get('vertical_id')
+
+    print('getInventorDetails::inventor_name: ', inventor_name)
+    print('getInventorDetails::vertical_id: ', vertical_id)
+
+    collection = db['inventors']
+    query = {
+        "name": inventor_name,
+        "vertical_id": vertical_id,
+    }
+
+    inventor_details = collection.find(query)
+    inventor_details = list(inventor_details)
+    print("getInventorDetails::inventor_details: ", inventor_details)
+    
+    source_patents = {}
+    for record in inventor_details:
+        for source_patent in record['source_patents']:
+            patent_id = source_patent['patent_id']
+            patent_title = source_patent['title']
+            source_patents[patent_id] = {'title': patent_title}
+            # source_papers[paper_id] = {'title': paper_title, 'citationCount': paper_citationCount, 'influentialCitationCount': paper_influentialCitationCount}
+
+
+    print("getInventorDetails::source_patents: ", source_patents)
+
+    inventor = inventor_details[0]
+    inventor['source_patents'] = source_patents
+    inventor['_id'] = str(inventor['_id'])
+    print("getInventorDetails::inventor: ", inventor)
+
+    return jsonify(inventor), 200
+
+
 @ui.route('/api/update_vertical', methods=['PATCH'])
 def updateVertical():
     body = request.json    

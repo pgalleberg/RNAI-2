@@ -22,6 +22,8 @@ import PaperDetails from './components/PaperDetails';
 import Author from './components/Author';
 import GrantDetails from './components/GrantDetails';
 import ApprovalPending from './components/ApprovalPending';
+import PatentDetails from './components/PatentDetails';
+import Inventor from './components/Inventor';
 
 function App(){
 
@@ -96,6 +98,27 @@ function App(){
               <Protected>
                 <Navbar />
                 <GrantDetails />
+              </Protected>
+            </>
+        },
+        {
+          path:'/patent/:patent_id/en/:vertical_id',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <PatentDetails />
+              </Protected>
+            </>
+        }
+        ,
+        {
+          path:'/inventor/:inventor_name/:vertical_id',
+          element: 
+            <>
+              <Protected>
+                <Navbar />
+                <Inventor />
               </Protected>
             </>
         }

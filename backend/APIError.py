@@ -1,4 +1,4 @@
-class S2Error(Exception):
+class APIError(Exception):
     """Custom exception class."""
 
     def __init__(self, message):

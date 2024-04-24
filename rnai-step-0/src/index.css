@@ -1,6 +1,7 @@
 @font-face {
   font-family: "ColfaxAI";
-  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2) format("woff2"),
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
+      format("woff2"),
     url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
   font-weight: normal;
   font-style: normal;
@@ -75,7 +76,7 @@ input[type="number"] {
   background-color: whitesmoke;
 }
 
-input[type="number"]:focus{
+input[type="number"]:focus {
   outline: none;
 }
 
@@ -125,8 +126,8 @@ input[type="submit"]:hover {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -137,19 +138,19 @@ input[type="submit"]:hover {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
-input:checked+.slider {
+input:checked + .slider {
   background-color: #10a37f;
 }
 
-input:focus+.slider {
+input:focus + .slider {
   box-shadow: 0 0 1px #10a37f;
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
@@ -193,7 +194,6 @@ input:checked+.slider:before {
   border-radius: 4px;
   /* margin-bottom: 24px; */
   text-align: left;
-
 }
 
 .loginButton:hover {
@@ -260,7 +260,6 @@ a {
   /* text-align: right; */
   padding: 14px 16px;
   /* text-decoration: none; */
-
 }
 
 .navbar a:hover {
@@ -304,11 +303,10 @@ a {
   padding-bottom: 10px;
 }
 
-
 .btn {
   border: none;
   border-radius: 5px;
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -320,20 +318,20 @@ a {
 
 .btn.approve:hover {
   opacity: 0.9;
-  background-color: #4CAF50;
+  background-color: #4caf50;
 }
 
 .btn.reject:hover {
   opacity: 0.9;
-  background-color: #F44336;
+  background-color: #f44336;
 }
 
 .approve {
-  background-color: #4CAF50;
+  background-color: #4caf50;
 }
 
 .reject {
-  background-color: #F44336;
+  background-color: #f44336;
 }
 
 .editButton {
@@ -387,7 +385,7 @@ p:focus {
 }
 
 .papers a {
-  color: #1857B6;
+  color: #1857b6;
 }
 
 .papers a:hover {
@@ -396,7 +394,7 @@ p:focus {
 
 .author {
   /* border: 1px solid red; */
-  background-color: whitesmoke;
+  background-color: Gainsboro;
   color: black;
   font-size: 13px;
   padding: 3px;
@@ -406,11 +404,11 @@ p:focus {
 }
 
 .author:hover {
-  color: #1857B6;
+  color: #1857b6;
 }
 
 .detail {
-  line-height: 3.0;
+  line-height: 3;
   color: gray;
 }
 
@@ -440,7 +438,7 @@ p:focus {
 
 .expand-citations,
 .expand-references {
-  color: #1857B6;
+  color: #1857b6;
   cursor: pointer;
 }
 
@@ -486,7 +484,7 @@ p:focus {
   padding: 10px;
 }
 
-.author-details p{
+.author-details p {
   font-size: 14px;
   /* line-height: 60%; */
   margin: 5px;
@@ -513,7 +511,7 @@ p:focus {
 
 .author-papers p {
   font-size: 20px;
-  margin-bottom: 0px
+  margin-bottom: 0px;
 }
 
 .tab {
@@ -522,7 +520,7 @@ p:focus {
 }
 
 .tab button {
-  background-color: #f1f1f1;;
+  background-color: #f1f1f1;
   border: 1px solid black;
   cursor: pointer;
   padding: 14px 100px;
@@ -549,4 +547,24 @@ p:focus {
   justify-content: center;
   align-items: center;
   height: 60vh;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  border: 1px solid #eaeaea;
+}
+
+th {
+  background-color: #fafafa;
+  color: #757575;
+  white-space: nowrap;
+  text-align: left;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #eaeaea;
 }

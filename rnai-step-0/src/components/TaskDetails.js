@@ -6,6 +6,7 @@ import { faCircleCheck, faCircleXmark, faTrashCan, faPenToSquare } from '@fortaw
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
 import Grant from "./Grant"
+import Patent from "./Patent"
 
 const TaskDetails = () => {
   console.log("TaskDetails rendered")
@@ -13,6 +14,7 @@ const TaskDetails = () => {
   console.log("TaskDetails::id: ", id)
   const [taskDetails, setTaskDetails] = useState([])
   const [fundingDetails, setFundingDetails] = useState([])
+  const [patentDetails, setPatentDetails] = useState([])
   const [task, setTask] = useState({})
   const [change, setChange] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -27,20 +29,20 @@ const TaskDetails = () => {
     console.log("useEffect triggered")
     const getTaskDetails = async () => {
       console.log("useEffect::fetchTaskDetails")
-      const taskDetails = await fetchTaskDetails()
-      console.log("useEffect::taskDetails: ", taskDetails)
-      setTaskDetails(taskDetails)
+      // Start all fetch operations in parallel
+      const [taskDetails, fundingDetails, patentDetails, taskFromServer] = await Promise.all([
+        fetchTaskDetails(),
+        fetchFundingDetails(),
+        fetchPatentDetails(),
+        fetchTask()
+      ]);
 
-      console.log("useEffect::fetchFundingDetails")
-      const fundingDetails = await fetchFundingDetails()
-      console.log("useEffect::fundingDetails: ", fundingDetails)
-      setFundingDetails(fundingDetails)
-
-      console.log("useEffect::fetchTask")
-      const taskFromServer = await fetchTask()
-      setTask(taskFromServer)
-
-      setLoading(false)
+      // Log and set states after all fetches have resolved
+      setTaskDetails(taskDetails);
+      setFundingDetails(fundingDetails);
+      setPatentDetails(patentDetails);
+      setTask(taskFromServer);
+      setLoading(false);
     }
     getTaskDetails()
   }, [])
@@ -56,6 +58,14 @@ const TaskDetails = () => {
 
   const fetchFundingDetails = async () => {
     const url = process.env.REACT_APP_FLASK_WEBSERVER + 'funding_details?id=' + id
+    const res = await fetch(url)
+    const data = await res.json()
+
+    return data
+  }
+
+  const fetchPatentDetails = async () => {
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + 'patent_details?id=' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -138,16 +148,15 @@ const TaskDetails = () => {
         <div className="tab">
           <button className={activeTab == 'funding' ? 'active' : ''} onClick={() => setActiveTab('funding')}>Funding</button>
           <button className={activeTab == 'literature' ? 'active' : ''} onClick={() => setActiveTab('literature')}>Literature</button>
+          <button className={activeTab == 'patents' ? 'active' : ''} onClick={() => setActiveTab('patents')}>Patents</button>
         </div>
 
         <div className='papers'>
 
-          {activeTab == 'funding' ?
+          {activeTab === 'funding' ?
             Object.keys(fundingDetails).length > 0 ? 
               <div>
                 <h2>Funding Opportunities</h2>
-
-                {/* <h4>{task.query}</h4> */}
                 {
                   fundingDetails[task.query].map((grant) => (
                     <Grant key={grant._id} grantDetails={grant}/>
@@ -168,11 +177,14 @@ const TaskDetails = () => {
                 }
               </div>
             :
-            <div className="container" style={{display: 'block'}}>
-              <p style={{paddingTop: '25vh'}}>Error 404</p>
-              <p><i>No contents to display</i></p>
-            </div>
-          :
+              <div className="container" style={{display: 'block'}}>
+                <p style={{paddingTop: '25vh'}}>Error 404</p>
+                <p><i>No contents to display (funding)</i></p>
+              </div>
+          : null
+          }
+
+          {activeTab === 'literature' ?
             taskDetails.length > 0 ?
               <div>
                 <h2>Papers & Authors</h2>
@@ -183,9 +195,28 @@ const TaskDetails = () => {
             :
               <div className="container" style={{display: 'block'}}>
                 <p style={{paddingTop: '25vh'}}>Error 404</p>
-                <p><i>No contents to display</i></p>
+                <p><i>No contents to display (literature)</i></p>
               </div> 
+          :
+          null
           }
+
+          {activeTab === 'patents' ?
+            patentDetails.length > 0 ?
+              <div>
+                <h2>Patents</h2>
+                {patentDetails.map((patent, index) => (
+                  <Patent key={patent.id} patentDetails={patent} index={index} />
+                ))}
+              </div>
+            :
+              <div className="container" style={{display: 'block'}}>
+                <p style={{paddingTop: '25vh'}}>Error 404</p>
+                <p><i>No contents to display (patents)</i></p>
+              </div> 
+          : null
+          }
+            
         </div>
 
         {task.status === 'Completed' &&

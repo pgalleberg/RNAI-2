@@ -44,7 +44,7 @@ const Navbar = () => {
             </div>
             
             {
-                (location.pathname.includes('/grant') || location.pathname.includes('/paper/') || location.pathname.includes('/author/')) && 
+                (location.pathname.includes('/inventor') || location.pathname.includes('/patent') || location.pathname.includes('/grant') || location.pathname.includes('/paper/') || location.pathname.includes('/author/')) && 
                 <div style={{textAlign: 'left', width: location.pathname.includes('/paper/') ? '75%' : '90%'}}>
                     <Link onClick={goBack}>
                         <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>

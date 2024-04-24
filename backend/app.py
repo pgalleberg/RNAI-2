@@ -11,10 +11,11 @@ import traceback
 from bson.objectid import ObjectId
 import os
 from celery.exceptions import SoftTimeLimitExceeded, MaxRetriesExceededError
-from S2Error import S2Error
+from APIError import APIError
 import pinecone
 import openai as openai
 from datetime import date
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -34,6 +35,7 @@ app.register_blueprint(ui, url_prefix='')
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 s2_api_key = os.getenv("S2_API_KEY")
+serp_api_key = os.getenv("SERP_API_KEY")
 
 headers = {
     'x-api-key': s2_api_key
@@ -79,8 +81,154 @@ def getData(vertical_id, record):
         )
     ]
 
-    workflow = group(grantsChain + papersChain)
+    patentsChain = [
+        chain(
+            getPatents.s(vertical_id, record["query"], record['numberOfPatents']),
+            group(
+                chain(
+                    getPatentDetails.s(index=i),
+                    group(
+                        insertInDb.s("patents"),
+                        chain(
+                            getInventorDetails.s(vertical_id),
+                            insertInDb.s("inventors")
+                        )
+                    )
+                ) for i in range(record["numberOfPatents"])
+            ) 
+        )
+    ]
+
+    workflow = group(grantsChain + papersChain + patentsChain)
     chord(workflow)(update_vertical.si(vertical_id, 'Completed'))
+
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=30, soft_time_limit=120)
+def getPatents(self, vertical_id, query, num_relevant_patents):
+    print("getPatents::getPatents API called")
+
+    try:
+        url = f"https://serpapi.com/search.json?engine=google_patents&q={query}&num={num_relevant_patents}&api_key={serp_api_key}"
+        response = requests.get(url).json()
+        
+        if response["search_metadata"]["status"] == "Error":
+            raise APIError(response["search_metadata"]["error"])
+        
+        patents = response["organic_results"]
+        
+        for patent in patents:
+            patent["vertical_id"] = vertical_id
+
+        return patents
+
+    except (SoftTimeLimitExceeded, APIError) as e:
+        print("getPatents::SoftTimeLimitExceeded/APIError")
+        print("getPatents::e: {}".format(e))
+
+        try: 
+            self.retry()
+
+        except MaxRetriesExceededError as e:
+            print("getPatents::MaxRetriesExceededError")
+            print("getPatents::e: {}".format(e))
+
+            return -1
+
+    except Exception as e:
+        print("getPatents::e: {}".format(e))
+        print("getPatents::error_details: {}".format(traceback.format_exc()))
+        if (isinstance(e, KeyError)):
+            print("getPatents::response: {}".format(response))
+        
+        return -1
+
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=30, soft_time_limit=120)
+def getPatentDetails(self, patents, index):
+    print("getPatentDetails::getPatentDetails API called")
+    if patents != -1:
+        patent = patents[index]
+        try:
+            response = requests.get(patent["serpapi_link"]+f"&api_key={serp_api_key}")
+            patent_detail = response.json()
+            if patent_detail["search_metadata"]["status"] == "Error":
+                raise APIError(patent_detail["search_metadata"]["error"])
+            
+            if patent_detail.get("description_link", None):
+                description = requests.get(patent_detail["description_link"])
+                soup = BeautifulSoup(description.content, "html.parser")
+                body_content = soup.find('body')
+                if body_content:
+                    patent_detail["description"] = body_content.text
+            
+            patent_detail["vertical_id"] = patent["vertical_id"]
+            # response["patent_id"] = str(uuid4())
+            patent_detail["rank"] = patent["rank"]
+            patent_detail["patent_id"] = patent_detail["search_parameters"]["patent_id"]
+            return patent_detail
+        
+        except (SoftTimeLimitExceeded, APIError) as e:
+            print("getPatentDetails::SoftTimeLimitExceeded/APIError")
+            print("getPatentDetails::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getPatentDetails::MaxRetriesExceededError")
+                print("getPatentDetails::e: {}".format(e))
+
+                return -1
+
+        except Exception as e:
+            print("getPatentDetails::e: {}".format(e))
+            print("getPatentDetails::error_details: {}".format(traceback.format_exc()))
+            if (isinstance(e, KeyError)):
+                print("getPatentDetails::response: {}".format(response))
+            
+            return -1
+
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=30, soft_time_limit=120)
+def getInventorDetails(self, patent_details, vertical_id):
+    print("getInventorDetails::getInventorDetails API called")
+    if patent_details != -1:
+        try:
+            inventors = []
+            for inventor in patent_details["inventors"]:
+                response = requests.get(inventor["serpapi_link"]+f"&api_key={serp_api_key}")
+                inventor_details = response.json()
+
+                if inventor_details["search_metadata"]["status"] == "Error":
+                    raise APIError(inventor_details["search_metadata"]["error"])
+                
+                inventor_details["vertical_id"] = vertical_id
+                inventor_details["source_patents"] = [{"title": patent_details["title"], "patent_id": patent_details["patent_id"]}]
+                inventor_details["name"] = inventor["name"]
+                inventors.append(inventor_details)
+            
+            return inventors
+            
+        except (SoftTimeLimitExceeded, APIError) as e:
+            print("getInventorDetails::SoftTimeLimitExceeded/APIError")
+            print("getInventorDetails::e: {}".format(e))
+
+            try: 
+                self.retry()
+
+            except MaxRetriesExceededError as e:
+                print("getInventorDetails::MaxRetriesExceededError")
+                print("getInventorDetails::e: {}".format(e))
+
+                return -1
+
+        except Exception as e:
+            print("getInventorDetails::e: {}".format(e))
+            print("getInventorDetails::error_details: {}".format(traceback.format_exc()))
+            if (isinstance(e, KeyError)):
+                print("getInventorDetails::response: {}".format(response))
+            
+            return -1
 
 
 @celery.task(bind=True, rate_limit='1/s', soft_time_limit=120, max_retries=3, default_retry_delay=10)
@@ -93,7 +241,7 @@ def getRelevantPapers(self, vertical_id, query, num_relevant_papers):
         # print('getRelevantPapers::response: {}'.format(response))
 
         if response.get("message", -1) != -1 or response.get("error", -1) != -1:
-            raise S2Error("Semantic Scholar API Error")
+            raise APIError("Semantic Scholar API Error")
 
         papers = response['data']
         for index, paper in enumerate(papers):
@@ -102,9 +250,10 @@ def getRelevantPapers(self, vertical_id, query, num_relevant_papers):
         print('getRelevantPapers::papers: ', papers)
         return papers
         
-    except (SoftTimeLimitExceeded, S2Error) as e:
-        print("getRelevantPapers::SoftTimeLimitExceeded/S2Error")
+    except (SoftTimeLimitExceeded, APIError) as e:
+        print("getRelevantPapers::SoftTimeLimitExceeded/APIError")
         print("getRelevantPapers::e: {}".format(e))
+        print("getRelevantPapers::response: {}".format(response))
 
         try: 
             self.retry()
@@ -147,7 +296,7 @@ def getAuthorDetails(self, paper_details, index):
 
                 if authors.get("message", -1) != -1 or authors.get("error", -1) != -1:
                     print("getAuthorDetails::authors: {}".format(authors))
-                    raise S2Error("Semantic Scholar API Error")
+                    raise APIError("Semantic Scholar API Error")
                 
                 authors = [author for author in authors['data'] if author != None]
 
@@ -159,8 +308,8 @@ def getAuthorDetails(self, paper_details, index):
                 print("getAuthorDetails::authors: {}".format(authors))
                 return authors
         
-        except (SoftTimeLimitExceeded, S2Error) as e:
-            print("getAuthorDetails::SoftTimeLimitExceeded/S2Error")
+        except (SoftTimeLimitExceeded, APIError) as e:
+            print("getAuthorDetails::SoftTimeLimitExceeded/APIError")
             print("getAuthorDetails::e: {}".format(e))
 
             try: 
@@ -171,6 +320,7 @@ def getAuthorDetails(self, paper_details, index):
                 print("getAuthorDetails::e: {}".format(e))
 
                 #TODO: No return statement here. Should there be?
+                return -1
 
         except Exception as e:
             print("getAuthorDetails::e: {}".format(e))
@@ -179,6 +329,7 @@ def getAuthorDetails(self, paper_details, index):
                 print("getAuthorDetails::response: {}".format(response))
             
             #TODO: No return statement here. Should there be?
+            return -1
             
 
 @celery.task(bind=True, soft_time_limit=180, max_retries=3, default_retry_delay=30)
@@ -201,6 +352,8 @@ def insertInDb(self, record, table):
                
                 if len(record) > 0:
                     collection.insert_many(record)
+                
+                return 1
 
         except SoftTimeLimitExceeded as e:
             print("insertInDb::SoftTimeLimitExceeded")
@@ -212,6 +365,7 @@ def insertInDb(self, record, table):
             except MaxRetriesExceededError as e:
                 print("insertInDb::MaxRetriesExceededError")
                 print("insertInDb::e: {}".format(e))
+                return -1
 
         except Exception as e:
             print("insertInDb::e: {}".format(e))
@@ -220,6 +374,7 @@ def insertInDb(self, record, table):
             print("insertInDb::type(record): {}".format(type(record)))
             print("insertInDb::len(record): {}".format(len(record)))
             print("insertInDb::record: {}".format(record))
+            return -1
 
 
 @celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
@@ -239,6 +394,7 @@ def update_vertical(self, id, status):
         )
 
         print('update_vertical::updated_document: ', updated_document)
+        return 1
     
     except SoftTimeLimitExceeded as e:
             print("update_vertical::SoftTimeLimitExceeded")
@@ -250,11 +406,12 @@ def update_vertical(self, id, status):
             except MaxRetriesExceededError as e:
                 print("update_vertical::MaxRetriesExceededError")
                 print("update_vertical::e: {}".format(e))
+                return -1
 
     except Exception as e:
         print("update_vertical::e: {}".format(e))
         print("update_vertical::error_details: {}".format(traceback.format_exc()))
-
+        return -1
 
 @celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
 def getGrants(self, vertical_id, query, num_results, opportunity_types):
@@ -301,6 +458,7 @@ def getGrants(self, vertical_id, query, num_results, opportunity_types):
         except MaxRetriesExceededError as e:
             print("getGrants::MaxRetriesExceededError")
             print("getGrants::e: {}".format(e))
+            return -1
 
 
 @app.route('/api/tasks', methods=['POST'])
@@ -330,6 +488,13 @@ def createVertical():
 if __name__ == "__main__":
     app.run()
 
-
-# getPapersFromS2.delay('6557a45d503f29770fd5b5c8', "methane removal from ambient air", 5)    
-# getGrantsFromG2.delay('6557a45d503f29770fd5b5c8', 'methane removal from ambient air', [])
+# task = {
+#     "query": "methane removal from ambient air",
+#     "status": "Pending",
+#     "numberOfGrants": 10,
+#     "numberOfGrantsPerGenericName": 0, 
+#     "numberOfRelevantPapers": 10,
+#     "numberOfPatents": 10,
+#     'OpportunityStatus': ["posted", "forecasted"]
+# }
+# getData.delay('6557a45d503f29770fd5b5c8', task)

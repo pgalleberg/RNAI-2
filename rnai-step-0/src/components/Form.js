@@ -13,6 +13,7 @@ const Form = () => {
     const [loading, setLoading] = useState(false)
     const [submitting, setSubmitting] = useState(false)
     const [numberOfGrantsPerGenericName, setNumberOfGrantsPerGenericName] = useState(3)
+    const [numberOfPatents, setNumberOfPatents] = useState(10);
 
     console.log("genericNames: ", genericNames)
 
@@ -96,7 +97,8 @@ const Form = () => {
               document.getElementById("forecasted").checked === true && 'forecasted',
               document.getElementById("closed").checked === true && 'closed'
             ].filter(Boolean),
-            "numberOfRelevantPapers": parseInt(document.getElementById("numberOfRelevantPapers").value, 10)
+            "numberOfRelevantPapers": parseInt(document.getElementById("numberOfRelevantPapers").value, 10),
+            "numberOfPatents": parseInt(numberOfPatents),
         }
 
         await addTask(task)
@@ -174,6 +176,26 @@ const Form = () => {
               <input type="number" defaultValue="3" max={10} min={1}></input><br></br>
             </div> */}
           </div>
+
+          <hr style={{ borderColor: 'lightgray', borderTopWidth: '0.1px', margin: '20px'}}></hr>
+
+          <div>
+            <div className="">
+              <label># of patents:</label>
+              <input id="numberOfPatents" type="number" value={numberOfPatents} max={100} min={10}
+                onChange={(e) => {
+                  setNumberOfPatents(e.target.value);
+                }}
+              >
+              </input>
+              <br></br>
+            </div>
+            {/* <div className="">
+              <label for="fname"># of recommended papers:</label>
+              <input type="number" defaultValue="3" max={10} min={1}></input><br></br>
+            </div> */}
+          </div>
+
         </div>
       </div>
 
