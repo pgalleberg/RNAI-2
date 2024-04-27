@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config['CELERY_BROKER_URL'] = os.getenv("REDIS_CONN_STRING")
-app.config['CELERY_RESULT_BACKEND'] = os.getenv("REDIS_CONN_STRING")
+app.config['result_backend'] = os.getenv("REDIS_CONN_STRING")
 
 celery = Celery(__name__, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
