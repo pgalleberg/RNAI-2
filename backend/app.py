@@ -187,6 +187,10 @@ def getPatentDetails(self, patents, index):
                 print("getPatentDetails::response: {}".format(response))
             
             return -1
+    else:
+        return -1
+
+    
 
 
 @celery.task(bind=True, max_retries=3, default_retry_delay=30, soft_time_limit=120)
@@ -229,6 +233,9 @@ def getInventorDetails(self, patent_details, vertical_id):
                 print("getInventorDetails::response: {}".format(response))
             
             return -1
+    else:
+        return -1
+    
 
 
 @celery.task(bind=True, rate_limit='1/s', soft_time_limit=120, max_retries=3, default_retry_delay=10)
@@ -330,6 +337,9 @@ def getAuthorDetails(self, paper_details, index):
             
             #TODO: No return statement here. Should there be?
             return -1
+    
+    else:
+        return -1
             
 
 @celery.task(bind=True, soft_time_limit=180, max_retries=3, default_retry_delay=30)
@@ -375,6 +385,9 @@ def insertInDb(self, record, table):
             print("insertInDb::len(record): {}".format(len(record)))
             print("insertInDb::record: {}".format(record))
             return -1
+    
+    else:
+        return -1
 
 
 @celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
