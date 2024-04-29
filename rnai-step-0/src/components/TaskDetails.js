@@ -179,7 +179,7 @@ const TaskDetails = () => {
             :
               <div className="container" style={{display: 'block'}}>
                 <p style={{paddingTop: '25vh'}}>Error 404</p>
-                <p><i>No contents to display (funding)</i></p>
+                <p><i>No contents to display</i></p>
               </div>
           : null
           }
@@ -195,7 +195,7 @@ const TaskDetails = () => {
             :
               <div className="container" style={{display: 'block'}}>
                 <p style={{paddingTop: '25vh'}}>Error 404</p>
-                <p><i>No contents to display (literature)</i></p>
+                <p><i>No contents to display</i></p>
               </div> 
           :
           null
@@ -212,7 +212,7 @@ const TaskDetails = () => {
             :
               <div className="container" style={{display: 'block'}}>
                 <p style={{paddingTop: '25vh'}}>Error 404</p>
-                <p><i>No contents to display (patents)</i></p>
+                <p><i>No contents to display</i></p>
               </div> 
           : null
           }
