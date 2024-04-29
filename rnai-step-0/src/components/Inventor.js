@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react"
-import { faSpinner} from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Inventor = () => {
@@ -29,62 +29,62 @@ const Inventor = () => {
 
     return (
         inventorDetails ?
-        <div className='author-container' >
-            <div className='author-card'>
-                <div className="background"></div>
-                <div className="author-details">
-                    <p style={{fontSize: '24px', paddingBottom: '0px'}}><strong>{inventorDetails.name}</strong></p>
-                    <div className="author-stat">
-                        <p>Patents</p>
-                        <p><strong>{Object.keys(inventorDetails.organic_results).length}</strong></p>
-                    </div>
-                    {/* <div className="author-stat">
+            <div className='author-container' >
+                <div className='author-card'>
+                    <div className="background"></div>
+                    <div className="author-details">
+                        <p style={{ fontSize: '24px', paddingBottom: '0px' }}><strong>{inventorDetails.name}</strong></p>
+                        <div className="author-stat">
+                            <p>Patents</p>
+                            <p><strong>{Object.keys(inventorDetails.organic_results).length}</strong></p>
+                        </div>
+                        {/* <div className="author-stat">
                         <p>CPC</p>
                         <p><strong></strong></p>
                     </div> */}
-                    <hr></hr>
-                    <p><strong>Vertical Specific</strong></p>
-                    <div className="author-stat">
-                        <p>Patents</p>
-                        <p><strong>{Object.keys(inventorDetails.source_patents).length}</strong></p>
+                        <hr></hr>
+                        <p><strong>Vertical Specific</strong></p>
+                        <div className="author-stat">
+                            <p>Patents</p>
+                            <p><strong>{Object.keys(inventorDetails.source_patents).length}</strong></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div className='author-papers references'>
-                <p>Vertical Specific Patents</p>
-                <p style={{fontSize: '10px', color: 'gray', marginTop: '0px'}}>
-                    &#42;&nbsp;Internal links (all patents are present in database)
-                </p>
-                {Object.keys(inventorDetails.source_patents).map((key) => (
-                    <>
-                        <Link to={`/paper/${key}/${vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{inventorDetails.source_patents[key].title}</Link>
-                        <br></br>
-                    </>                    
-                ))}
 
-                {
-                    inventorDetails.organic_results && (
+                <div className='author-papers references'>
+                    <p>Vertical Specific Patents</p>
+                    <p style={{ fontSize: '10px', color: 'gray', marginTop: '0px' }}>
+                        &#42;&nbsp;Internal links (all patents are present in database)
+                    </p>
+                    {Object.keys(inventorDetails.source_patents).map((key) => (
                         <>
-                            <p>All Patents</p>
-                            <p style={{fontSize: '10px', color: 'gray', marginTop: '0px'}}>
-                                &#42;&nbsp;External links (all patents are not present in the database)
-                            </p>
-                            {inventorDetails.organic_results.map((patent) => (
-                                <>
-                                    <Link target="_blank" to={patent.pdf}>&nbsp;&nbsp;•&nbsp;&nbsp;{patent.title}</Link>
-                                    <br></br> 
-                                </>
-                            ))}
+                            <Link to={`/${key}/${vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{inventorDetails.source_patents[key].title}</Link>
+                            <br></br>
                         </>
-                    )
-                }
+                    ))}
+
+                    {
+                        inventorDetails.organic_results && (
+                            <>
+                                <p>All Patents</p>
+                                <p style={{ fontSize: '10px', color: 'gray', marginTop: '0px' }}>
+                                    &#42;&nbsp;External links (all patents are not present in the database)
+                                </p>
+                                {inventorDetails.organic_results.map((patent) => (
+                                    <>
+                                        <Link target="_blank" to={patent.pdf}>&nbsp;&nbsp;•&nbsp;&nbsp;{patent.title}</Link>
+                                        <br></br>
+                                    </>
+                                ))}
+                            </>
+                        )
+                    }
+                </div>
             </div>
-        </div>
-        :
-        <div className="container">
-            <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
-        </div>
+            :
+            <div className="container">
+                <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
+            </div>
     )
 }
 export default Inventor

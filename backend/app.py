@@ -77,7 +77,8 @@ def getData(vertical_id, record):
                     getAuthorDetails.s(index=i),
                     insertInDb.s('authors')
                 ) for i in range(record['numberOfRelevantPapers'])]
-            )
+            ),
+            papers_check.si('Completed')
         )
     ]
 
@@ -95,7 +96,8 @@ def getData(vertical_id, record):
                         )
                     )
                 ) for i in range(record["numberOfPatents"])
-            ) 
+            ),
+            patents_check.si('Completed')
         )
     ]
 
@@ -351,6 +353,7 @@ def insertInDb(self, record, table):
 
             if isinstance(record, dict):
                 collection.insert_one(record)
+                return 1
 
             elif isinstance(record, list):
                 # remove all nones. Catering to record = [None, None] & record = [None, [{}, ...]]
@@ -425,6 +428,23 @@ def update_vertical(self, id, status):
         print("update_vertical::e: {}".format(e))
         print("update_vertical::error_details: {}".format(traceback.format_exc()))
         return -1
+
+
+@celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def grants_check(self, status):
+    print("grants_check::status: {}".format(status))
+    return 1
+
+@celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def patents_check(self, status):
+    print("patents_check::status: {}".format(status))
+    return 1
+
+@celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
+def papers_check(self, status):
+    print("papers_check::status: {}".format(status))
+    return 1
+
 
 @celery.task(bind=True, soft_time_limit=60, max_retries=3, default_retry_delay=10)
 def getGrants(self, vertical_id, query, num_results, opportunity_types):
