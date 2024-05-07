@@ -38,7 +38,7 @@ const Patent = ({ patentDetails, index }) => {
           <div className='pdf'>
             <br></br>
             <FontAwesomeIcon icon={faUnlock} style={{ marginRight: '10px' }} />
-            <a href={patentDetails.pdf} target="_blank">PDF</a>
+            <a href={patentDetails.pdf} target="_blank" rel="noreferrer">PDF</a>
           </div>
         }
 

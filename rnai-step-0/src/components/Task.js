@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner, faCheck, faTimes, faCircleCheck, faCircleXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faCheck, faTimes, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import AlertDialog from "./AlertDialog";
 
