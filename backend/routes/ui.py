@@ -284,3 +284,21 @@ def updateVertical():
 
     return updated_document, 200
 
+
+@ui.route('/api/delete_vertical/<string:vertical_id>', methods=['DELETE'])
+def deleteVertical(vertical_id):
+    print("vertical_id: {} received".format(vertical_id))
+    db['verticals'].delete_one({"_id": ObjectId(vertical_id)})
+    
+    collections = ['authors', 'funding', 'inventors', 'papers', 'patents']
+    for collection in collections:
+        query = {
+            "vertical_id": vertical_id
+        }
+        try:
+            db[collection].delete_many(query)
+            print("deleting from collection: {}".format(collection))
+        except Exception as e:
+            print("exception::e:{}".format(e))
+
+    return jsonify({"message": "Vertical deleted successfully!"}), 200

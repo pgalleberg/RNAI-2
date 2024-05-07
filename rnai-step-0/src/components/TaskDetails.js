@@ -2,16 +2,14 @@ import { useEffect, useState } from "react"
 import Button from "./Button"
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleXmark, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
 import Grant from "./Grant"
 import Patent from "./Patent"
 
 const TaskDetails = () => {
-  console.log("TaskDetails rendered")
   const { id } = useParams();
-  console.log("TaskDetails::id: ", id)
   const [taskDetails, setTaskDetails] = useState([])
   const [fundingDetails, setFundingDetails] = useState([])
   const [patentDetails, setPatentDetails] = useState([])
@@ -26,9 +24,7 @@ const TaskDetails = () => {
   const [activeTab, setActiveTab] = useState(currentTab)
 
   useEffect(() => {
-    console.log("useEffect triggered")
     const getTaskDetails = async () => {
-      console.log("useEffect::fetchTaskDetails")
       // Start all fetch operations in parallel
       const [taskDetails, fundingDetails, patentDetails, taskFromServer] = await Promise.all([
         fetchTaskDetails(),
@@ -86,7 +82,6 @@ const TaskDetails = () => {
   }
 
   useEffect(() => {
-    console.log("useEffect 2 triggered")
     const updateTask = async () => {
       const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'update_vertical', {
         method: 'PATCH',
@@ -95,45 +90,14 @@ const TaskDetails = () => {
         },
         body: JSON.stringify(task)
       })
-
       await res.json()
     }
 
     if (task.status !== undefined && change === true) {
-      console.log("useEffect 2::updateTask")
       updateTask()
     }
-
   }, [task, change])
 
-  function editDetails(subHeading) {
-    console.log("Button clicked")
-    document.getElementById(subHeading).contentEditable = true
-    document.getElementById(subHeading).focus();
-
-    document.getElementById(subHeading + 'buttons').style.display = 'block'
-  }
-
-  function cancelEdit(subHeading, originalText) {
-    document.getElementById(subHeading).contentEditable = false
-    document.getElementById(subHeading + 'buttons').style.display = 'none'
-    document.getElementById(subHeading).innerHTML = originalText
-  }
-
-  async function saveEdits(subHeading) {
-    document.getElementById(subHeading).contentEditable = false
-    document.getElementById(subHeading + 'buttons').style.display = 'none'
-    setTaskDetails({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
-    const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'task_details/' + id, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({ ...taskDetails, [subHeading]: document.getElementById(subHeading).innerHTML })
-    })
-
-    await res.json()
-  }
 
   return (
     loading ? 
@@ -146,9 +110,9 @@ const TaskDetails = () => {
         {/* <hr></hr> */}
 
         <div className="tab">
-          <button className={activeTab == 'funding' ? 'active' : ''} onClick={() => setActiveTab('funding')}>Funding</button>
-          <button className={activeTab == 'literature' ? 'active' : ''} onClick={() => setActiveTab('literature')}>Literature</button>
-          <button className={activeTab == 'patents' ? 'active' : ''} onClick={() => setActiveTab('patents')}>Patents</button>
+          <button className={activeTab === 'funding' ? 'active' : ''} onClick={() => setActiveTab('funding')}>Funding</button>
+          <button className={activeTab === 'literature' ? 'active' : ''} onClick={() => setActiveTab('literature')}>Literature</button>
+          <button className={activeTab === 'patents' ? 'active' : ''} onClick={() => setActiveTab('patents')}>Patents</button>
         </div>
 
         <div className='papers'>

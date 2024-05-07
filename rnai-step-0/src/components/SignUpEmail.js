@@ -18,29 +18,20 @@ const SignUpEmail = ({ setEmail_ }) => {
     const navigate = useNavigate()
 
     const onSubmit = async (e) => {
-
         e.preventDefault()
-
         setSubmitting(true)
-
-        console.log("auth: ", auth)
-        console.log("email: ", email)
-        console.log("password: ", password)
 
         // const auth = getAuth();
         await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
-            const user = userCredential.user;
-            // ...
-            console.log("User Created: ", user)
+            // const user = userCredential.user;
             navigate("/approval-pending")
         })
         .catch((error) => {
             setSubmitting(false)
             const errorCode = error.code;
             const errorMessage = error.message;
-            // ..
             console.log("User Not Created\n", errorCode, ":", errorMessage)
             if (errorCode === "auth/weak-password"){
                 console.log("Weak Password")
@@ -52,10 +43,7 @@ const SignUpEmail = ({ setEmail_ }) => {
                 setEmailExists(true)
                 setWeakPwd(false)
             }
-        });
-
-        console.log("Finally here")
-        
+        });        
     }
 
     const forgotPassword = async (e) => {

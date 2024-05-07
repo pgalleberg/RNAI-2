@@ -4,12 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 
 const Paper = ({ paperDetails, index }) => {
-
-    console.log("Paper::paperDetails: ", paperDetails)
     function expand(index, section) {
-        console.log("index received: ", index)
-        console.log("section name: ", section)
-
         let className = ''
         if (section === 'citations') {
             className = 'citations'
@@ -25,8 +20,6 @@ const Paper = ({ paperDetails, index }) => {
             document.getElementsByClassName(className)[index].style.display = 'none'
             document.getElementsByClassName('expand-' + section)[index].innerHTML = 'Expand'
         }
-
-        console.log("Expand clicked")
     }
 
     return (
@@ -73,7 +66,7 @@ const Paper = ({ paperDetails, index }) => {
                 <div className='pdf'>
                     <br></br>
                     <FontAwesomeIcon icon={faUnlock} style={{ marginRight: '10px' }} />
-                    <a href={paperDetails.openAccessPdf && paperDetails.openAccessPdf.url} target="_blank">PDF</a>
+                    <a href={paperDetails.openAccessPdf && paperDetails.openAccessPdf.url} target="_blank" rel="noreferrer">PDF</a>
                 </div>
             }
 
@@ -87,7 +80,7 @@ const Paper = ({ paperDetails, index }) => {
                         <div className="citations" style={{ display: 'none' }}>
                             <br></br>
                             {paperDetails.citations.map((citation) => (
-                                paperDetails.depth == 0 ?
+                                paperDetails.depth === 0 ?
                                     <Link to={`/paper/${citation.paperId}/${paperDetails.vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</Link>
                                     : <p>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</p>
                                     // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{citation.title}</a>
@@ -107,7 +100,7 @@ const Paper = ({ paperDetails, index }) => {
                         <div className="references" style={{ display: 'none' }}>
                             <br></br>
                             {paperDetails.references.map((reference) => (
-                                paperDetails.depth == 0 ?
+                                paperDetails.depth === 0 ?
                                     <Link to={`/paper/${reference.paperId}/${paperDetails.vertical_id}`}>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</Link>
                                     : <p>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</p>
                                     // <a href='#'>&nbsp;&nbsp;•&nbsp;&nbsp;{reference.title}</a>

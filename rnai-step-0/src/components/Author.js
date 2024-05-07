@@ -11,7 +11,6 @@ const Author = () => {
     sessionStorage.setItem('currentTab', 'literature');
 
     useEffect(() => {
-        console.log("Author.js::useEffect() trigerred")
         const getAuthorDetails = async () => {
             const authorDetails = await fetchAuthorDetails()
             setAuthorDetails(authorDetails)
@@ -23,8 +22,6 @@ const Author = () => {
         const url = process.env.REACT_APP_FLASK_WEBSERVER + 'author_details?author_id=' + author_id + '&vertical_id=' + vertical_id
         const res = await fetch(url)
         const data = await res.json()
-
-        console.log("Author.js::author: ", data)
         return data
     }
 

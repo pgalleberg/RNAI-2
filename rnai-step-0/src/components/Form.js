@@ -1,13 +1,11 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner, faTriangleExclamation, faGear } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faGear } from '@fortawesome/free-solid-svg-icons'
 import auth from "../firebase";
 
 const Form = () => {
-    console.log("Form rendered")
     const user = auth.currentUser;
-    console.log("user: ", user)
     const [autoSuggest, setAutoSuggest] = useState(false)
     const [genericNames, setGenericNames] = useState([]) 
     const [loading, setLoading] = useState(false)
@@ -15,14 +13,10 @@ const Form = () => {
     const [numberOfGrantsPerGenericName, setNumberOfGrantsPerGenericName] = useState(3)
     const [numberOfPatents, setNumberOfPatents] = useState(10);
 
-    console.log("genericNames: ", genericNames)
-
     const fetchGenericNames = async (verticalName) => {
       setLoading(true);
       const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'getGenericNames?verticalName=' + verticalName) 
-      console.log("fetchTasks::res: ", res)
       const data = await res.json()
-      console.log("fetchTasks::data: ", data)
       
       setGenericNames([
         { 
@@ -50,8 +44,6 @@ const Form = () => {
     }
 
     const addTask = async (task) => {
-        console.log("addTask::task received: ", task)
-        console.log("addTask::JSON.stringify(task): ", JSON.stringify(task))
         const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks',{ /* TODO: Should I send request to tasks/user */
             method: 'POST',
             headers: {
@@ -59,19 +51,15 @@ const Form = () => {
             },
             body: JSON.stringify(task)
         })
-
         //const data = await res.json() //don't need to await here
-        //console.log("addTask::data added: ", data)
     }
 
     const navigate = useNavigate()
 
     const onSubmit = async (e) => {
         e.preventDefault()
-
         setSubmitting(true)
          
-        console.log("Submit clicked")
         const now = new Date();
         const task = {
             "query": document.getElementById("verticalName").value,
@@ -135,7 +123,7 @@ const Form = () => {
                 checked={autoSuggest} 
                 onChange={(e) => {
                   setAutoSuggest(e.currentTarget.checked)
-                  document.getElementById('verticalName').value.length > 5 && numberOfGrantsPerGenericName > 0 &&  document.getElementById('name1').value.length == 0 &&
+                  document.getElementById('verticalName').value.length > 5 && numberOfGrantsPerGenericName > 0 &&  document.getElementById('name1').value.length === 0 &&
                   fetchGenericNames(document.getElementById('verticalName').value)
                 }}
                 disabled={loading}

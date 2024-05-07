@@ -6,10 +6,7 @@ import { Link } from "react-router-dom";
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 
 const PatentDetails = () => {
-    console.log("PatentDetails rendered")
     const { patent_id, vertical_id } = useParams();
-    console.log("PatentDetails::patent_id: ", patent_id)
-    console.log("PatentDetails::vertical_id: ", vertical_id)
     const [patentDetails, setPatentDetails] = useState(null)
 
     sessionStorage.setItem('currentTab', 'patents');
@@ -18,7 +15,6 @@ const PatentDetails = () => {
         const getPatentDetails = async () => {
             const patentDetails = await fetchPatentDetails()
             setPatentDetails(patentDetails)
-            console.log("patentDetails: ", patentDetails)
         }
         getPatentDetails()
     }, [patent_id]);
@@ -65,7 +61,7 @@ const PatentDetails = () => {
                 <div className='pdf'>
                     <br></br>
                     <FontAwesomeIcon icon={faUnlock} style={{ marginRight: '10px' }} />
-                    <a href={patentDetails.pdf} target="_blank">PDF</a>
+                    <a href={patentDetails.pdf} target="_blank" rel="noreferrer">PDF</a>
                 </div>
             }
 
@@ -76,7 +72,7 @@ const PatentDetails = () => {
                         {patentDetails.images?.map((i) => (
                             <img src={i}
                                 style={{ border: "2px solid black", maxWidth: "100%", maxHeight: "100%", height: "250px", marginRight: "10px", display: "inline-block", verticalAlign: "middle"}}
-                                width="contains"
+                                width="contains" alt="patent"
                             />
                         ))}
                     </div>
@@ -115,7 +111,7 @@ const PatentDetails = () => {
 
                         {patentDetails?.patent_citations?.original?.map((i) => (
                         <tr>
-                            <td><a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank">{i.publication_number}</a></td>
+                            <td><a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank" rel="noreferrer">{i.publication_number}</a></td>
                             <td>{i.priority_date}</td>
                             <td>{i.publication_date}</td>
                             <td>{i.assignee_original}</td>
@@ -157,7 +153,7 @@ const PatentDetails = () => {
 
                         {patentDetails?.cited_by?.original?.map((i) => (
                         <tr>
-                            <td><a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank">{i.publication_number}</a></td>
+                            <td><a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank" rel="noreferrer">{i.publication_number}</a></td>
                             <td>{i.priority_date}</td>
                             <td>{i.publication_date}</td>
                             <td>{i.assignee_original}</td>
@@ -182,7 +178,7 @@ const PatentDetails = () => {
 
                         {patentDetails?.cited_by?.family_to_family?.map((i) => (
                         <tr>
-                            <td><a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank">{i.publication_number}</a></td>
+                            <td><a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank" rel="noreferrer">{i.publication_number}</a></td>
                             <td>{i.priority_date}</td>
                             <td>{i.publication_date}</td>
                             <td>{i.assignee_original}</td>
@@ -207,9 +203,9 @@ const PatentDetails = () => {
                         <tr>
                             <td>
                                 {i.publication_number ? 
-                                    <a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank">{i.publication_number}</a>
+                                    <a href={`https://patents.google.com/patent/${i.publication_number}/en`} target="_blank" rel="noreferrer">{i.publication_number}</a>
                                 :
-                                    <a href={`https://patents.google.com/scholar/${i.scholar_id}`} target="_blank">{i.scholar_authors}</a>
+                                    <a href={`https://patents.google.com/scholar/${i.scholar_id}`} target="_blank" rel="noreferrer">{i.scholar_authors}</a>
                                 }
                             </td>
                             <td>{i.publication_date}</td>

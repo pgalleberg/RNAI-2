@@ -30,7 +30,6 @@ function App(){
   const [email, setEmail] = useState('')
   
   const setEmail_ = (email) => {
-    console.log("setting email")
     setEmail(email)
   }
 

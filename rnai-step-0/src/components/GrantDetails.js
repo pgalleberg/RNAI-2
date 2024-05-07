@@ -1,5 +1,4 @@
 import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboardCheck, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useParams } from "react-router-dom";
@@ -12,10 +11,7 @@ const GrantDetails = () => {
 
     sessionStorage.setItem('currentTab', 'funding');
 
-    useEffect(() => {
-        console.log("useEffect triggered")
-        console.log("data: ", data)
-        
+    useEffect(() => {        
         const getGrantDetails = async () => {
             const grantDetails = await fetchGrantDetails()
             setData(grantDetails.metadata)
@@ -47,13 +43,13 @@ const GrantDetails = () => {
     }
 
     function formatFundingInstrumentType(code) {
-        if (code == 'G')
+        if (code === 'G')
             return 'Grant'
-        else if (code == 'CA')
+        else if (code === 'CA')
             return 'Cooperative Agreement'
-        else if (code == 'O')
+        else if (code === 'O')
             return 'Other'
-        else if (code == 'PC')
+        else if (code === 'PC')
             return 'Procurement Contract'
         else
             return code
@@ -343,9 +339,9 @@ const GrantDetails = () => {
                         {/* <a href={'https://grants.gov/search-results-detail/' + data.OpportunityID} target="_blank" style={{fontSize: '18px'}}>Apply Online</a> */}
                         {
                             data.OpportunityID ? 
-                                <a href={'https://grants.gov/search-results-detail/' + data.OpportunityID} target="_blank" style={{fontSize: '18px'}}>Apply Online</a>
+                                <a href={'https://grants.gov/search-results-detail/' + data.OpportunityID} target="_blank" rel="noreferrer" style={{fontSize: '18px'}}>Apply Online</a>
                             :
-                            <a href={data.grant_source_url} target="_blank" style={{fontSize: '18px'}}>Apply Online</a>
+                            <a href={data.grant_source_url} target="_blank" rel="noreferrer" style={{fontSize: '18px'}}>Apply Online</a>
                         }
                     </div>
                     

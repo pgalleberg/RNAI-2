@@ -12,8 +12,6 @@ const LogIn = ({ setEmail_ }) => {
   let searchParams = new URLSearchParams(location.search);
   let emailId = searchParams.get('emailId')
   let userStatus = searchParams.get('status')
-  console.log("emailId: ", emailId)
-  console.log("userStatus: ", userStatus)
 
   const [email, setEmail] = useState(emailId)
   const [password, setPassword] = useState('')
@@ -21,28 +19,20 @@ const LogIn = ({ setEmail_ }) => {
   const [correctEmail, setCorrectEmail] = useState('true')
   const [correctPwd, setCorrectPwd] = useState('true')
 
-  const [status, setStatus] = useState(userStatus)
   const [submitting, setSubmitting] = useState(false)
 
   const navigate = useNavigate()
 
   const onSubmit = async (e) => {
-
     e.preventDefault()
-
     setSubmitting(true)
-
-    console.log("auth: ", auth)
-    console.log("email: ", email)
-    console.log("password: ", password)
 
     // const auth = getAuth();
     await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in 
-      const user = userCredential.user;
-      // ...
-      console.log("User: ", user)
+      // const user = userCredential.user;
+      // console.log("User: ", user)
       navigate("/")
     })
     .catch((error) => {
@@ -95,7 +85,7 @@ const LogIn = ({ setEmail_ }) => {
             &nbsp;&nbsp;Wrong password
           </p> }
 
-          {correctEmail && correctPwd && status == "created" && <p style={{color: 'red', fontSize: '12px', textAlign: 'left'}}>
+          {correctEmail && correctPwd && userStatus === "created" && <p style={{color: 'red', fontSize: '12px', textAlign: 'left'}}>
             {/* <faTriangleExclamation style={{color: 'red', verticalAlign: 'middle'}} /> */}
             <FontAwesomeIcon icon={faTriangleExclamation} color="red"/>
             &nbsp;&nbsp;Contact administrator for access. 

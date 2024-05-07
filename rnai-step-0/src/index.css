@@ -267,24 +267,10 @@ a {
   color: black;
 }
 
-.results {
-  /* border: 1px solid red; */
-}
-
-.block {
-  /* border-bottom: 2px solid black; */
-}
-
 .result {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 0.1fr;
-  width: 75%;
-}
-
-.result {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 0.1fr;
-  width: 75%;
+  grid-template-columns: 2fr 1fr 1fr 0.1fr 0.3fr;
+  width: 80%;
 }
 
 .result-admin {

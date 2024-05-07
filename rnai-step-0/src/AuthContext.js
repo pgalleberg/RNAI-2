@@ -14,12 +14,11 @@ export function AuthContext({ children }){
             setLoading(false);
             if (currentUser) {
                 currentUser.getIdTokenResult().then((idTokenResult) => {
-                    if (idTokenResult.claims.approved == true){
+                    if (idTokenResult.claims.approved === true){
                         setUser("Approved")
                     } else {
                         setUser("Created")
                         signOut(auth).then(() => {
-                            console.log('User created and signed out');
                         });
                     }
                 })
