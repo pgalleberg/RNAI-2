@@ -10,7 +10,6 @@ const Inventor = () => {
     sessionStorage.setItem('currentTab', 'patents');
 
     useEffect(() => {
-        console.log("Inventor.js::useEffect() trigerred")
         const getInventorDetails = async () => {
             const inventorDetails = await fetchInventorDetails()
             setInventorDetails(inventorDetails)
@@ -22,8 +21,6 @@ const Inventor = () => {
         const url = process.env.REACT_APP_FLASK_WEBSERVER + 'inventor_details?inventor_name=' + inventor_name + '&vertical_id=' + vertical_id
         const res = await fetch(url)
         const data = await res.json()
-
-        console.log("Inventor.js::inventor: ", data)
         return data
     }
 

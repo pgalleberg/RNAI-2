@@ -3,27 +3,28 @@ import Task from "./Task";
 import auth from "../firebase";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
-
-console.log("Tasks component initialized")
-
+   
 const Tasks = () => {
-    console.log("Tasks component rendered")
+
     const user = auth.currentUser;
-    console.log("user: ", user)
     const [tasks, setTasks] = useState([])
     const [polling, setPolling] = useState([])
     const [admin, setAdmin] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    const deleteVertical = async (id) => {
+      setTasks(tasks.filter(task => task._id !== id));
+      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'delete_vertical/' + id,{
+          method: 'DELETE'
+      })
+    }
+
     sessionStorage.removeItem('currentTab');
 
     useEffect(() => {
-        console.log("useEffect trigerred")
-
         //check if admin
         auth.currentUser.getIdTokenResult()
         .then((idTokenResult) => {
-          console.log("idTokenResult.claims.admin: ", idTokenResult.claims.admin)
           if (!!idTokenResult.claims.admin) {
             setAdmin(true)
           } 
@@ -36,23 +37,15 @@ const Tasks = () => {
     }, [])
 
     const fetchTasks = async () => {
-      console.log("url: ", process.env.REACT_APP_FLASK_WEBSERVER + 'tasks?uid=' + user.uid)
       const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks?uid=' + user.uid)
-      console.log("res: ", res)
       const data = await res.json()
-    
-      console.log("fetchTasks::Tasks: ", data)
-      data.reverse()
-      console.log("fetchTasks::Tasks reversed: ", data)
-      
+      data.reverse()      
       setTasks(data)
       setLoading(false)
-
       setPolling(data.some(task => task.status === 'Pending'))
     }
 
     useEffect(() => {
-
       let interval = null
       if (polling){
         interval = setInterval(() => {
@@ -80,9 +73,9 @@ const Tasks = () => {
           <h2>Submission Time</h2>
           <h2>Status</h2>
           <h2> </h2>
-          {tasks.map((task) => <Task key={task._id} task={task} admin={admin}/>)}
+          <h2> </h2>
+          {tasks.map((task) => <Task key={task._id} task={task} admin={admin} onDelete={deleteVertical}/>)}
       </div>
-      
   )
 }
 

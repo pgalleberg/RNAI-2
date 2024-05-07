@@ -5,12 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const PaperDetails = () => {
-    console.log("PaperDetails rendered")
     const { paper_id, vertical_id } = useParams();
-    console.log("PaperDetails::paper_id: ", paper_id)
-    console.log("PaperDetails::vertical_id: ", vertical_id)
     const [paperDetails, setPaperDetails] = useState(null)
-
     sessionStorage.setItem('currentTab', 'literature');
 
     useEffect(() => {
