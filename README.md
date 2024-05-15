@@ -12,7 +12,7 @@ The steps below assume that:
 ### Step 0 - Set up .env file
 
 ```
-cd rnai-step-0
+cd frontend
 cp .example-env .env
 nano .env #populate the API keys
 ```
@@ -20,7 +20,7 @@ nano .env #populate the API keys
 ### Step 1 - Run the react application
 
 ```
-cd rnai-step-0
+cd frontend
 npm install
 npm run start
 ```

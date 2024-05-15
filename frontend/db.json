@@ -1,0 +1,283 @@
+{
+  "tasks": [
+    {
+      "query": "Methane removal from ambient air",
+      "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
+      "status": "Failed",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 1
+    },
+    {
+      "query": "carbon removal",
+      "user": "Hassaan",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
+      "status": "Approved",
+      "time": "16/09/2023, 00:14:40",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Climate change mitigation",
+        "Renewable energy",
+        "Sustainable agriculture",
+        "Environmental conservation",
+        "Clean technology"
+      ],
+      "autoSuggest": true,
+      "id": 2
+    },
+    {
+      "query": "fleet electrification",
+      "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
+      "status": "Rejected",
+      "time": "19/09/2023, 21:00:40",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Clean energy and sustainability",
+        "Transportation and infrastructure",
+        "Renewable energy technologies",
+        "Energy efficiency and conservation",
+        "Climate change mitigation and adaptation"
+      ],
+      "autoSuggest": false,
+      "id": 3
+    },
+    {
+      "query": "The science of reading",
+      "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
+      "status": "Approved",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 4
+    },
+    {
+      "query": "bio-inspired burrowing robots",
+      "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
+      "status": "Approved",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 5
+    },
+    {
+      "query": "solar energy",
+      "user": "Hassaan",
+      "uid": "neeoo2K4kSaXNJrlvycCw1OMAen1",
+      "status": "Pending",
+      "time": "15/09/2023, 21:28:13",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy sources",
+        "Climate change mitigation",
+        "Air pollution control",
+        "Environmental sustainability",
+        "Greenhouse gas reduction"
+      ],
+      "autoSuggest": true,
+      "id": 6
+    },
+    {
+      "query": "Test 1",
+      "user": "Hoorien",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
+      "status": "Pending",
+      "time": "22/09/2023, 20:02:00",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Topic 1",
+        "Research and development funding",
+        "Topic 2",
+        "Technology innovation grants",
+        "Topic 3"
+      ],
+      "autoSuggest": true,
+      "id": 7
+    },
+    {
+      "query": "methane",
+      "user": "Hoorien",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
+      "status": "Pending",
+      "time": "22/09/2023, 21:16:15",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Climate change mitigation",
+        "Sustainable agriculture",
+        "Environmental conservation",
+        "Clean technology"
+      ],
+      "autoSuggest": true,
+      "id": 8
+    },
+    {
+      "query": "methane",
+      "user": "Hoorien",
+      "uid": "FlWrr0rJgtgXLsp2vHAkL2Ef1u53",
+      "status": "Pending",
+      "time": "22/09/2023, 23:45:51",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Renewable energy",
+        "Climate change mitigation",
+        "Sustainable agriculture",
+        "Environmental research and development",
+        "Clean technology innovation"
+      ],
+      "autoSuggest": true,
+      "id": 9
+    },
+    {
+      "query": "methane removal from ambient air",
+      "user": "Hassaan",
+      "status": "Pending",
+      "time": "01/11/2023, 11:11:15",
+      "papers": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 3",
+        "Paper 4",
+        "Paper 5"
+      ],
+      "names": [
+        "Climate change mitigation and adaptation ",
+        "Environmental sustainability and conservation ",
+        "Clean energy and renewable technologies ",
+        "Air pollution control and reduction ",
+        "Greenhouse gas emissions reduction and management"
+      ],
+      "autoSuggest": true,
+      "id": 10
+    }
+  ],
+  "task_details": [
+    {
+      "id": 1,
+      "query": "Methane removal from ambient air",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+    },
+    {
+      "id": 2,
+      "query": "carbon removal",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+    },
+    {
+      "id": 3,
+      "query": "fleet electrification",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+    },
+    {
+      "id": 4,
+      "query": "The science of reading",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+    },
+    {
+      "id": 5,
+      "query": "bio-inspired burrowing robots",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in. Hasan",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia. Syed",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris. Hassaan",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut. Hola"
+    },
+    {
+      "id": 6,
+      "query": "solar energy",
+      "papers": "Dolor eiusmod culpa ullamco cupidatat et ad qui nisi non. Eiusmod quis cupidatat ea excepteur ad officia eiusmod aute dolor do cupidatat qui. Dolor laborum nulla esse officia consequat elit enim eu ipsum ad Lorem exercitation est. Mollit est mollit amet est dolore commodo. Occaecat fugiat consequat ullamco in.",
+      "authors": "Consectetur laborum commodo irure esse ut nisi adipisicing fugiat culpa exercitation deserunt qui aliquip pariatur. Magna deserunt elit magna ipsum ex deserunt nisi. Excepteur sint esse aliqua ea reprehenderit ut. Nulla sunt sint ad nisi. Ad esse aliquip qui pariatur. Et nostrud culpa quis id. Esse nulla anim ut dolore laborum labore amet amet est reprehenderit id labore officia.",
+      "institutes": "Aliqua aute Lorem mollit occaecat do occaecat excepteur non tempor. Duis sint amet duis voluptate incididunt esse nostrud consequat. Cupidatat labore eu officia ullamco proident et do sit dolore. Sunt eiusmod ea quis officia adipisicing voluptate sint esse qui officia officia incididunt laboris.",
+      "fundings": "Sit et aliquip qui duis dolor qui quis eiusmod ex culpa do in elit veniam. Sunt exercitation reprehenderit velit aliquip ullamco ex labore excepteur magna in mollit reprehenderit. Est nostrud nulla ipsum reprehenderit eu ut."
+    }
+  ]
+}

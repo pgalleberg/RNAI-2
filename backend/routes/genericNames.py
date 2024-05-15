@@ -1,9 +1,11 @@
 from flask import Blueprint, request
-import openai as openai
+from openai import OpenAI
 import os
 
 genericNames = Blueprint("genericNames", __name__)
-genericNames.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(
+    api_key = os.getenv("OPENAI_API_KEY")
+)
 
 @genericNames.route('/api/getGenericNames', methods=['GET'])
 def getGenericNames():
@@ -14,7 +16,7 @@ def getGenericNames():
     
 
 def completion(verticalName):
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -22,7 +24,7 @@ def completion(verticalName):
         ]
     )
 
-    return response["choices"][0]["message"]["content"]
+    return response.choices[0].message.content
 
 
 def createPrompt(verticalName):

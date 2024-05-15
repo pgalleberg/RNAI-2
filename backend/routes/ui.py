@@ -61,7 +61,7 @@ def getVerticalDetails():
         # "depth": 0
     }
 
-    result_set = list(collection.find(query).sort('rank', ASCENDING))
+    result_set = list(collection.find(query).sort('score', DESCENDING))
     
     for paper in result_set:
         paper['_id'] = str(paper['_id'])

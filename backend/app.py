@@ -13,9 +13,11 @@ import os
 from celery.exceptions import SoftTimeLimitExceeded, MaxRetriesExceededError
 from APIError import APIError
 import pinecone
-import openai as openai
+from openai import OpenAI
 from datetime import date
 from bs4 import BeautifulSoup
+import tiktoken
+import numpy as np
 
 app = Flask(__name__)
 
@@ -36,10 +38,12 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 s2_api_key = os.getenv("S2_API_KEY")
 serp_api_key = os.getenv("SERP_API_KEY")
-
 headers = {
     'x-api-key': s2_api_key
 }
+client = OpenAI(
+    api_key = os.getenv("OPENAI_API_KEY")
+)
 
 pinecone_api_key = os.getenv("PINECONE_API_KEY")
 env = 'gcp-starter'
@@ -68,9 +72,11 @@ def getData(vertical_id, record):
         ) for query, num_results in queries.items()
     ] 
 
+    numInitialPapers = 100
     papersChain = [
         chain(
-            getRelevantPapers.s(vertical_id, record['query'], record['numberOfRelevantPapers']),
+            getRelevantPapers.s(vertical_id, record['query'], numInitialPapers),
+            getMostRelevantPapers.s(record['query'], record['numberOfRelevantPapers']),
             group(
                 [insertInDb.s('papers')] + 
                 [chain(
@@ -103,6 +109,84 @@ def getData(vertical_id, record):
 
     workflow = group(grantsChain + papersChain + patentsChain)
     chord(workflow)(update_vertical.si(vertical_id, 'Completed'))
+
+
+def num_tokens_from_string(string: str, encoding_name: str):
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
+
+
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+
+@celery.task(bind=True, max_retries=3, default_retry_delay=10) #rate_limit='10/s', soft_time_limit=60, 
+def getMostRelevantPapers(self, papers, query, num_results):
+    print("getMostRelevantPapers::getMostRelevantPapers API called")
+    print("getMostRelevantPapers::len(papers): {}".format(len(papers)))
+    # create embeddings
+    i = 0
+    num_tokens = 0
+    papers_batch = []
+    papers_records = []
+    index = 0
+    while i < len(papers):
+        print("getMostRelevantPapers::Title: {}".format(papers[i]['title']))
+        print("getMostRelevantPapers::Abstract: {}".format(papers[i]['abstract']))
+        if papers[i]['abstract']:
+            paper_formatted = 'Title: ' + papers[i]['title'] + "\nAbstract: " + papers[i]['abstract']
+        else:
+            print("getMostRelevantPapers::abstract not found for paper {}".format(papers[i]['title']))
+            paper_formatted = 'Title: ' + papers[i]['title']
+            
+        num_tokens += num_tokens_from_string(paper_formatted, "cl100k_base")
+    
+        if num_tokens <= 8192:
+            papers_batch.append(paper_formatted)
+            print("getMostRelevantPapers::paper {} appended to batch".format(paper_formatted))
+            papers_records.append(papers[i])
+            i+=1
+        
+        if num_tokens > 8192 or i == len(papers):
+            if papers_batch != []: 
+                response = client.embeddings.create(
+                    input=papers_batch,
+                    model="text-embedding-3-small"
+                )
+
+                for object in response.data:
+                    print("getMostRelevantPapers::index: {}".format(index))
+                    papers_records[index]['values'] = object.embedding
+                    index+=1
+                
+                num_tokens = 0
+                papers_batch = []
+            else:
+                print("getMostRelevantPapers::empty papers_batch received")
+                i+=1
+                num_tokens = 0
+                papers_batch = []
+                
+
+    # calculate cosine similarity
+    response = client.embeddings.create(
+        input= query,
+        model="text-embedding-3-small"
+    )
+
+    embedding = response.data[0].embedding
+    for paper in papers_records:
+        print("getMostRelevantPapers::paper title: {} processed".format(paper['title']))
+        paper['score'] = cosine_similarity(paper['values'], embedding)       
+
+    # get the top cosine similarity scores
+    sorted_data = sorted(papers_records, key=lambda x: x['score'], reverse=True)
+
+    for data in sorted_data:
+        data.pop('values', None)
+
+    return sorted_data[0:num_results]
 
 
 @celery.task(bind=True, max_retries=3, default_retry_delay=30, soft_time_limit=120)
@@ -455,7 +539,7 @@ def getGrants(self, vertical_id, query, num_results, opportunity_types):
         print('getGrants::num_results: ', num_results)
         print('getGrants::opportunity_types: ', opportunity_types)
 
-        response = openai.Embedding.create(
+        response = client.embeddings.create(
             input= query,
             model="text-embedding-3-small"
         )
