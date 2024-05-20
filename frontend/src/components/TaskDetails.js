@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import Button from "./Button"
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
-import { faSpinner} from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
 import Grant from "./Grant"
 import Patent from "./Patent"
@@ -100,7 +100,7 @@ const TaskDetails = () => {
 
 
   return (
-    loading ? 
+    loading ?
       <div className="container">
         <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
       </div>
@@ -118,34 +118,34 @@ const TaskDetails = () => {
         <div className='papers'>
 
           {activeTab === 'funding' ?
-            Object.keys(fundingDetails).length > 0 ? 
+            Object.keys(fundingDetails).length > 0 ?
               <div>
                 <h2>Funding Opportunities</h2>
                 {
                   fundingDetails[task.query].map((grant) => (
-                    <Grant key={grant._id} grantDetails={grant}/>
+                    <Grant key={grant._id} grantDetails={grant} />
                   ))
                 }
 
                 {
-                  Object.entries(fundingDetails).map(([search_term, grants]) => 
+                  Object.entries(fundingDetails).map(([search_term, grants]) =>
                     search_term !== task.query &&
                     <>
                       <hr></hr>
-                      <h2 style={{fontSize: '1.25em',}}><i>{search_term}</i></h2>
-                    { grants.map((grant) => (
-                        <Grant key={grant._id} grantDetails={grant}/>
+                      <h2 style={{ fontSize: '1.25em', }}><i>{search_term}</i></h2>
+                      {grants.map((grant) => (
+                        <Grant key={grant._id} grantDetails={grant} />
                       ))}
                     </>
                   )
                 }
               </div>
-            :
-              <div className="container" style={{display: 'block'}}>
-                <p style={{paddingTop: '25vh'}}>Error 404</p>
+              :
+              <div className="container" style={{ display: 'block' }}>
+                <p style={{ paddingTop: '25vh' }}>Error 404</p>
                 <p><i>No contents to display</i></p>
               </div>
-          : null
+            : null
           }
 
           {activeTab === 'literature' ?
@@ -156,13 +156,13 @@ const TaskDetails = () => {
                   <Paper key={paper.paperId} paperDetails={paper} index={index} />
                 ))}
               </div>
-            :
-              <div className="container" style={{display: 'block'}}>
-                <p style={{paddingTop: '25vh'}}>Error 404</p>
+              :
+              <div className="container" style={{ display: 'block' }}>
+                <p style={{ paddingTop: '25vh' }}>Error 404</p>
                 <p><i>No contents to display</i></p>
-              </div> 
-          :
-          null
+              </div>
+            :
+            null
           }
 
           {activeTab === 'patents' ?
@@ -173,14 +173,14 @@ const TaskDetails = () => {
                   <Patent key={patent.id} patentDetails={patent} index={index} />
                 ))}
               </div>
-            :
-              <div className="container" style={{display: 'block'}}>
-                <p style={{paddingTop: '25vh'}}>Error 404</p>
+              :
+              <div className="container" style={{ display: 'block' }}>
+                <p style={{ paddingTop: '25vh' }}>Error 404</p>
                 <p><i>No contents to display</i></p>
-              </div> 
-          : null
+              </div>
+            : null
           }
-            
+
         </div>
 
         {task.status === 'Completed' &&
