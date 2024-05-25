@@ -7,12 +7,16 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
 import Grant from "./Grant"
 import Patent from "./Patent"
+import AuthorCard from "./AuthorCard"
+import InventorCard from "./InventorCard"
 
 const TaskDetails = () => {
   const { id } = useParams();
   const [taskDetails, setTaskDetails] = useState([])
   const [fundingDetails, setFundingDetails] = useState([])
   const [patentDetails, setPatentDetails] = useState([])
+  const [inventors, setInventors] = useState([])
+  const [authors, setAuthors] = useState([])
   const [task, setTask] = useState({})
   const [change, setChange] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -26,11 +30,13 @@ const TaskDetails = () => {
   useEffect(() => {
     const getTaskDetails = async () => {
       // Start all fetch operations in parallel
-      const [taskDetails, fundingDetails, patentDetails, taskFromServer] = await Promise.all([
+      const [taskDetails, fundingDetails, patentDetails, taskFromServer, authors, inventors] = await Promise.all([
         fetchTaskDetails(),
         fetchFundingDetails(),
         fetchPatentDetails(),
-        fetchTask()
+        fetchTask(),
+        fetchAuthors(),
+        fetchInventors()
       ]);
 
       // Log and set states after all fetches have resolved
@@ -38,6 +44,8 @@ const TaskDetails = () => {
       setFundingDetails(fundingDetails);
       setPatentDetails(patentDetails);
       setTask(taskFromServer);
+      setInventors(inventors);
+      setAuthors(authors);
       setLoading(false);
     }
     getTaskDetails()
@@ -62,6 +70,22 @@ const TaskDetails = () => {
 
   const fetchPatentDetails = async () => {
     const url = process.env.REACT_APP_FLASK_WEBSERVER + 'patent_details?id=' + id
+    const res = await fetch(url)
+    const data = await res.json()
+
+    return data
+  }
+
+  const fetchAuthors = async () => {
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + 'authors?id=' + id
+    const res = await fetch(url)
+    const data = await res.json()
+
+    return data
+  }
+
+  const fetchInventors = async () => {
+    const url = process.env.REACT_APP_FLASK_WEBSERVER + 'inventors?id=' + id
     const res = await fetch(url)
     const data = await res.json()
 
@@ -113,6 +137,7 @@ const TaskDetails = () => {
           <button className={activeTab === 'funding' ? 'active' : ''} onClick={() => setActiveTab('funding')}>Funding</button>
           <button className={activeTab === 'literature' ? 'active' : ''} onClick={() => setActiveTab('literature')}>Literature</button>
           <button className={activeTab === 'patents' ? 'active' : ''} onClick={() => setActiveTab('patents')}>Patents</button>
+          <button className={activeTab === 'people' ? 'active' : ''} onClick={() => setActiveTab('people')}>People</button>
         </div>
 
         <div className='papers'>
@@ -172,6 +197,33 @@ const TaskDetails = () => {
                 {patentDetails.map((patent, index) => (
                   <Patent key={patent.id} patentDetails={patent} index={index} />
                 ))}
+              </div>
+              :
+              <div className="container" style={{ display: 'block' }}>
+                <p style={{ paddingTop: '25vh' }}>Error 404</p>
+                <p><i>No contents to display</i></p>
+              </div>
+            : null
+          }
+
+          
+          {activeTab === 'people' ?
+            authors.length > 0 || inventors.length > 0 ?
+              <div>
+                <h2>Authors</h2>
+                <div className='person-grid' >
+                  {authors.map((author, index) => (
+                    console.log("author::", author),
+                    <AuthorCard key={author.id} details={author}/>
+                  ))}
+                </div>
+                <h2>Inventors</h2>
+                <div className='person-grid' >
+                  {inventors.map((inventor, index) => (
+                    console.log("inventor::", inventor),
+                    <InventorCard key={inventor.id} details={inventor}/>
+                  ))}
+                </div>
               </div>
               :
               <div className="container" style={{ display: 'block' }}>

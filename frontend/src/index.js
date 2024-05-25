@@ -109,8 +109,7 @@ function App(){
                 <PatentDetails />
               </Protected>
             </>
-        }
-        ,
+        },
         {
           path:'/inventor/:inventor_name/:vertical_id',
           element: 

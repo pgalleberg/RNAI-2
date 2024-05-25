@@ -264,6 +264,32 @@ def getInventorDetails():
     return jsonify(inventor), 200
 
 
+@ui.route('/api/inventors', methods=['GET'])
+def getInventors():
+    vertical_id = request.args.get('id')
+    collection = db['inventors']
+    query = {"vertical_id": vertical_id}
+    inventors = collection.find(query)
+    inventors = list(inventors)
+    for inventor in inventors:
+         inventor['_id'] = str(inventor['_id'])
+
+    return jsonify(inventors), 200
+
+
+@ui.route('/api/authors', methods=['GET'])
+def getAuthors():
+    vertical_id = request.args.get('id')
+    collection = db['authors']
+    query = {"vertical_id": vertical_id}
+    authors = collection.find(query)
+    authors = list(authors)
+    for author in authors:
+         author['_id'] = str(author['_id'])
+
+    return jsonify(authors), 200
+
+
 @ui.route('/api/update_vertical', methods=['PATCH'])
 def updateVertical():
     body = request.json    
