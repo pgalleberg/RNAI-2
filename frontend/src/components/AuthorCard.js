@@ -16,12 +16,12 @@ const AuthorCard = ({ details }) => {
                     <Link to={`/author/${details.authorId}/${details.vertical_id}`} style={{ textDecoration: 'none' }}>
                         <p style={{fontSize: '24px', paddingBottom: '0px'}}><strong>{details.name}</strong></p>
                     </Link>
-                    {   
+                    {/* {   
                         details.aliases &&
                             <p style={{fontSize: '10px', marginBottom: '10px', color: 'gray', fontStyle: 'italic'}}>
                                 <strong>{details.aliases.reduce((a, b) => (a.length > b.length ? a : b))}</strong>
                             </p>
-                    }
+                    } */}
                   </div>
                 </div>
                 

@@ -81,7 +81,17 @@ const TaskDetails = () => {
     const res = await fetch(url)
     const data = await res.json()
 
-    return data
+    const uniqueAuthors = [];
+    const seenAuthors = new Set();
+
+    data.forEach(author => {
+      if (!seenAuthors.has(author.authorId)) {
+        seenAuthors.add(author.authorId);
+        uniqueAuthors.push(author);
+      }
+    });
+
+    return uniqueAuthors
   }
 
   const fetchInventors = async () => {
@@ -89,7 +99,17 @@ const TaskDetails = () => {
     const res = await fetch(url)
     const data = await res.json()
 
-    return data
+    const uniqueInventors = [];
+    const seenInventors = new Set();
+
+    data.forEach(inventor => {
+      if (!seenInventors.has(inventor.name)) {
+        seenInventors.add(inventor.name);
+        uniqueInventors.push(inventor);
+      }
+    });
+
+    return uniqueInventors
   }
 
   const fetchTask = async () => {
@@ -213,14 +233,12 @@ const TaskDetails = () => {
                 <h2>Authors</h2>
                 <div className='person-grid' >
                   {authors.map((author, index) => (
-                    console.log("author::", author),
                     <AuthorCard key={author.id} details={author}/>
                   ))}
                 </div>
                 <h2>Inventors</h2>
                 <div className='person-grid' >
                   {inventors.map((inventor, index) => (
-                    console.log("inventor::", inventor),
                     <InventorCard key={inventor.id} details={inventor}/>
                   ))}
                 </div>

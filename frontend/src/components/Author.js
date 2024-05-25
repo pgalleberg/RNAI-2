@@ -32,12 +32,12 @@ const Author = () => {
                 <div className="background"></div>
                 <div className="author-details">
                     <p style={{fontSize: '24px', paddingBottom: '0px'}}><strong>{authorDetails.name}</strong></p>
-                    {   
+                    {/* {   
                         authorDetails.aliases &&
                             <p style={{fontSize: '10px', marginBottom: '10px', color: 'gray', fontStyle: 'italic'}}>
                                 <strong>{authorDetails.aliases.reduce((a, b) => (a.length > b.length ? a : b))}</strong>
                             </p>
-                    }
+                    } */}
                     
                     <div className="author-stat">
                         <p>Publications</p>

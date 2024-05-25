@@ -381,7 +381,7 @@ def getAuthorDetails(self, paper_details, index):
             # depth = paper_details["depth"]
             
             if len(author_ids) > 0: #TODO: Empty return in case it goes to else here
-                url = "https://api.semanticscholar.org/graph/v1/paper/" + paper_id + "/authors?fields=url,name,aliases,affiliations,homepage,paperCount,citationCount,hIndex,papers.title,papers.url,papers.influentialCitationCount"
+                url = "https://api.semanticscholar.org/graph/v1/paper/" + paper_id + "/authors?fields=url,name,affiliations,homepage,paperCount,citationCount,hIndex,papers.title,papers.url,papers.influentialCitationCount"
                 print("getAuthorDetails::sending request to url: {}".format(url))
                 response = requests.get(url, headers=headers)
                 authors = response.json()
