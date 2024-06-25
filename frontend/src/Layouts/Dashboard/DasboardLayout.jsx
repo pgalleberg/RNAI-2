@@ -17,6 +17,7 @@ const drawerWidth = 240;
 const Main = styled(Box)`
   min-width: 80vw;
   display:flex;
+  position:relative;
   margin: 0 auto;
   padding-top: 5rem;
   @media (max-width: 1440px) {
@@ -65,17 +66,20 @@ export default function DashboardLayout({children}) {
                 '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
               }}
             >
-              <DrawerList sidebarRoutes={sidebarRoutes}/>
+              <DrawerList/>
             </Drawer>
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'block' },
-              width:'20%'
-            }}
-            open
-          >
-            <DrawerList sidebarRoutes={sidebarRoutes} />
-          </Box>
+        <Box
+          sx={{
+            position:'sticky',
+            top:'5rem',
+            display: { xs: 'none', md: 'block' },
+            width:'20%',
+            height:'80vh',
+          }}
+          open
+        >
+          <DrawerList />
+        </Box>
         <Box 
           sx={{ flexGrow: 1, p: 3, overflowX:'hidden', minWidth: { xs:'100%', md: '75%'} }}
         >

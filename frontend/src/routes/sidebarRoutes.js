@@ -4,7 +4,7 @@ export const sidebarRoutes = [
     {
         title:'People',
         icon: ImUsers,
-        href:'#',
+        href:'/dashboard',
     },
     {
         title:'Funding',
