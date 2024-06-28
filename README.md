@@ -1,4 +1,4 @@
-## How to run the project
+## How to run the project:
 
 The steps below assume that:
 
