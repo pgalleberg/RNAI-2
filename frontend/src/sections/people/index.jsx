@@ -47,7 +47,6 @@ const Index = () => {
       setTab(newValue);
     };
   
-    console.log({authorsData,inventorsData})
 
   return (
     <Box>

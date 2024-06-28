@@ -15,7 +15,6 @@ export const useFetchAuthors = (
         //     endPoint = endPoint + '?' + new URLSearchParams(params).toString();
         // }
         const response = await GET(urls.people.getAuthors + `?id=${vertic_id}`)
-        console.log('author response',response)
         const uniqueAuthors = [];
         const seenAuthors = new Set();
     

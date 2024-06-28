@@ -12,7 +12,6 @@ export const useFetchInventors = (
     const fetchInventors = async (vertic_id) => {
     try {
         const response = await GET(urls.people.getInventors + `?id=${vertic_id}`)
-        console.log('inventor response',response)
         const uniqueInventors = [];
         const seenInventors = new Set();
 
