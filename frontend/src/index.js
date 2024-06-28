@@ -6,6 +6,7 @@ import App from './App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material';
 import createTheme from './theme';
+import { Context } from './context/globalContext';
 
 // Create a client
 const queryClient = new QueryClient()
@@ -16,9 +17,11 @@ root.render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={createTheme()}>
-      <AuthContext>
-        <App /> 
-      </AuthContext>
+      <Context>
+        <AuthContext>
+          <App /> 
+        </AuthContext>
+      </Context>
     </ThemeProvider>
   </QueryClientProvider>
   // </React.StrictMode>

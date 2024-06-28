@@ -4,41 +4,41 @@ export const sidebarRoutes = [
     {
         title:'People',
         icon: ImUsers,
-        href:'/dashboard',
+        href: '/people',
     },
     {
         title:'Funding',
         icon: ImUsers,
-        href:'#',
+        href: '/funding',
     },
     {
         title:'Publications',
         icon: ImUsers,
-        href:'#',
+        href: '/publications',
     },
     {
         title:'Patents',
         icon:ImUsers,
-        href:'#',
+        href: '/patents',
     },
     {
         title:'Instituions',
         icon:ImUsers,
-        href:'#',
+        href: '/institutions',
     },
     {
         title:'Events',
         icon:ImUsers,
-        href:'#',
+        href: '/events',
     },
     {
         title:'Tutorials',
         icon:ImUsers,
-        href:'#',
+        href: '/tutorials',
     },
     {
         title:'Jobs',
         icon:ImUsers,
-        href:'#',
+        href: '/jobs',
     },
 ]

@@ -50,7 +50,7 @@ const Navbar = ({closeSidebar}) => {
                 </Box>
             </Box>
             
-            {
+            {/* {
                 (location.pathname.includes('/inventor') || location.pathname.includes('/patent') || location.pathname.includes('/grant') || location.pathname.includes('/paper/') || location.pathname.includes('/author/')) && 
                 <div style={{textAlign: 'left', width: location.pathname.includes('/paper/') ? '75%' : '90%'}}>
                     <Link onClick={goBack}>
@@ -59,7 +59,7 @@ const Navbar = ({closeSidebar}) => {
                         Back
                     </Link>
                 </div>
-            }
+            } */}
         </>
     )
 }

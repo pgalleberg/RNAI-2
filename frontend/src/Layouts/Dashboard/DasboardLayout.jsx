@@ -15,12 +15,12 @@ import DrawerList from './DrawerList';
 const drawerWidth = 240;
 
 const Main = styled(Box)`
-  min-width: 80vw;
+  width: 80vw;
   display:flex;
   position:relative;
   margin: 0 auto;
   padding-top: 5rem;
-  @media (max-width: 1440px) {
+  @media (max-width: 1280px) {
      width:95%
   }
 `
@@ -81,7 +81,7 @@ export default function DashboardLayout({children}) {
           <DrawerList />
         </Box>
         <Box 
-          sx={{ flexGrow: 1, p: 3, overflowX:'hidden', minWidth: { xs:'100%', md: '75%'} }}
+          sx={{ flexGrow: 1, p: 3, overflowX:'hidden', width: { xs:'100%', md: '75%'} }}
         >
           {children}
         </Box>

@@ -18,6 +18,10 @@ import ResetPassword from "../components/ResetPassword";
 import ApprovalPending from "../components/ApprovalPending";
 import { useState } from "react";
 
+//sections import 
+import Dashboard from '../sections/myRequests'
+import People from '../sections/people'
+
 export const useRoutes = () => {
      const [email, setEmail] = useState('')
   
@@ -38,19 +42,28 @@ export const useRoutes = () => {
             },
             {
               path: '/dashboard',
-              element: <Tasks />
+              element: <Dashboard />
             },
             {
-              path:'/task/:id',
-              element: <TaskDetails />
+              path:'/people/:vertical_id',
+              element: <People />
             },
+            {
+              path:'/author/:author_id/:vertical_id',
+              element: <Author />
+            },
+            {
+              path:'/inventor/:inventor_name/:vertical_id',
+              element: <Inventor />
+            },
+            //Literature routes
             {
               path:'/paper/:paper_id/:vertical_id',
               element: <PaperDetails />
             },
             {
-              path:'/author/:author_id/:vertical_id',
-              element: <Author />
+              path:'/paper/:paper_id/:vertical_id',
+              element: <PaperDetails />
             },
             {
               path:'/grant/:grant_id',
@@ -60,10 +73,7 @@ export const useRoutes = () => {
               path:'/patent/:patent_id/en/:vertical_id',
               element: <PatentDetails />
             },
-            {
-              path:'/inventor/:inventor_name/:vertical_id',
-              element: <Inventor />
-            }
+            
           ]
         },
         {

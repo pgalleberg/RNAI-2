@@ -16,7 +16,8 @@ const defaultVariant = {
   palette: {
     mode: "light",
     primary: {
-      main: customBlue[800],
+      main: customBlue[500],
+      hover: customBlue[400],
       contrastText: "#FFF",
     },
     secondary: {

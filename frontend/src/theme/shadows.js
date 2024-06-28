@@ -4,6 +4,11 @@ function createShadow() {
 
 const shadows = [
   "none",
+  createShadow(),
+  createShadow(),
+  createShadow(),
+  createShadow(),
+  createShadow(),
   createShadow()
 ];
 

@@ -1,9 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner, faCheck, faTimes, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AlertDialog from "./AlertDialog";
+import { useContext } from 'react';
+import { GlobalContext } from '../context/globalContext';
+import { Box } from '@mui/material';
 
 const Task = ({ task, admin, onDelete }) => {
+  const {setVerticalId} = useContext(GlobalContext);
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    setVerticalId(task._id)
+    localStorage.setItem('vertical_id',task._id)
+    navigate(`/people/${task._id}`)
+  }
+
   return (
     <>
         <span className="result-item">{task.query}</span>
@@ -12,10 +24,10 @@ const Task = ({ task, admin, onDelete }) => {
         
         {
           task.status === "Completed" || task.status === "Approved" || task.status === "Rejected"?
-            <Link to={`/task/${task._id}`} className='result-item' 
+            <Box onClick={handleClick} className='result-item' 
               style={{color: task.status === "Rejected" ?'#e14141' : "#10a37f"}}>
               <span>{task.status} &nbsp;&nbsp;</span>
-            </Link>
+            </Box>
           : <span className='result-item'>{task.status} &nbsp;&nbsp;</span>
         }
         

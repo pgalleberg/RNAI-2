@@ -20,9 +20,6 @@ const createTheme = () => {
     },
     {
       name: themeConfig.name,
-      header: themeConfig.header,
-      footer: themeConfig.footer,
-      sidebar: themeConfig.sidebar,
     }
   );
 };

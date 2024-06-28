@@ -1,7 +1,8 @@
 import { Box, List as MuiList, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, styled } from '@mui/material'
-import React from 'react';
+import React, { useContext } from 'react';
 import { sidebarRoutes } from '../../routes/sidebarRoutes';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../context/globalContext';
 
 const List = styled
 (MuiList)(({ theme }) =>({
@@ -18,6 +19,9 @@ const List = styled
       '&, & .MuiListItemIcon-root': {
         color: '#000',
       },
+      '&:disabled':{
+        cursor: 'not-allowed'
+      }
     },
   }));
 
@@ -25,11 +29,13 @@ const Link = styled
 (RouterLink)(({ theme, isActive }) => ({
     width:'100%',
     borderRadius:10,
-    background: isActive ? theme.palette.active.main : 'transparent'
+    background: isActive ? theme.palette.active.main : 'transparent',
   }));
 
 const DrawerList = () => {
+  const {verticalId} = useContext(GlobalContext)
   const loc = useLocation()
+
   return (
     <>
       <Toolbar sx={{display: { xs: 'block', md: 'none' }}}/>
@@ -37,8 +43,8 @@ const DrawerList = () => {
         <List>
           {sidebarRoutes.map((route, index) => (
             <ListItem key={route.title} disablePadding>
-              <Link isActive={loc.pathname.includes(route.href)} to={route.href}>
-                <ListItemButton>
+              <Link isActive={loc.pathname.includes(route.href)} to={!!verticalId ? route.href + `/${verticalId}`: ''}>
+                <ListItemButton disabled={!!!verticalId}>
                   <ListItemIcon sx={{minWidth:'30px'}}>
                     <route.icon size={20} />
                   </ListItemIcon>
