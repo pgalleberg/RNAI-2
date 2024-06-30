@@ -14,7 +14,7 @@ import Tasks from './components/Tasks';
 import ApprovalPending from './components/ApprovalPending';
 import Author from './components/Author';
 import ForgotPassword from './components/ForgotPassword';
-import GrantDetails from './components/GrantDetails';
+// import GrantDetails from './components/GrantDetails';
 import Inventor from './components/Inventor';
 import PaperDetails from './components/PaperDetails';
 import PatentDetails from './components/PatentDetails';

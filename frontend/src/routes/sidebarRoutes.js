@@ -9,7 +9,7 @@ export const sidebarRoutes = [
     {
         title:'Funding',
         icon: ImUsers,
-        href: '/funding',
+        href: '/fundings',
     },
     {
         title:'Publications',

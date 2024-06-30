@@ -5,7 +5,7 @@ import Tasks from "../components/Tasks";
 import TaskDetails from "../components/TaskDetails";
 import PaperDetails from "../components/PaperDetails";
 import Author from "../components/Author";
-import GrantDetails from "../components/GrantDetails";
+import GrantDetails from "../sections/funding/GrantDetails";
 import PatentDetails from "../components/PatentDetails";
 import Inventor from "../components/Inventor";
 import Header from "../components/Header";
@@ -16,11 +16,15 @@ import LogIn from "../components/LogIn";
 import ForgotPassword from "../components/ForgotPassword";
 import ResetPassword from "../components/ResetPassword";
 import ApprovalPending from "../components/ApprovalPending";
+
 import { useState } from "react";
 
 //sections import 
 import Dashboard from '../sections/myRequests'
 import People from '../sections/people'
+
+//funding pages
+import Fundings from '../sections/funding'
 
 export const useRoutes = () => {
      const [email, setEmail] = useState('')
@@ -45,7 +49,12 @@ export const useRoutes = () => {
               element: <Dashboard />
             },
             {
-              path:'/people/:vertical_id',
+              path: '/view/:id',
+              element: <TaskDetails />
+            },
+            //peoples routes
+            {
+              path:'/:vertical_id/people',
               element: <People />
             },
             {
@@ -55,6 +64,11 @@ export const useRoutes = () => {
             {
               path:'/inventor/:inventor_name/:vertical_id',
               element: <Inventor />
+            },
+            //funding routes
+            {
+              path:'/:vertical_id/fundings',
+              element: <Fundings />
             },
             //Literature routes
             {

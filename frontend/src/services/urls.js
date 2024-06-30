@@ -6,5 +6,12 @@ export const urls = {
     people: {
         getAuthors: '/authors',
         getInventors: '/inventors'
+    },
+    task: {
+        getTask: '/task',
+    },
+    funding: {
+        getFundingDetails: '/funding_details',
+        getSingleFundingDetails: '/grant_details',
     }
 }

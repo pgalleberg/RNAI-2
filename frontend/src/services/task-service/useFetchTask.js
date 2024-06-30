@@ -1,15 +1,18 @@
 // React Query Imports
 import { useQuery } from "@tanstack/react-query";
+
+//services imports
 import { GET } from "../AxiosFunctions";
 import { urls } from "../urls";
 
-export const useFetchFundings = (
-  vertial_id
+export const useFetchTask = (
+  vertical_id,
 ) => {
 
-  const fetchFundings = async (vertic_id) => {
+    const fetchTask = async (vertic_id) => {
     try {
-        const response = await GET(urls.funding.getFundingDetails + `?id=${vertic_id}`)
+        const response = await GET(urls.task.getTask + `?id=${vertic_id}`)
+
         return response
     } catch (error) {
       throw new Error(
@@ -19,8 +22,8 @@ export const useFetchFundings = (
   };
   
   return useQuery({
-    queryKey: vertial_id ? ["vertial_id", vertial_id] : [null],
-    queryFn: () => fetchFundings( vertial_id ),
+    queryKey: vertical_id ? ["task", vertical_id] : [null],
+    queryFn: () => fetchTask( vertical_id ),
     staleTime: Infinity,
     cacheTime: 10 * 60 * 1000,
     retry: 1,

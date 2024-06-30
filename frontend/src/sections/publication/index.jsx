@@ -1,8 +1,14 @@
+import { Box } from '@mui/material'
 import React from 'react'
+import MainHeading from '../../components/MainHeading'
 
 const Index = () => {
   return (
-    <div>publication</div>
+    <Box>
+        <Box>
+            <MainHeading title={'Publications'} />
+        </Box>
+    </Box>
   )
 }
 

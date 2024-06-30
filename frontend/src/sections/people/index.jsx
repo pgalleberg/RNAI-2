@@ -12,6 +12,7 @@ import InventorCard from '../../components/InventorCard';
 
 //MUI imports
 import { Box, CircularProgress, Grid, Stack, Tab, Tabs } from '@mui/material';
+import MainHeading from '../../components/MainHeading';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,6 +51,9 @@ const Index = () => {
 
   return (
     <Box>
+        <Box>
+          <MainHeading title={'Peoples'} />
+        </Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs onChange={handleChange} value={tab} aria-label="lab API tabs example">
             <Tab label="Author" value={0}  {...a11yProps(0)} />

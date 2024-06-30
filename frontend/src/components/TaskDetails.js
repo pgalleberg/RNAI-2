@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Paper from "./Paper"
-import Grant from "./Grant"
+import Grant from "../sections/funding/Grant"
 import Patent from "./Patent"
 import AuthorCard from "./AuthorCard"
 import InventorCard from "./InventorCard"
@@ -39,14 +39,21 @@ const TaskDetails = () => {
         fetchInventors()
       ]);
 
-      // Log and set states after all fetches have resolved
-      setTaskDetails(taskDetails);
-      setFundingDetails(fundingDetails);
-      setPatentDetails(patentDetails);
-      setTask(taskFromServer);
-      setInventors(inventors);
-      setAuthors(authors);
-      setLoading(false);
+      try {
+        // Log and set states after all fetches have resolved
+        setTaskDetails(taskDetails);
+        setFundingDetails(fundingDetails);
+        setPatentDetails(patentDetails);
+        setTask(taskFromServer);
+        setInventors(inventors);
+        setAuthors(authors);
+        setLoading(false);
+        
+      } catch (error) {
+        console.log(error)
+        setLoading(false);
+        
+      }
     }
     getTaskDetails()
   }, [])
@@ -145,7 +152,7 @@ const TaskDetails = () => {
 
   return (
     loading ?
-      <div className="container">
+      <div >
         <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
       </div>
       :

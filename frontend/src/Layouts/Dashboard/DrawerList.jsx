@@ -42,7 +42,7 @@ const DrawerList = () => {
         <List>
           {sidebarRoutes.map((route, index) => (
             <ListItem key={route.title} disablePadding>
-              <Link isActive={loc.pathname.includes(route.href)} to={!!verticalId ? route.href + `/${verticalId}`: ''}>
+              <Link isActive={loc.pathname.includes(route.href)} to={!!verticalId ? `/${verticalId}` + route.href : ''}>
                 <ListItemButton disabled={!!!verticalId}>
                   <ListItemIcon sx={{minWidth:'30px'}}>
                     <route.icon size={20} />
