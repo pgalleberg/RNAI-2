@@ -3,63 +3,64 @@ import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react"
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
+import { Button, Card, CardActions, CardContent, CardHeader, Divider, Typography } from '@mui/material';
+
+const styles ={
+    publicationsStyles : {display:'flex', justifyContent:'space-between', alignItems:'center', mb:2}
+}
 
 const AuthorCard = ({ details }) => {
   return (
-    details ?
-        <div className='author-card' style={{borderRadius: '10px'}}>
-            <div className="background" style={{borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}></div>
-            <div className="author-details">
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr', marginTop: '10px', marginBottom: '20px', alignItems: 'center'}}>
-                  <FontAwesomeIcon icon={faUserCircle} size="4x" style={{color: 'gray'}}></FontAwesomeIcon>      
-                  <div>          
-                    <Link to={`/author/${details.authorId}/${details.vertical_id}`} style={{ textDecoration: 'none' }}>
-                        <p style={{fontSize: '24px', paddingBottom: '0px'}}><strong>{details.name}</strong></p>
-                    </Link>
-                    {/* {   
-                        details.aliases &&
-                            <p style={{fontSize: '10px', marginBottom: '10px', color: 'gray', fontStyle: 'italic'}}>
-                                <strong>{details.aliases.reduce((a, b) => (a.length > b.length ? a : b))}</strong>
-                            </p>
-                    } */}
-                  </div>
-                </div>
-                
-                <div className="author-stat">
-                    <p>Publications</p>
-                    <p><strong>{details.paperCount}</strong></p>
-                </div>
-                <div className="author-stat">
-                    <p>h-index</p>
-                    <p><strong>{details.hIndex}</strong></p>
-                </div>
-                <div className="author-stat">
-                    <p>Citations</p>
-                    <p><strong>{details.citationCount}</strong></p>
-                </div>
+    details ?(
+        <Card sx={{ width: '100%', ':hover': {scale:120} }}>
+            <CardHeader sx={{bgcolor: 'active.main', width:'100%', height:100 }} title={details.name} />
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                    Details
+                </Typography>
+                <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                    <span>Publications</span>
+                    <span>{details.paperCount}</span>
+                </Typography>
+                <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                    <span>h-index</span>
+                    <span>{details.hIndex}</span>
+                </Typography>
+                <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                    <span>Citations</span>
+                    <span>{details.citationCount}</span>
+                </Typography>
                 {
                     details.papers &&
-                        <div className="author-stat">
-                            <p>Highly Influential Citations</p>
-                            <p><strong>{details.papers.reduce((total, paper) => total + paper.influentialCitationCount, 0)}</strong></p>
-                        </div>
+                        <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                            <span>Highly Influential Citations</span>
+                            <span>{details.papers.reduce((total, paper) => total + paper.influentialCitationCount, 0)}</span>
+                        </Typography>
                 }
-                <hr></hr>
-                <p><strong>Vertical Specific</strong></p>
-                <div className="author-stat">
-                    <p>Publications</p>
-                    <p><strong>{Object.keys(details.source_papers).length}</strong></p>
-                </div>
-                <div className="author-stat">
-                    <p>Citations</p>
-                    <p><strong>{Object.keys(details.source_papers).reduce((sum, key) => sum + details.source_papers[key].citationCount, 0)}</strong></p>
-                </div>
-                <div className="author-stat">
-                    <p>Highly Influential Citations</p>
-                    <p><strong>{Object.keys(details.source_papers).reduce((sum, key) => sum + details.source_papers[key].influentialCitationCount, 0)}</strong></p>
-                </div>
-            </div>
-        </div>
+                <Divider />
+
+                <Typography gutterBottom variant="h5" mt={3} component="div">
+                    Vertical Specific
+                </Typography>
+
+                <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                     <span>Publications</span>
+                     <span>{Object.keys(details.source_papers).length}</span>
+                 </Typography>
+                 <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                     <span>Citations</span>
+                     <span>{Object.keys(details.source_papers).reduce((sum, key) => sum + details.source_papers[key].citationCount, 0)}</span>
+                 </Typography>
+                 <Typography sx={styles.publicationsStyles} variant="body2" color="text.secondary">
+                     <span>Highly Influential Citations</span>
+                     <span>{Object.keys(details.source_papers).reduce((sum, key) => sum + details.source_papers[key].influentialCitationCount, 0)}</span>
+                 </Typography>
+            </CardContent>
+            <CardActions>
+                <Button component='a' href={`/author/${details.authorId}/${details.vertical_id}`} size="small">Learn More</Button>
+            </CardActions>
+        </Card>
+    )
     :
     <div className="container">
         <FontAwesomeIcon icon={faSpinner} spin size="10x"></FontAwesomeIcon>
