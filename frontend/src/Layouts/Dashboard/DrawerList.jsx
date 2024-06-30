@@ -35,7 +35,6 @@ const Link = styled
 const DrawerList = () => {
   const {verticalId} = useContext(GlobalContext)
   const loc = useLocation()
-
   return (
     <>
       <Toolbar sx={{display: { xs: 'block', md: 'none' }}}/>

@@ -51,18 +51,18 @@ const Index = () => {
   return (
     <Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Author"  {...a11yProps(0)} />
-            <Tab label="Inventors"  {...a11yProps(1)} />
+          <Tabs onChange={handleChange} value={tab} aria-label="lab API tabs example">
+            <Tab label="Author" value={0}  {...a11yProps(0)} />
+            <Tab label="Inventors" value={1}  {...a11yProps(1)} />
           </Tabs>
         </Box>
         <TabPanel value={tab} index={0}>
             <Stack alignItems={'center'} py={4}>
-              {isFetching && <CircularProgress />}
+              {isFetching && <CircularProgress key={isFetching} />}
             </Stack>
             <Grid container justifyContent={'space-around'} rowSpacing={5} spacing={5}>
                 {authorsData?.length > 0 && authorsData?.map((author, index) => (
-                    <Grid item xs={6} md={4}>
+                    <Grid key={author.id} item xs={6} md={4}>
                      <AuthorCard key={author.id} details={author}/>
                     </Grid>
                 ))}
@@ -74,8 +74,8 @@ const Index = () => {
             </Stack>
             <Grid container justifyContent={'space-around'} rowSpacing={5} spacing={5}>
               {inventorsData?.length > 0 && inventorsData.map((inventor, index) => (
-                  <Grid item xs={6} md={4}>
-                    <InventorCard key={inventor.id} details={inventor}/>
+                  <Grid key={inventor.id} item xs={6} md={4}>
+                    <InventorCard details={inventor}/>
                   </Grid>
               ))}
             </Grid>

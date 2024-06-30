@@ -6,28 +6,10 @@ import RNAILogo from '../RNAI_logo_II.png';
 import { useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faBars } from '@fortawesome/free-solid-svg-icons'
-import { Box, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
+import NavMenu from "./NavMenu";
 
 const Navbar = ({closeSidebar}) => {
-
-    const navigate = useNavigate();
-    const location = useLocation()
-
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
-        // Sign-out successful.
-            navigate("/login");
-        }).catch((error) => {
-            // An error happened.
-            console.log("Error: ", error)
-        });
-    }
-
-    const goBack = () => {
-        navigate(-1);
-      };
-    
-
     return (
         <>
             <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center', width:{xs:'95%',lg:'80%'}, alignSelf:'center', height:'4rem'}}>
@@ -44,9 +26,14 @@ const Navbar = ({closeSidebar}) => {
                 </Box>
             
                 <Box sx={{display:'flex', alignItems:'center', gap:5}}>
-                    <Link to="/">Home</Link>
-                    <Link to="/dashboard">Dashboard</Link>
-                    <Link to="#" onClick={ handleLogout }>Sign Out</Link>
+                    <Button variant="outlined">
+                        <Link to="/dashboard">Dashboard</Link>
+                    </Button>
+                    <Button LinkComponent={"a"} href="/" variant="contained">
+                        Try RNAI
+                    </Button>
+                    <NavMenu />
+                    {/* <Link to="#" onClick={ handleLogout }>Sign Out</Link> */}
                 </Box>
             </Box>
             

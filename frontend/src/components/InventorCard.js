@@ -14,7 +14,7 @@ const styles ={
 const InventorCard = ({ details }) => {
     return (
         details ?
-            <Card sx={{ width: '100%', ':hover': {scale:120} }}>
+            <Card sx={{ width: '100%'}}>
                 <CardHeader sx={{bgcolor: 'active.main', width:'100%', height:100 }} title={details.name} />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
