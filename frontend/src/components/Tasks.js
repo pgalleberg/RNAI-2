@@ -37,13 +37,7 @@ const Tasks = () => {
     }, [])
 
     const fetchTasks = async () => {
-      const res = await fetch(`${process.env.REACT_APP_FLASK_WEBSERVER}tasks`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `${localStorage.getItem('firebaseToken')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks?uid=' + user.uid)
       const data = await res.json()
       data.reverse()
       setTasks(data)

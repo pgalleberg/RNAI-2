@@ -29,11 +29,8 @@ const LogIn = ({ setEmail_ }) => {
 
     // const auth = getAuth();
     await signInWithEmailAndPassword(auth, email, password)
-    .then(async (userCredential) => {
+    .then((userCredential) => {
       // Signed in 
-      const user = userCredential.user;
-      const idToken = await user.getIdToken(true)
-      localStorage.setItem('firebaseToken', idToken);
       navigate("/")
     })
     .catch((error) => {
