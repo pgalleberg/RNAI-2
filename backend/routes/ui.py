@@ -9,9 +9,10 @@ ui = Blueprint("ui", __name__)
 webserver = os.getenv('WEBSERVER')
 
 @ui.route('/api/tasks', methods=['GET'])
-@firebase_token_required
+# @firebase_token_required
 def getTasks():
-    uid = g.user.uid
+    uid = request.args.get('uid')
+    # uid = g.user.uid
     print('getTasks::uid: ', uid)
 
     collection = db['verticals']
