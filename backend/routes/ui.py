@@ -1,15 +1,18 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from bson.objectid import ObjectId
 from config import db
 import os
 from pymongo import ReturnDocument, DESCENDING, ASCENDING
+from middleware import firebase_token_required
 
 ui = Blueprint("ui", __name__)
 webserver = os.getenv('WEBSERVER')
 
 @ui.route('/api/tasks', methods=['GET'])
+# @firebase_token_required
 def getTasks():
     uid = request.args.get('uid')
+    # uid = g.user.uid
     print('getTasks::uid: ', uid)
 
     collection = db['verticals']

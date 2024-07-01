@@ -23,11 +23,11 @@ const Tasks = () => {
 
     useEffect(() => {
         //check if admin
-        auth.currentUser.getIdTokenResult()
+        user.getIdTokenResult()
         .then((idTokenResult) => {
           if (!!idTokenResult.claims.admin) {
             setAdmin(true)
-          } 
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -39,7 +39,7 @@ const Tasks = () => {
     const fetchTasks = async () => {
       const res = await fetch(process.env.REACT_APP_FLASK_WEBSERVER + 'tasks?uid=' + user.uid)
       const data = await res.json()
-      data.reverse()      
+      data.reverse()
       setTasks(data)
       setLoading(false)
       setPolling(data.some(task => task.status === 'Pending'))
